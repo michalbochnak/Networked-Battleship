@@ -1,3 +1,5 @@
+import View.BattleshipView;
+
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -20,6 +22,5 @@ public class BattleshipGame {
 
         BattleshipView view = new BattleshipView();
 
-        // test
     }
 }

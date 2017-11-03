@@ -1,3 +1,5 @@
+package View;
+
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -27,7 +29,7 @@ public class BattleshipView {
     private JPanel bgPanel;
     private BufferedImage img;
 
-    BattleshipView() {
+    public BattleshipView() {
         try {
             img = ImageIO.read(new File("images/water_bg.jpg"));
         } catch (Exception exc) {

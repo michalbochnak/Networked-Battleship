@@ -1,3 +1,4 @@
+package View;
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -31,7 +32,7 @@ public class ImagePanel extends JPanel {
     private JPanel panel;
     private BufferedImage bgImg;
 
-    ImagePanel() {
+    public ImagePanel() {
         bgImg = readImageIn();
 
         panel = new JPanel() {
