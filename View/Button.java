@@ -1,4 +1,3 @@
-
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -8,22 +7,21 @@
 // Nov 16, 2017
 // UIC, Pat Troy
 //
-// BattleshipModel.java
+// Button.java
 //
 
 //
 //  class description...
 //
 
-package Model;
-
-public class BattleshipModel {
+package View;
 
 
+import javax.swing.*;
 
+public class Button extends JButton {
 
-
+    // 0 - empty, 1 - miss, 2 - hit
+    private int status;
 
 }
-
-

@@ -1,3 +1,5 @@
+import Controller.BattleshipController;
+import Model.BattleshipModel;
 import View.BattleshipView;
 
 //
@@ -20,7 +22,7 @@ public class BattleshipGame {
 
     public static void main ( String args[]) {
 
-        BattleshipView view = new BattleshipView();
+        BattleshipController controller = new BattleshipController();
 
     }
 }

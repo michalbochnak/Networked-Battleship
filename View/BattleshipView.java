@@ -59,10 +59,6 @@ public class BattleshipView {
         addHelpMenuListeners(actionListener);
     }
 
-    public void addFileMenuListeners() {
-
-    }
-
     private void addHelpMenuListeners(ActionListener actionListener) {
         JMenu temp = menuBar.getHelpMenu();
         for (int i = 0; i < temp.getItemCount(); ++i) {
@@ -70,9 +66,42 @@ public class BattleshipView {
         }
     }
 
-    // FIXME: Implement
     private void addFileMenuListeners(ActionListener actionListener) {
-
+        JMenu temp = menuBar.getFileMenu();
+        for (int i = 0; i < temp.getItemCount(); ++i) {
+            temp.getItem(i).addActionListener(actionListener);
+        }
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
