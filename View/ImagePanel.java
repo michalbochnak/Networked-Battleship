@@ -1,4 +1,3 @@
-package View;
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -15,10 +14,11 @@ package View;
 //  class description...
 //
 
+package View;
+
 
 /*
  Notes:
-    - not used as for now
 
 */
 
@@ -36,7 +36,8 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel() {
         bgImg = readImageIn();
-        setSize(500,500);
+        // resize();
+        // this.setMaximumSize(new Dimension(600, 600));
     }
 
 
@@ -46,7 +47,7 @@ public class ImagePanel extends JPanel {
         try {
             tempImg = ImageIO.read(new File("images/water_bg.jpg"));
         } catch (IOException exc) {
-            System.out.println("Image read in failed");
+            System.out.println("Image loading failed");
             exc.printStackTrace();
         }
 
@@ -57,6 +58,22 @@ public class ImagePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImg, 0, 0, null);
+    }
+
+    // resize the image to 600 x 600
+    private void resize() {
+        Image img = bgImg.getScaledInstance
+                (600, 600, Image.SCALE_DEFAULT);
+
+        BufferedImage scaledImg = new BufferedImage(img.getWidth(null),
+                img.getHeight(null), BufferedImage.TYPE_INT_ARGB );
+
+        // draw the image
+        Graphics2D temp = scaledImg.createGraphics();
+        temp.drawImage(img, 0, 0, null);
+        temp.dispose();
+
+        bgImg = scaledImg;
     }
 
 }

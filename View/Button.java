@@ -17,11 +17,27 @@
 package View;
 
 
+import Model.Coordinates;
+
 import javax.swing.*;
 
 public class Button extends JButton {
 
-    // 0 - empty, 1 - miss, 2 - hit
+    // 0 - empty, 1 - ship, 2 - miss, 3 - hit
     private int status;
+    private Coordinates coords;
+    private double opacity;
+
+    protected  Button(int row, int col) {
+        coords = new Coordinates(row, col);
+    }
+
+    protected void setOpacity(double value) {
+        opacity = value;
+    }
+
+    protected double getOpacity() {
+        return opacity;
+    }
 
 }

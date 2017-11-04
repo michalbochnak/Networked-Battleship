@@ -31,7 +31,7 @@ public class BattleshipController {
         BattleshipView view = new BattleshipView();
         BattleshipModel model = new BattleshipModel();
 
-        view.addMenuListener(new fileMenuHandler());
+        view.addMenuBarListeners(new fileMenuHandler());
     }
 
 

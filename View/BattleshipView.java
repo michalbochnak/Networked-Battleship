@@ -17,6 +17,7 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -26,11 +27,15 @@ public class BattleshipView {
     private JFrame frame;
     private ImagePanel bgPanel;
     private MenuBar menuBar;
+    private Button[][] buttons;
+    private JLabel statusLabel;
 
     public BattleshipView() {
         setupFrame();
         setupPanel();
-        setupMenu();
+        setupMenuBar();
+        setupButtons();
+        setupStatusBar();
 
         frame.setVisible(true);
     }
@@ -45,16 +50,51 @@ public class BattleshipView {
 
     private void setupPanel() {
         bgPanel = new ImagePanel();
-        bgPanel.setLayout(new GridLayout(10,10,2, 2));
+        bgPanel.setMaximumSize(new Dimension(600,600));
+        bgPanel.setLayout(new GridLayout(10,10));
         frame.getContentPane().add(bgPanel);
     }
 
-    private void setupMenu() {
+    private void setupMenuBar() {
         menuBar = new MenuBar();
         frame.setJMenuBar(menuBar);
     }
 
-    public void addMenuListener(ActionListener actionListener) {
+    private void setupStatusBar() {
+        JPanel statusBar = new JPanel();
+        statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        statusBar.setBackground(Color.white);
+        statusBar.setBorder(new BevelBorder(BevelBorder.RAISED));
+
+        statusBar.add(createStatusLabel());
+        frame.add(statusBar, BorderLayout.SOUTH);
+    }
+
+    private JLabel createStatusLabel() {
+        statusLabel = new JLabel("Choose File -> Set Connection to begin the battle...");
+        return statusLabel;
+    }
+
+    public void setStatusLabel(String text) {
+        statusLabel.setText(text);
+    }
+
+    private void setupButtons() {
+        buttons = new Button[10][10];
+
+        for (int i = 0; i < 10; ++i ) {
+            for (int k = 0; k < 10; ++k) {
+                buttons[i][k] = new Button(i, k);
+                buttons[i][k].setBackground(Color.white);
+                //buttons[i][k].setOpacity(0.5);
+                buttons[i][k].repaint();
+                buttons[i][k].setOpaque(false);
+                bgPanel.add(buttons[i][k]);
+            }
+        }
+    }
+
+    public void addMenuBarListeners(ActionListener actionListener) {
         addFileMenuListeners(actionListener);
         addHelpMenuListeners(actionListener);
     }
