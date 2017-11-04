@@ -16,8 +16,11 @@ package View;
 //
 
 
-// Notes:
-//  - not used as for now
+/*
+ Notes:
+    - not used as for now
+
+*/
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,20 +32,11 @@ import java.io.IOException;
 
 public class ImagePanel extends JPanel {
 
-    private JPanel panel;
     private BufferedImage bgImg;
 
     public ImagePanel() {
         bgImg = readImageIn();
-
-        panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(bgImg, 0, 0, null);
-            }
-        };
-
+        setSize(500,500);
     }
 
 
@@ -59,5 +53,10 @@ public class ImagePanel extends JPanel {
         return tempImg;
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(bgImg, 0, 0, null);
+    }
 
 }

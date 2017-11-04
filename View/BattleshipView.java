@@ -1,5 +1,3 @@
-package View;
-
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -16,27 +14,25 @@ package View;
 //  class description...
 //
 
-import javax.imageio.ImageIO;
+package View;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.event.ActionListener;
 
 
 public class BattleshipView {
 
     private JFrame frame;
-    private JPanel bgPanel;
-    private BufferedImage img;
+    private ImagePanel bgPanel;
+    private MenuBar menuBar;
 
     public BattleshipView() {
-        try {
-            img = ImageIO.read(new File("images/water_bg.jpg"));
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
         setupFrame();
         setupPanel();
+        setupMenu();
+
+        frame.setVisible(true);
     }
 
     private void setupFrame() {
@@ -45,30 +41,38 @@ public class BattleshipView {
         frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setVisible(true);
     }
 
     private void setupPanel() {
-
-        bgPanel = new MyPanel();
-        //bgPanel.setLayout(new GridLayout(10,10,2, 2));;
-        frame.add(bgPanel);
-
-        /*
-        bgPanel  = new ImagePanel();
-
-        bgPanel.setSize(500, 500);
-        bgPanel.setLayout(new GridLayout(10, 10, 1, 1));
-
-        frame.add(bgPanel);
-        */
+        bgPanel = new ImagePanel();
+        bgPanel.setLayout(new GridLayout(10,10,2, 2));
+        frame.getContentPane().add(bgPanel);
     }
 
-    private class MyPanel extends JPanel {
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+    private void setupMenu() {
+        menuBar = new MenuBar();
+        frame.setJMenuBar(menuBar);
+    }
+
+    public void addMenuListener(ActionListener actionListener) {
+        addFileMenuListeners(actionListener);
+        addHelpMenuListeners(actionListener);
+    }
+
+    public void addFileMenuListeners() {
+
+    }
+
+    private void addHelpMenuListeners(ActionListener actionListener) {
+        JMenu temp = menuBar.getHelpMenu();
+        for (int i = 0; i < temp.getItemCount(); ++i) {
+            temp.getItem(i).addActionListener(actionListener);
         }
+    }
+
+    // FIXME: Implement
+    private void addFileMenuListeners(ActionListener actionListener) {
+
     }
 
 }

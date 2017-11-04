@@ -1,4 +1,3 @@
-import View.BattleshipView;
 
 //
 // Michal Bochnak, Netid: mbochn2
@@ -9,18 +8,15 @@ import View.BattleshipView;
 // Nov 16, 2017
 // UIC, Pat Troy
 //
-// BattleshipGame.java
+// BattleshipModel.java
 //
 
 //
 //  class description...
 //
 
-public class BattleshipGame {
+package Model;
 
-    public static void main ( String args[]) {
+public class BattleshipModel {
 
-        BattleshipView view = new BattleshipView();
-
-    }
 }
