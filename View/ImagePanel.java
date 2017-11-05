@@ -36,8 +36,8 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel() {
         bgImg = readImageIn();
-        // resize();
-        // this.setMaximumSize(new Dimension(600, 600));
+        resize();
+        this.setLayout(new GridLayout(10,10));
     }
 
 

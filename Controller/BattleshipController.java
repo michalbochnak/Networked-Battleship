@@ -19,17 +19,18 @@ package Controller;
 import Model.BattleshipModel;
 import View.BattleshipView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class BattleshipController {
 
-    BattleshipView view;
-    BattleshipModel model;
+    private BattleshipView view;
+    private BattleshipModel model;
 
     public BattleshipController() {
-        BattleshipView view = new BattleshipView();
-        BattleshipModel model = new BattleshipModel();
+        view = new BattleshipView();
+        model = new BattleshipModel();
 
         view.addMenuBarListeners(new fileMenuHandler());
     }
@@ -38,6 +39,7 @@ public class BattleshipController {
 
 //FIXME: implement specific handlers
     private class fileMenuHandler implements  ActionListener {
+        @Override
         public void actionPerformed (ActionEvent event) {
             if (event.getActionCommand().equals("Set Connection")) {
                 System.out.println("set connection");
@@ -48,9 +50,10 @@ public class BattleshipController {
             } else if (event.getActionCommand().equals("Connection help")) {
                 System.out.println("connection help");
             } else if (event.getActionCommand().equals("Game help")) {
-                System.out.println("game help");
+                view.displayGameHelpDialog();
             } else if (event.getActionCommand().equals("About")) {
-                System.out.println("About");
+                System.out.println("Here");
+                view.displayAboutDialog();
             }
         }
     }

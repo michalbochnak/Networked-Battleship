@@ -1,7 +1,3 @@
-import Controller.BattleshipController;
-import Model.BattleshipModel;
-import View.BattleshipView;
-
 //
 // Michal Bochnak, Netid: mbochn2
 // Alex Viznytsya, Netid: avizny2
@@ -11,12 +7,19 @@ import View.BattleshipView;
 // Nov 16, 2017
 // UIC, Pat Troy
 //
-// BattleshipGame.java
+// Controller.BattleshipGame.java
 //
 
 //
 //  class description...
 //
+
+package Controller;
+
+import Controller.BattleshipController;
+import Model.BattleshipModel;
+import View.BattleshipView;
+
 
 public class BattleshipGame {
 
