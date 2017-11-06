@@ -20,6 +20,7 @@ import Model.BattleshipModel;
 import View.BattleshipView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,6 +35,7 @@ public class BattleshipController {
 
         view.addMenuBarListeners(new fileMenuHandler());
         view.addButtonsListener(new buttonHandler());
+        view.addShipSelectionListener(new shipSelectorHandler());
     }
 
 
@@ -62,7 +64,15 @@ public class BattleshipController {
     //FIXME: Implement specific action handlers
     private class buttonHandler implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            System.out.println("Ouch, don't touch me...");
+            System.out.println("Ouch, don't touch me... : )");
+        }
+    }
+
+    private class shipSelectorHandler implements  ActionListener {
+        public void actionPerformed (ActionEvent event) {
+            // get imagename clicked
+            view.setCursor("images/russia-kuznetsov.png");
+            view.setStatusLabel("Place your ships on the grid soldier!");
         }
     }
 

@@ -51,7 +51,7 @@ public class Board extends ImagePanel{
     private void setupInfoLabel(String labelTitle) {
         infoLabel = new JLabel(labelTitle);
     }
-    
+
 }
 
 

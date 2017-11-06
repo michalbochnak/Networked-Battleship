@@ -34,6 +34,7 @@ public class BattleshipView {
     private MenuBar menuBar;
     private JLabel statusLabel;
     private JPanel shipsSelectionPanel;
+    private JButton shipSelectionButtons[];
 
     public BattleshipView() {
         setupFrame();
@@ -85,6 +86,11 @@ public class BattleshipView {
 
     private void setupShipSelectionPanel() {
         shipsSelectionPanel = new JPanel();
+        shipSelectionButtons = new JButton[5];
+        for (int i = 0; i< 5; ++i) {
+            shipSelectionButtons[i] = new JButton();
+            shipsSelectionPanel.add(shipSelectionButtons[i]);
+        }
         shipsSelectionPanel.setLayout(new GridLayout(9, 1));
         shipsSelectionPanel.setPreferredSize(new Dimension(280, 500));
         shipsSelectionPanel.setBackground(Color.white);
@@ -94,10 +100,12 @@ public class BattleshipView {
     }
 
     private void addShips() {
-        JButton aircraft = new JButton();
+        addAircraft();
+    }
+
+    private void addAircraft() {
         ImageIcon icon = new ImageIcon(loadImage("images/russia-kuznetsov.png"));
-        aircraft.setIcon(icon);
-        shipsSelectionPanel.add(aircraft);
+        shipSelectionButtons[0].setIcon(icon);
     }
 
     private BufferedImage loadImage (String filepath) {
@@ -169,6 +177,11 @@ public class BattleshipView {
                 b.addActionListener(al);
     }
 
+    public void addShipSelectionListener(ActionListener actionListener) {
+        for (JButton b : shipSelectionButtons)
+            b.addActionListener(actionListener);
+    }
+
     public void displayAboutDialog() {
         String message = "Authors:\n\n" +
                 "Michal Bochnak\nNetid: mbochn2\n\n" +
@@ -196,6 +209,13 @@ public class BattleshipView {
                 "Good Luck!";
         String title = "Game help";
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void setCursor(String filepath) {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image cursorImage = toolkit.getImage(filepath);
+        Cursor newCursor = toolkit.createCustomCursor(cursorImage, new Point(10,10), "Aircraft");
+        frame.setCursor(newCursor);
     }
 
 }
