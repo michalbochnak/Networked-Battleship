@@ -16,10 +16,14 @@
 
 package View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 
 
 public class BattleshipView {
@@ -29,12 +33,14 @@ public class BattleshipView {
     private Board opponentBoard;
     private MenuBar menuBar;
     private JLabel statusLabel;
+    private JPanel shipsSelectionPanel;
 
     public BattleshipView() {
         setupFrame();
         setupBoards();
         setupMenuBar();
         setupStatusBar();
+        setupShipSelectionPanel();
 
         frame.setVisible(true);
     }
@@ -42,7 +48,7 @@ public class BattleshipView {
     private void setupFrame() {
         frame = new JFrame("Networked Battleship");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1220, 680);
+        frame.setSize(1420, 680);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
     }
@@ -51,12 +57,13 @@ public class BattleshipView {
         Container mainPanel = new JPanel();
         playerBoard = new Board("You");
         opponentBoard = new Board("Enemy");
+        opponentBoard.setBgImage("images/water_02_b.png");
         playerBoard.setMaximumSize(new Dimension(600,600));
         mainPanel.setLayout(new GridLayout(1, 2, 10, 0));
         mainPanel.add(playerBoard);
         mainPanel.add(opponentBoard);
         mainPanel.setBackground(Color.white);
-        frame.getContentPane().add(mainPanel);
+        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
     private void setupMenuBar() {
@@ -76,11 +83,54 @@ public class BattleshipView {
         frame.add(statusBar, BorderLayout.SOUTH);
     }
 
+    private void setupShipSelectionPanel() {
+        shipsSelectionPanel = new JPanel();
+        shipsSelectionPanel.setLayout(new GridLayout(9, 1));
+        shipsSelectionPanel.setPreferredSize(new Dimension(280, 500));
+        shipsSelectionPanel.setBackground(Color.white);
+        shipsSelectionPanel.setBorder(BorderFactory.createLineBorder(Color.white, 8));
+        addShips();
+        frame.add(shipsSelectionPanel, BorderLayout.WEST);
+    }
+
+    private void addShips() {
+        JButton aircraft = new JButton();
+        ImageIcon icon = new ImageIcon(loadImage("images/russia-kuznetsov.png"));
+        aircraft.setIcon(icon);
+        shipsSelectionPanel.add(aircraft);
+    }
+
+    private BufferedImage loadImage (String filepath) {
+        BufferedImage img = null;
+        try {
+            File f = new File(filepath);
+            FileInputStream fs = new FileInputStream(f);
+            img = ImageIO.read(fs);
+        } catch (Exception ex) {
+            System.out.println("Loading image error");
+            System.out.println(ex);
+        }
+        return resize(img);
+    }
+
+    private BufferedImage resize(BufferedImage img) {
+        Image scaledImg = img.getScaledInstance
+                (260, 60, Image.SCALE_DEFAULT);
+
+        BufferedImage tempImage = new BufferedImage(scaledImg.getWidth(null),
+                scaledImg.getHeight(null), BufferedImage.TYPE_INT_ARGB );
+
+        // draw the image
+        Graphics2D temp = tempImage.createGraphics();
+        temp.drawImage(scaledImg, 0, 0, null);
+        temp.dispose();
+
+        return tempImage;
+    }
+
     public void setStatusLabel(String text) {
         statusLabel.setText(text);
     }
-
-
 
     public void addMenuBarListeners(ActionListener actionListener) {
         addFileMenuListeners(actionListener);
@@ -99,6 +149,24 @@ public class BattleshipView {
         for (int i = 0; i < temp.getItemCount(); ++i) {
             temp.getItem(i).addActionListener(actionListener);
         }
+    }
+
+    // FIXME: might update to seperate handlers for player / opponent
+    public void addButtonsListener(ActionListener actionListener) {
+        addButtonsListenerPlayer(actionListener);
+        addButtonsListenerOpponent(actionListener);
+    }
+
+    private void addButtonsListenerPlayer(ActionListener al) {
+        for (Button buttons[]: playerBoard.getButtons())
+            for (Button b: buttons)
+                b.addActionListener(al);
+    }
+
+    private void addButtonsListenerOpponent(ActionListener al) {
+        for (Button buttons[]: opponentBoard.getButtons())
+            for (Button b: buttons)
+                b.addActionListener(al);
     }
 
     public void displayAboutDialog() {

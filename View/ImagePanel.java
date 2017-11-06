@@ -35,17 +35,21 @@ public class ImagePanel extends JPanel {
     private BufferedImage bgImg;
 
     public ImagePanel() {
-        bgImg = readImageIn();
+        bgImg = readImageIn("images/water_02_a.png");
         resize();
         this.setLayout(new GridLayout(10,10));
     }
 
+    public void setBgImage(String filepath) {
+        bgImg = readImageIn(filepath);
+        resize();
+    }
 
-    private BufferedImage readImageIn() {
+    private BufferedImage readImageIn(String filepath) {
         BufferedImage tempImg = null;
 
         try {
-            tempImg = ImageIO.read(new File("images/water_bg.jpg"));
+            tempImg = ImageIO.read(new File(filepath));
         } catch (IOException exc) {
             System.out.println("Image loading failed");
             exc.printStackTrace();

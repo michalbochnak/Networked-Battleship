@@ -36,6 +36,10 @@ public class Button extends JButton {
         opacity = value;
     }
 
+    protected Coordinates getCoordinates() {
+        return coords;
+    }
+
     protected double getOpacity() {
         return opacity;
     }

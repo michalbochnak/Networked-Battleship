@@ -33,6 +33,7 @@ public class BattleshipController {
         model = new BattleshipModel();
 
         view.addMenuBarListeners(new fileMenuHandler());
+        view.addButtonsListener(new buttonHandler());
     }
 
 
@@ -55,6 +56,13 @@ public class BattleshipController {
                 System.out.println("Here");
                 view.displayAboutDialog();
             }
+        }
+    }
+
+    //FIXME: Implement specific action handlers
+    private class buttonHandler implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            System.out.println("Ouch, don't touch me...");
         }
     }
 

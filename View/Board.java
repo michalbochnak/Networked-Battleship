@@ -24,10 +24,13 @@ public class Board extends ImagePanel{
     private Button[][] buttons;
     private JLabel infoLabel;
 
-
     public Board(String labelTitle) {
         setupButtons();
         setupInfoLabel(labelTitle);
+    }
+
+    public Button[][] getButtons() {
+        return buttons;
     }
 
     private void setupButtons() {
