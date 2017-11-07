@@ -23,11 +23,14 @@ public class Board extends ImagePanel{
 
     private Button[][] buttons;
     private JLabel infoLabel;
+    private JLabel aircraft;
+
 
     public Board(String labelTitle) {
         setupButtons();
         setupInfoLabel(labelTitle);
     }
+
 
     public Button[][] getButtons() {
         return buttons;
@@ -42,7 +45,7 @@ public class Board extends ImagePanel{
                 buttons[i][k].setBackground(Color.white);
                 //buttons[i][k].setOpacity(0.5);
                 buttons[i][k].repaint();
-                buttons[i][k].setOpaque(false);
+                 buttons[i][k].setOpaque(false);
                 this.add(buttons[i][k]);
             }
         }
