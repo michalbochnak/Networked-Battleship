@@ -26,7 +26,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +47,7 @@ public class BattleshipController {
         model = new BattleshipModel();
         gameStage = 1;
         shipDirection = 0;
-        shipSelected = 5;
+        shipSelected = -1;
         shipsOnBoard = new HashSet<Integer>();
 
         view.addMenuBarListeners(new fileMenuHandler());
@@ -88,7 +87,8 @@ public class BattleshipController {
                 System.out.println("Click ignored...");
             }
             // Ship placement stage
-            else if (gameStage == 1 && !shipsOnBoard.contains(shipSelected)) {
+            else if (gameStage == 1 && !shipsOnBoard.contains(shipSelected)
+                    && shipSelected != -1) {
                 tryToPlaceShip(event);
                 if (shipsOnBoard.size() == 5) {
                     view.getOpponentBoard().setVisible(true);
@@ -216,8 +216,10 @@ public class BattleshipController {
         if (shipSelected == 5 || shipSelected == 4 || shipSelected == 3)
             return shipSelected;
         // size one more that ID
-        else
+        else if (shipSelected == 2 || shipSelected == 1)
             return shipSelected + 1;
+        else
+            return -1;
     }
 
     private class shipSelectorHandler implements  ActionListener {
@@ -243,7 +245,10 @@ public class BattleshipController {
                     break;
             }
 
-            view.setCursor("images/skull_02_cursor.png");
+            view.removeSelectionShipBorders();
+            ((JButton) event.getSource()).setBorder( BorderFactory.
+                    createLineBorder(Color.BLUE, 3));
+            view.setPlayerBoardCursor("images/skull_02_cursor.png");
            // view.setStatusLabel("Place your ships on the grid soldier!");
 
             System.out.println(shipSelected + " was selected.");

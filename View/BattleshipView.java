@@ -33,16 +33,16 @@ public class BattleshipView {
 
     private JFrame frame;
     private Board playerBoard;
-
-    public Board getOpponentBoard() {
-        return opponentBoard;
-    }
-
     private Board opponentBoard;
     private MenuBar menuBar;
     private JLabel statusLabel;
     private JPanel shipSelectionPanel;
     private JButton shipSelectionButtons[];
+
+
+    public Board getOpponentBoard() {
+        return opponentBoard;
+    }
 
 
 
@@ -276,13 +276,14 @@ public class BattleshipView {
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
-    public void setCursor(String filepath) {
+    public void setPlayerBoardCursor(String filepath) {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image cursorImage = toolkit.getImage(filepath);
         Cursor newCursor = toolkit.createCustomCursor(cursorImage,
                 new Point(10,10), "Aircraft");
-        frame.setCursor(newCursor);
+        playerBoard.setCursor(newCursor);
     }
+
 
     /*
     // FIXME: add array with cutted image as parameter, loop thru buttons to add
@@ -312,6 +313,11 @@ public class BattleshipView {
         }
     }
 
+    public void removeSelectionShipBorders() {
+        for (JButton b : shipSelectionButtons)
+            b.setBorder( BorderFactory.
+                    createEmptyBorder());
+    }
 
 }
 
