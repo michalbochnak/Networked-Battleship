@@ -34,11 +34,13 @@ public class ImagePanel extends JPanel {
 
     private BufferedImage bgImg;
 
+
     public ImagePanel() {
         bgImg = readImageIn("images/water_02_a.png");
         resize();
         this.setLayout(new GridLayout(10,10));
     }
+
 
     public void setBgImage(String filepath) {
         bgImg = readImageIn(filepath);

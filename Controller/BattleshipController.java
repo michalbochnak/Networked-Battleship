@@ -20,11 +20,9 @@ import Model.BattleshipModel;
 import Model.Coordinates;
 import View.BattleshipView;
 import View.Button;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,6 +40,7 @@ public class BattleshipController {
     private int shipDirection;
     private Set shipsOnBoard;
 
+
     public BattleshipController() {
         view = new BattleshipView();
         model = new BattleshipModel();
@@ -52,8 +51,11 @@ public class BattleshipController {
 
         view.addMenuBarListeners(new fileMenuHandler());
         view.addButtonsListener(new buttonHandler());
+        view.addMouseListener(new mouseHoveredHandler());
         view.addShipSelectionListener(new shipSelectorHandler());
+        view.addPlaceModeButtonListener(new placeModeButtonListener());
     }
+
 
 //FIXME: implement specific handlers
     private class fileMenuHandler implements  ActionListener {
@@ -95,7 +97,7 @@ public class BattleshipController {
                 }
             }
             // Game stage
-            else {
+            else if (gameStage == 2){
                 System.out.println("Game in progress");
             }
         }
@@ -247,11 +249,27 @@ public class BattleshipController {
 
             view.removeSelectionShipBorders();
             ((JButton) event.getSource()).setBorder( BorderFactory.
-                    createLineBorder(Color.BLUE, 3));
+                    createLineBorder(Color.orange, 3));
             view.setPlayerBoardCursor("images/skull_02_cursor.png");
            // view.setStatusLabel("Place your ships on the grid soldier!");
 
             System.out.println(shipSelected + " was selected.");
+        }
+    }
+
+    private class mouseHoveredHandler extends MouseAdapter{
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+
+            view.clearHighlightsFromAllButtons();
+
+            if (shipDirection == 0){
+                view.highllightHorizontally(findShipSize(),
+                        ((Button)evt.getSource()).getCoordinates());
+            }
+            else if (shipDirection == 1) {
+                view.highlightVertically(findShipSize(),
+                        ((Button)evt.getSource()).getCoordinates());;
+            }
         }
     }
 
@@ -281,6 +299,19 @@ public class BattleshipController {
                 break;
         }
         return tempImg;
+    }
+
+    private class placeModeButtonListener implements ActionListener {
+        public void actionPerformed (ActionEvent evt) {
+            if (shipDirection == 1){
+                shipDirection = 0;
+                view.getPlaceModeButton().setText("Placing horizontally");
+            }
+            else if (shipDirection == 0) {
+                shipDirection = 1;
+                view.getPlaceModeButton().setText("Placing vertically");
+            }
+        }
     }
 
 

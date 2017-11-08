@@ -28,9 +28,11 @@ public class Button extends JButton {
     private Coordinates coords;
     private double opacity;
 
-    protected  Button(int row, int col) {
+
+    public  Button(int row, int col) {
         coords = new Coordinates(row, col);
     }
+
 
     protected void setOpacity(double value) {
         opacity = value;

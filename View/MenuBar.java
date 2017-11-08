@@ -23,10 +23,12 @@ public class MenuBar extends JMenuBar {
 
     private JMenu fileMenu, helpMenu;
 
-    protected MenuBar() {
+
+    public MenuBar() {
         addFileMenu();
         addHelpMenu();
     }
+
 
     private void addFileMenu() {
         fileMenu = new JMenu("File");

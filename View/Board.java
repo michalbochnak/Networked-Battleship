@@ -27,14 +27,34 @@ public class Board extends ImagePanel{
 
 
     public Board(String labelTitle) {
+        //addNumberIndicators();
         setupButtons();
         setupInfoLabel(labelTitle);
+        addLetterIndicators();
     }
 
 
     public Button[][] getButtons() {
         return buttons;
     }
+
+    private void addLetterIndicators() {
+
+    }
+
+    /*
+    private void addNumberIndicators() {
+        JPanel tempPanel = new JPanel();
+        tempPanel.setSize(50, 600);
+        // add 10 labels
+        for (int i = 0; i < 10; ++i) {
+            JLabel tempLabel = new JLabel();
+            tempLabel.setText("1");
+            tempPanel.add(tempLabel);
+        }
+        add(tempPanel, BorderLayout.WEST);
+    }
+    */
 
     private void setupButtons() {
         buttons = new Button[10][10];
@@ -56,7 +76,6 @@ public class Board extends ImagePanel{
     }
 
 }
-
 
 
 

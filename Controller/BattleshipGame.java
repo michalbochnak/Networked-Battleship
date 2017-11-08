@@ -16,9 +16,6 @@
 
 package Controller;
 
-import Controller.BattleshipController;
-import Model.BattleshipModel;
-import View.BattleshipView;
 
 
 public class BattleshipGame {

@@ -21,6 +21,13 @@ import javax.print.event.PrintJobAttributeListener;
 
 public class BattleshipModel {
 
+    private int board[][];
+    private enum ships {aircraft, battleship, destroyer, submarine, patrol};
+
+
+    public BattleshipModel() {
+        board = new int[10][10];
+    }
 
 
 

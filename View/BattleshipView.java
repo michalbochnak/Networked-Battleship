@@ -23,10 +23,10 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.Buffer;
 
 
 public class BattleshipView {
@@ -38,6 +38,7 @@ public class BattleshipView {
     private JLabel statusLabel;
     private JPanel shipSelectionPanel;
     private JButton shipSelectionButtons[];
+    private JButton placeModeButton;
 
 
     public Board getOpponentBoard() {
@@ -45,6 +46,9 @@ public class BattleshipView {
     }
 
 
+    public JButton getPlaceModeButton() {
+        return placeModeButton;
+}
 
     public BattleshipView() {
         setupFrame();
@@ -124,7 +128,18 @@ public class BattleshipView {
         shipSelectionPanel.setBackground(Color.white);
         shipSelectionPanel.setBorder(BorderFactory.createLineBorder(Color.white, 8));
         addShips();
+        addPlaceModeButton();
         frame.add(shipSelectionPanel, BorderLayout.WEST);
+    }
+
+    private void addPlaceModeButton() {
+        placeModeButton = new JButton("Placing horizontally");
+        placeModeButton.setBackground(Color.orange);
+        shipSelectionPanel.add(placeModeButton);
+    }
+
+    public void addPlaceModeButtonListener(ActionListener al) {
+        placeModeButton.addActionListener(al);
     }
 
     private void addShips() {
@@ -231,9 +246,19 @@ public class BattleshipView {
     }
 
     private void addButtonsListenerPlayer(ActionListener al) {
-        for (Button buttons[]: playerBoard.getButtons())
-            for (Button b: buttons)
+        for (Button buttons[]: playerBoard.getButtons()){
+            for (Button b: buttons) {
                 b.addActionListener(al);
+            }
+        }
+    }
+
+    public void addMouseListener(MouseAdapter ma){
+        for (Button buttons[]: playerBoard.getButtons()){
+            for (Button b: buttons) {
+                b.addMouseListener(ma);
+            }
+        }
     }
 
     private void addButtonsListenerOpponent(ActionListener al) {
@@ -319,7 +344,46 @@ public class BattleshipView {
                     createEmptyBorder());
     }
 
-}
+    public void highllightHorizontally(int shipSize, Coordinates c) {
+        if ((10 - c.getMyCol()) >= shipSize) {
+            int row = c.getMyRow();
+            for (int col = c.getMyCol(); col < c.getMyCol() + shipSize; ++col) {
+                highlighButton(new Coordinates(row, col));
+            }
+        }
+    }
+
+    public void highlightVertically(int shipSize, Coordinates c) {
+        if ((10 - c.getMyRow()) >= shipSize) {
+            int col = c.getMyCol();
+            for (int row = c.getMyRow(); row < c.getMyRow() + shipSize; ++row) {
+                highlighButton(new Coordinates(row, col));
+            }
+        }
+    }
+
+    public void highlighButton(Coordinates c) {
+        playerBoard.getButtons()[c.getMyRow()][c.getMyCol()].
+                setBorder(BorderFactory.createLineBorder
+                        (Color.ORANGE, 2));
+    }
+
+    public void clearHighlightsFromAllButtons() {
+        for (Button row[] : playerBoard.getButtons())
+            for (Button b : row )
+                b.setBorder(BorderFactory.createLineBorder
+                        (Color.GRAY, 1));
+    }
+
+    public void removeHighlightFromButton(Coordinates c) {
+        playerBoard.getButtons()[c.getMyRow()][c.getMyCol()].
+                setBorder(BorderFactory.createLineBorder
+                        (Color.GRAY, 1));
+    }
+
+
+
+}   // end of BattleshipView class
 
 
 
