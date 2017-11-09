@@ -37,14 +37,14 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel() {
         bgImg = readImageIn("images/water_02_a.png");
-        resize();
+        resizeImage();
         this.setLayout(new GridLayout(10,10));
     }
 
 
     public void setBgImage(String filepath) {
         bgImg = readImageIn(filepath);
-        resize();
+        resizeImage();
     }
 
     private BufferedImage readImageIn(String filepath) {
@@ -66,8 +66,8 @@ public class ImagePanel extends JPanel {
         g.drawImage(bgImg, 0, 0, null);
     }
 
-    // resize the image to 600 x 600
-    private void resize() {
+    // resizeImage the image to 600 x 600
+    private void resizeImage() {
         Image img = bgImg.getScaledInstance
                 (600, 600, Image.SCALE_DEFAULT);
 

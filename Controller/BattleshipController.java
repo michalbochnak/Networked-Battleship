@@ -51,7 +51,7 @@ public class BattleshipController {
 
         view.addMenuBarListeners(new fileMenuHandler());
         view.addButtonsListener(new buttonHandler());
-        view.addMouseListener(new mouseHoveredHandler());
+        view.addMouseListener(new hoverHandlerShipSelection());
         view.addShipSelectionListener(new shipSelectorHandler());
         view.addPlaceModeButtonListener(new placeModeButtonListener());
     }
@@ -110,16 +110,44 @@ public class BattleshipController {
                 ImageIcon shipPieces[] = cutIcon(findShipSize());
                 view.placeShipHorizontally(shipPieces, c);
                 shipsOnBoard.add(shipSelected);
+                view.getShipSelectionButtons()[findIndex(shipSelected)].setBackground(Color.gray);
             }
         }
         else  {             // vertical
             if (enoughSpaceForShip(c)) {
                 ImageIcon shipPieces[] = cutIcon(findShipSize());
-                // FIXME:  twist images 90 degrees
                 view.placeShipVertically(shipPieces, c);
                 shipsOnBoard.add(shipSelected);
+                view.getShipSelectionButtons()[findIndex(shipSelected)].setBackground(Color.gray);
             }
         }
+        if (shipsOnBoard.size() == 5) {
+            gameStage = 2;
+            view.removeHoverListener();
+            view.clearHighlightsFromAllButtons();
+        }
+    }
+
+    private int findIndex (int shipID) {
+        int index = -1;
+        switch (shipID) {
+            case 5:
+                index = 0;
+                break;
+            case 4:
+                index = 1;
+                break;
+            case 3:
+                index = 2;
+                break;
+            case 2:
+                index = 3;
+                break;
+            case 1:
+                index = 4;
+                break;
+        }
+        return index;
     }
 
     private boolean enoughSpaceForShip(Coordinates c) {
@@ -166,28 +194,49 @@ public class BattleshipController {
         return freeSpots;
     }
 
-    private ImageIcon[] cutIcon(int columns) {
+    private ImageIcon[] cutIcon(int pieces) {
         BufferedImage origImg = generateScaledShip();
-        BufferedImage img[] = new BufferedImage[columns];
-        int pieceW = origImg.getWidth() / columns;
+        BufferedImage imgs[] = new BufferedImage[pieces];
+        int pieceW = origImg.getWidth() / pieces;
         int pieceH = origImg.getHeight();
 
-        for (int i = 0; i < columns; ++i) {
-            img[i] = new BufferedImage(pieceW, pieceH, origImg.getType());
+        for (int i = 0; i < pieces; ++i) {
+            imgs[i] = new BufferedImage(pieceW, pieceH, origImg.getType());
             // draw the image chunk
-            Graphics2D gr = img[i].createGraphics();
+            Graphics2D gr = imgs[i].createGraphics();
             gr.drawImage(origImg, 0,0, pieceW, pieceH,
                     pieceW * i, 0, pieceW*i +pieceW, pieceH,
                     null);
             gr.dispose();
         }
 
-        ImageIcon icon[] = new ImageIcon[columns];
-        for (int i = 0; i < img.length; ++i) {
-            icon[i] = new ImageIcon(img[i]);
+        ImageIcon icons[] = new ImageIcon[pieces];
+        for (int i = 0; i < imgs.length; ++i) {
+            // placing vertically -> rotate
+            if (shipDirection == 1) { imgs[i] = rotateImage(imgs[i]); };
+            icons[i] = new ImageIcon(imgs[i]);
         }
+        return icons;
+    }
 
-        return icon;
+    private BufferedImage rotateImage(BufferedImage img) {
+        BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+        Graphics2D gr = (Graphics2D)temp.getGraphics();
+        gr.rotate(Math.toRadians(90), img.getWidth() / 2, img.getHeight() / 2);
+        gr.drawImage(img, 0, 0, null);
+        gr.dispose();
+        return temp;
+
+        /*
+        AffineTransform at = AffineTransform.getTranslateInstance
+                (img.getWidth(), img.getHeight());
+        at.rotate(Math.toRadians(45), img.getWidth()/2,
+                img.getHeight()/2);
+
+        Graphics2D gr = (Graphics2D)img.getGraphics();
+        gr.drawImage(img, at, null);
+        return img;
+        */
     }
 
     private String findShipFilepath() {
@@ -248,22 +297,24 @@ public class BattleshipController {
             }
 
             view.removeSelectionShipBorders();
-            ((JButton) event.getSource()).setBorder( BorderFactory.
-                    createLineBorder(Color.orange, 3));
-            view.setPlayerBoardCursor("images/skull_02_cursor.png");
+            view.resetShipSelectionButtonsBorders();
+            if (!shipsOnBoard.contains(shipSelected)) {
+                ((JButton) event.getSource()).setBorder(BorderFactory.
+                        createLineBorder(Color.DARK_GRAY, 4));
+            }
            // view.setStatusLabel("Place your ships on the grid soldier!");
 
             System.out.println(shipSelected + " was selected.");
         }
     }
 
-    private class mouseHoveredHandler extends MouseAdapter{
+    private class hoverHandlerShipSelection extends MouseAdapter{
         public void mouseEntered(java.awt.event.MouseEvent evt) {
 
             view.clearHighlightsFromAllButtons();
 
             if (shipDirection == 0){
-                view.highllightHorizontally(findShipSize(),
+                view.highlightHorizontally(findShipSize(),
                         ((Button)evt.getSource()).getCoordinates());
             }
             else if (shipDirection == 1) {

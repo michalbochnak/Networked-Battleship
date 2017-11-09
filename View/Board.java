@@ -31,12 +31,35 @@ public class Board extends ImagePanel{
         setupButtons();
         setupInfoLabel(labelTitle);
         addLetterIndicators();
+        //setLayout(new GridLayout(10,10));
+        addIndicatorBars();
     }
 
 
     public Button[][] getButtons() {
         return buttons;
     }
+
+    private void addIndicatorBars() {
+        //add_ABC_Bar();
+        //add_123_Bar();
+    }
+
+
+    private void add_ABC_Bar() {
+        JPanel bar = new JPanel();
+        bar.setSize(600, 50);
+        bar.setBackground(Color.orange);
+        add(bar);
+    }
+
+    private void add_123_Bar() {
+        JPanel bar = new JPanel();
+        bar.setSize(600, 50);
+        bar.setBackground(Color.orange);
+        add(bar);
+    }
+
 
     private void addLetterIndicators() {
 
@@ -58,6 +81,10 @@ public class Board extends ImagePanel{
 
     private void setupButtons() {
         buttons = new Button[10][10];
+        //JPanel grid = new JPanel();
+        //grid.setSize(500,500);
+        //grid.setBackground(Color.cyan);
+        //grid.setLayout(new GridLayout(10,10));
 
         for (int i = 0; i < 10; ++i ) {
             for (int k = 0; k < 10; ++k) {
@@ -65,10 +92,12 @@ public class Board extends ImagePanel{
                 buttons[i][k].setBackground(Color.white);
                 //buttons[i][k].setOpacity(0.5);
                 buttons[i][k].repaint();
-                 buttons[i][k].setOpaque(false);
-                this.add(buttons[i][k]);
+                buttons[i][k].setOpaque(false);
+                add(buttons[i][k]);
             }
         }
+
+        //add(grid, BorderLayout.SOUTH);
     }
 
     private void setupInfoLabel(String labelTitle) {
