@@ -17,7 +17,12 @@
 
 package Model;
 
-import javax.print.event.PrintJobAttributeListener;
+/*
+Todo:
+    - Please, make sure you store ships in the grid as we talked
+        so I can verify which part of ship was hit to update the
+        proper image on the grid
+ */
 
 public class BattleshipModel {
 
