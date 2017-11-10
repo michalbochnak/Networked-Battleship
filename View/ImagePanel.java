@@ -38,7 +38,7 @@ public class ImagePanel extends JPanel {
     public ImagePanel() {
         bgImg = readImageIn("images/water_02_a.png");
         resizeImage();
-        this.setLayout(new GridLayout(10,10));
+        this.setLayout(new BorderLayout());
     }
 
 

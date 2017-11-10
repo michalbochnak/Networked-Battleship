@@ -54,4 +54,5 @@ public class MenuBar extends JMenuBar {
     public JMenu getHelpMenu() {
         return helpMenu;
     }
+    
 }

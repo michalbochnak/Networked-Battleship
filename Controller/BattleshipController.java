@@ -310,9 +310,7 @@ public class BattleshipController {
 
     private class hoverHandlerShipSelection extends MouseAdapter{
         public void mouseEntered(java.awt.event.MouseEvent evt) {
-
             view.clearHighlightsFromAllButtons();
-
             if (shipDirection == 0){
                 view.highlightHorizontally(findShipSize(),
                         ((Button)evt.getSource()).getCoordinates());
@@ -321,6 +319,10 @@ public class BattleshipController {
                 view.highlightVertically(findShipSize(),
                         ((Button)evt.getSource()).getCoordinates());;
             }
+        }
+
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            view.clearHighlightsFromAllButtons();
         }
     }
 

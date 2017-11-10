@@ -40,6 +40,7 @@ public class BattleshipView {
     private JPanel shipSelectionPanel;
     private JButton placeModeButton;
     private JButton shipSelectionButtons[];
+    private Color myColor = Color.white;
 
 
     public BattleshipView() {
@@ -86,22 +87,24 @@ public class BattleshipView {
     private void setupFrame() {
         frame = new JFrame("Networked Battleship");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1420, 650);
+        frame.setSize(1400, 700);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        frame.setBackground(myColor);
+        //frame.setResizable(false);
     }
 
     private void setupBoards() {
-        Container mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         playerBoard = new Board("You");
         opponentBoard = new Board("Enemy");
-        playerBoard.setBgImage("images/water_05.jpg");
-        opponentBoard.setBgImage("images/water_05.jpg");
+        playerBoard.setBgImage("images/water_02_a.png");
+        opponentBoard.setBgImage("images/water_02_b.png");
         playerBoard.setMaximumSize(new Dimension(600,600));
-        mainPanel.setLayout(new GridLayout(1, 2, 10, 0));
+        mainPanel.setLayout(new GridLayout(1, 2, 0, 0));
         mainPanel.add(playerBoard);
         mainPanel.add(opponentBoard);
-        mainPanel.setBackground(Color.white);
+        mainPanel.setOpaque(false);
+        mainPanel.setBackground(myColor);
         setBoardCursor("images/skull_02_cursor_orange.png");
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
@@ -116,9 +119,8 @@ public class BattleshipView {
         statusLabel = new JLabel();
         statusLabel.setText("Choose File -> Set Connection to begin the battle...");
         statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        statusBar.setBackground(Color.white);
+        statusBar.setBackground(myColor);
         statusBar.setBorder(new BevelBorder(BevelBorder.RAISED));
-
         statusBar.add(statusLabel);
         frame.add(statusBar, BorderLayout.SOUTH);
     }
@@ -130,10 +132,11 @@ public class BattleshipView {
             shipSelectionButtons[i] = new JButton();
             shipSelectionPanel.add(shipSelectionButtons[i]);
         }
-        shipSelectionPanel.setLayout(new GridLayout(9, 1));
+        shipSelectionPanel.setLayout(new GridLayout(6, 1));
         shipSelectionPanel.setPreferredSize(new Dimension(280, 500));
-        shipSelectionPanel.setBackground(Color.white);
+        shipSelectionPanel.setBackground(myColor);
         shipSelectionPanel.setBorder(BorderFactory.createLineBorder(Color.white, 8));
+        shipSelectionPanel.setOpaque(false);
         addShips();
         addPlaceModeButton();
         frame.add(shipSelectionPanel, BorderLayout.WEST);
@@ -145,9 +148,10 @@ public class BattleshipView {
         label.setText("                                       Your Board                                              Opponent Board");
         label.setFont(new Font("Arial", Font.BOLD, 30));
         infoBar.add(label);
-        infoBar.setBackground(Color.orange);
+        infoBar.setBackground(myColor);
         infoBar.setSize(1400, 50);
         infoBar.setBorder(BorderFactory.createLineBorder(Color.white, 5));
+        //infoBar.setOpaque(false);
         frame.add(infoBar, BorderLayout.NORTH);
     }
 
@@ -174,7 +178,7 @@ public class BattleshipView {
         addSubmarine();
         addPatrolBoat();
         for (JButton b : shipSelectionButtons)
-            b.setBackground(Color.orange);
+            b.setBackground(myColor);
     }
 
     private void addAircraft() {
@@ -288,7 +292,7 @@ public class BattleshipView {
         }
     }
 
-public void removeHoverListener() {
+    public void removeHoverListener() {
     for (Button buttons[]: playerBoard.getButtons()){
         for (Button b: buttons) {
             MouseListener[] ml = b.getMouseListeners();
