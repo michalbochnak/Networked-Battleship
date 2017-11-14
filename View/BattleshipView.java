@@ -35,7 +35,7 @@ public class BattleshipView {
     private JFrame frame;
     private Board playerBoard;
     private Board opponentBoard;
-    private MenuBar menuBar;
+//    private MenuBar menuBar;
     private JLabel statusLabel;
     private JPanel shipSelectionPanel;
     private JButton placeModeButton;
@@ -46,7 +46,7 @@ public class BattleshipView {
     public BattleshipView() {
         setupFrame();
         setupBoards();
-        setupMenuBar();
+//        setupMenuBar();
         setupStatusBar();
         setupShipSelectionPanel();
         //opponentBoard.setVisible(false);
@@ -109,10 +109,10 @@ public class BattleshipView {
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
-    private void setupMenuBar() {
-        menuBar = new MenuBar();
-        frame.setJMenuBar(menuBar);
-    }
+//    private void setupMenuBar() {
+//        menuBar = new MenuBar();
+//        frame.setJMenuBar(menuBar);
+//    }
 
     private void setupStatusBar() {
         JPanel statusBar = new JPanel();
@@ -251,24 +251,7 @@ public class BattleshipView {
         statusLabel.setText(text);
     }
 
-    public void addMenuBarListeners(ActionListener actionListener) {
-        addFileMenuListeners(actionListener);
-        addHelpMenuListeners(actionListener);
-    }
-
-    private void addHelpMenuListeners(ActionListener actionListener) {
-        JMenu temp = menuBar.getHelpMenu();
-        for (int i = 0; i < temp.getItemCount(); ++i) {
-            temp.getItem(i).addActionListener(actionListener);
-        }
-    }
-
-    private void addFileMenuListeners(ActionListener actionListener) {
-        JMenu temp = menuBar.getFileMenu();
-        for (int i = 0; i < temp.getItemCount(); ++i) {
-            temp.getItem(i).addActionListener(actionListener);
-        }
-    }
+   
 
     // FIXME: might update to seperate handlers for player / opponent
     public void addButtonsListener(ActionListener actionListener) {

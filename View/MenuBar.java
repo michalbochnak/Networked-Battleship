@@ -16,43 +16,56 @@
 
 package View;
 
-
-import javax.swing.*;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.util.Map;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class MenuBar extends JMenuBar {
 
-    private JMenu fileMenu, helpMenu;
+	private static final long serialVersionUID = 1L;
+	private JMenu fileMenu, helpMenu;
+	private Map<String, JMenuItem> jMenuItems;
 
-
-    public MenuBar() {
+	// Default constructor:
+    
+	public MenuBar() {
+		jMenuItems = new HashMap<String, JMenuItem>();
         addFileMenu();
         addHelpMenu();
     }
 
-
+    // Getter functions:
+		
     private void addFileMenu() {
-        fileMenu = new JMenu("File");
-        fileMenu.add(new JMenuItem("Set Connection"));
-        fileMenu.add(new JMenuItem("Statistics"));
-        fileMenu.add(new JMenuItem("Quit"));
+    		fileMenu = new JMenu("File");
+    		jMenuItems.put("CreateHost", new JMenuItem("Create Host"));
+    		fileMenu.add(jMenuItems.get("CreateHost"));
+    		jMenuItems.put("ConnectToHost", new JMenuItem("Connect to Host"));
+    		fileMenu.add(jMenuItems.get("ConnectToHost"));
+    		jMenuItems.put("Statistics", new JMenuItem("Statistics"));
+    		fileMenu.add(jMenuItems.get("Statistics"));
+    		jMenuItems.put("Quit", new JMenuItem("Quit"));
+    		fileMenu.add(jMenuItems.get("Quit"));
         add(fileMenu);
     }
 
     private void addHelpMenu() {
         helpMenu = new JMenu("Help");
-        helpMenu.add(new JMenuItem("Connection help"));
-        helpMenu.add(new JMenuItem("Game help"));
-        helpMenu.add(new JMenuItem("About"));
+        jMenuItems.put("ConnectionHelp", new JMenuItem("Connection Help"));
+        helpMenu.add(jMenuItems.get("ConnectionHelp"));
+        jMenuItems.put("GameRules", new JMenuItem("Game Rules"));
+        helpMenu.add(jMenuItems.get("GameRules"));
+        jMenuItems.put("About", new JMenuItem("About"));
+        helpMenu.add(jMenuItems.get("About"));
         add(helpMenu);
     }
 
-    public JMenu getFileMenu() {
-        return fileMenu;
+    
+    public void addMenuItemListener(String menuItem, ActionListener actionListener) {
+    		jMenuItems.get(menuItem).addActionListener(actionListener);
     }
 
-    @Override
-    public JMenu getHelpMenu() {
-        return helpMenu;
-    }
-    
 }

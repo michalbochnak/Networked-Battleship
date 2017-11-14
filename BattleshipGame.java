@@ -14,9 +14,9 @@
 //  class description...
 //
 
-package Controller;
 
 
+import Controller.BattleshipController;
 
 public class BattleshipGame {
 

@@ -32,6 +32,7 @@ public class BattleshipController {
 
     private BattleshipView view;
     private BattleshipModel model;
+    private MenuBarController menuBar;
     // 0 - 2: 0 - connection, 1 - ship placement, 2 - game
     private int gameStage;
     // 5 - 1: 5 - aircraft, 4 - battleship, 3 - destroyer, 2 - submarine, 1 - patrol boat
@@ -44,12 +45,13 @@ public class BattleshipController {
     public BattleshipController() {
         view = new BattleshipView();
         model = new BattleshipModel();
+        menuBar = new MenuBarController(view.getFrame());
+        
         gameStage = 1;
         shipDirection = 0;
         shipSelected = -1;
         shipsOnBoard = new HashSet<Integer>();
-
-        view.addMenuBarListeners(new fileMenuHandler());
+        
         view.addButtonsListener(new buttonHandler());
         view.addMouseListener(new hoverHandlerShipSelection());
         view.addShipSelectionListener(new shipSelectorHandler());
@@ -58,26 +60,26 @@ public class BattleshipController {
 
 
 //FIXME: implement specific handlers
-    private class fileMenuHandler implements  ActionListener {
-        @Override
-        public void actionPerformed (ActionEvent event) {
-            if (event.getActionCommand().equals("Set Connection")) {
-                System.out.println("set connection");
-                // toggle game mode if connection established
-            } else if (event.getActionCommand().equals("Statistics")) {
-                System.out.println("Statistics");
-            } else if (event.getActionCommand().equals("Quit")) {
-                java.lang.System.exit(0);
-            } else if (event.getActionCommand().equals("Connection help")) {
-                System.out.println("connection help");
-            } else if (event.getActionCommand().equals("Game help")) {
-                view.displayGameHelpDialog();
-            } else if (event.getActionCommand().equals("About")) {
-                System.out.println("Here");
-                view.displayAboutDialog();
-            }
-        }
-    }
+//    private class fileMenuHandler implements  ActionListener {
+//        @Override
+//        public void actionPerformed (ActionEvent event) {
+//            if (event.getActionCommand().equals("Set Connection")) {
+//                System.out.println("set connection");
+//                // toggle game mode if connection established
+//            } else if (event.getActionCommand().equals("Statistics")) {
+//                System.out.println("Statistics");
+//            } else if (event.getActionCommand().equals("Quit")) {
+//                java.lang.System.exit(0);
+//            } else if (event.getActionCommand().equals("Connection help")) {
+//                System.out.println("connection help");
+//            } else if (event.getActionCommand().equals("Game help")) {
+//                view.displayGameHelpDialog();
+//            } else if (event.getActionCommand().equals("About")) {
+//                System.out.println("Here");
+//                view.displayAboutDialog();
+//            }
+//        }
+//    }
 
     //FIXME: Implement specific action handlers
     private class buttonHandler implements ActionListener {
