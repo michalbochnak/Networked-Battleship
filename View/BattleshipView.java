@@ -159,141 +159,141 @@ public class BattleshipView {
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
     }
 
-    private void addPlaceModeButton() {
-        placeModeButton = new JButton("Placing horizontally");
-        placeModeButton.setFont(new Font("Arial", Font.BOLD, 17));
-        placeModeButton.setBackground(Color.orange);
-        shipSelectionPanel.add(placeModeButton);
-    }
-
-    public void addPlaceModeButtonListener(ActionListener al) {
-        placeModeButton.addActionListener(al);
-    }
-
-    private void addShips() {
-        addAircraft();
-        addBattleship();
-        addDestroyer();
-        addSubmarine();
-        addPatrolBoat();
-        for (JButton b : shipSelectionButtons)
-            b.setBackground(myColor);
-    }
-
-    private void addAircraft() {
-        BufferedImage img = resize(loadImage
-                ("images/russia-kuznetsov.png"), 260, 60);
-        ImageIcon icon = new ImageIcon(img, "Aircraft Carrier");
-        shipSelectionButtons[0].setIcon(icon);
-    }
-
-    private void addBattleship() {
-        BufferedImage img = resize(loadImage
-                ("images/yamato.png"), 208, 60);
-        ImageIcon icon = new ImageIcon(img, "Battleship");
-        shipSelectionButtons[1].setIcon(icon);
-    }
-
-    private void addDestroyer() {
-        BufferedImage img = resize(loadImage
-                ("images/destroyer.png"), 154, 60);
-        ImageIcon icon = new ImageIcon(img, "Destroyer");
-        shipSelectionButtons[2].setIcon(icon);
-    }
-
-    private void addSubmarine() {
-        BufferedImage img = resize(loadImage
-                ("images/typhoon.png"), 154, 60);
-        ImageIcon icon = new ImageIcon(img, "Submarine");
-        shipSelectionButtons[3].setIcon(icon);
-    }
-
-    private void addPatrolBoat() {
-        BufferedImage img = resize(loadImage
-                ("images/patrol_boat.png"), 102, 50);
-        ImageIcon icon = new ImageIcon(img, "Patrol Boat");
-        shipSelectionButtons[4].setIcon(icon);
-    }
-
-    public BufferedImage loadImage (String filepath) {
-        BufferedImage img = null;
-        try {
-            File f = new File(filepath);
-            FileInputStream fs = new FileInputStream(f);
-            img = ImageIO.read(fs);
-        } catch (Exception ex) {
-            System.out.println("Loading image error");
-            System.out.println(ex);
-        }
-
-        return img;
-    }
-
-    public BufferedImage resize(BufferedImage img, int width, int height) {
-
-        Image scaledImg = img.getScaledInstance
-                (width, height, Image.SCALE_DEFAULT);
-
-
-        BufferedImage tempImage = new BufferedImage(scaledImg.getWidth(null),
-                scaledImg.getHeight(null), BufferedImage.TYPE_INT_ARGB );
-
-        // draw the image
-        Graphics2D temp = tempImage.createGraphics();
-        temp.drawImage(scaledImg, 0, 0, null);
-        temp.dispose();
-
-        return tempImage;
-    }
-
-    public void setStatusLabel(String text) {
-        statusLabel.setText(text);
-    }
-
-   
-
-    // FIXME: might update to seperate handlers for player / opponent
-    public void addButtonsListener(ActionListener actionListener) {
-        addButtonsListenerPlayer(actionListener);
-        //addButtonsListenerOpponent(actionListener);
-    }
-
-    private void addButtonsListenerPlayer(ActionListener al) {
-        for (Button buttons[]: playerBoard.getButtons()){
-            for (Button b: buttons) {
-                b.addActionListener(al);
-            }
-        }
-    }
-
-    public void addMouseListener(MouseAdapter ma){
-        for (Button buttons[]: playerBoard.getButtons()){
-            for (Button b: buttons) {
-                b.addMouseListener(ma);
-            }
-        }
-    }
-
-    public void removeHoverListener() {
-    for (Button buttons[]: playerBoard.getButtons()){
-        for (Button b: buttons) {
-            MouseListener[] ml = b.getMouseListeners();
-            for (MouseListener x : ml)
-                b.removeMouseListener(x);
-        }
-    }
-}
-
-    private void addButtonsListenerOpponent(ActionListener al) {
-        for (Button buttons[]: opponentBoard.getButtons())
-            for (Button b: buttons)
-                b.addActionListener(al);
-    }
-
-    public void addShipSelectionListener(ActionListener actionListener) {
-        for (JButton b : shipSelectionButtons)
-            b.addActionListener(actionListener);
-    }
+//    private void addPlaceModeButton() {
+//        placeModeButton = new JButton("Placing horizontally");
+//        placeModeButton.setFont(new Font("Arial", Font.BOLD, 17));
+//        placeModeButton.setBackground(Color.orange);
+//        shipSelectionPanel.add(placeModeButton);
+//    }
+//
+//    public void addPlaceModeButtonListener(ActionListener al) {
+//        placeModeButton.addActionListener(al);
+//    }
+//
+//    private void addShips() {
+//        addAircraft();
+//        addBattleship();
+//        addDestroyer();
+//        addSubmarine();
+//        addPatrolBoat();
+//        for (JButton b : shipSelectionButtons)
+//            b.setBackground(myColor);
+//    }
+//
+//    private void addAircraft() {
+//        BufferedImage img = resize(loadImage
+//                ("images/russia-kuznetsov.png"), 260, 60);
+//        ImageIcon icon = new ImageIcon(img, "Aircraft Carrier");
+//        shipSelectionButtons[0].setIcon(icon);
+//    }
+//
+//    private void addBattleship() {
+//        BufferedImage img = resize(loadImage
+//                ("images/yamato.png"), 208, 60);
+//        ImageIcon icon = new ImageIcon(img, "Battleship");
+//        shipSelectionButtons[1].setIcon(icon);
+//    }
+//
+//    private void addDestroyer() {
+//        BufferedImage img = resize(loadImage
+//                ("images/destroyer.png"), 154, 60);
+//        ImageIcon icon = new ImageIcon(img, "Destroyer");
+//        shipSelectionButtons[2].setIcon(icon);
+//    }
+//
+//    private void addSubmarine() {
+//        BufferedImage img = resize(loadImage
+//                ("images/typhoon.png"), 154, 60);
+//        ImageIcon icon = new ImageIcon(img, "Submarine");
+//        shipSelectionButtons[3].setIcon(icon);
+//    }
+//
+//    private void addPatrolBoat() {
+//        BufferedImage img = resize(loadImage
+//                ("images/patrol_boat.png"), 102, 50);
+//        ImageIcon icon = new ImageIcon(img, "Patrol Boat");
+//        shipSelectionButtons[4].setIcon(icon);
+//    }
+//
+//    public BufferedImage loadImage (String filepath) {
+//        BufferedImage img = null;
+//        try {
+//            File f = new File(filepath);
+//            FileInputStream fs = new FileInputStream(f);
+//            img = ImageIO.read(fs);
+//        } catch (Exception ex) {
+//            System.out.println("Loading image error");
+//            System.out.println(ex);
+//        }
+//
+//        return img;
+//    }
+//
+//    public BufferedImage resize(BufferedImage img, int width, int height) {
+//
+//        Image scaledImg = img.getScaledInstance
+//                (width, height, Image.SCALE_DEFAULT);
+//
+//
+//        BufferedImage tempImage = new BufferedImage(scaledImg.getWidth(null),
+//                scaledImg.getHeight(null), BufferedImage.TYPE_INT_ARGB );
+//
+//        // draw the image
+//        Graphics2D temp = tempImage.createGraphics();
+//        temp.drawImage(scaledImg, 0, 0, null);
+//        temp.dispose();
+//
+//        return tempImage;
+//    }
+//
+//    public void setStatusLabel(String text) {
+//        statusLabel.setText(text);
+//    }
+//
+//   
+//
+//    // FIXME: might update to seperate handlers for player / opponent
+//    public void addButtonsListener(ActionListener actionListener) {
+//        addButtonsListenerPlayer(actionListener);
+//        //addButtonsListenerOpponent(actionListener);
+//    }
+//
+//    private void addButtonsListenerPlayer(ActionListener al) {
+//        for (Button buttons[]: playerBoard.getButtons()){
+//            for (Button b: buttons) {
+//                b.addActionListener(al);
+//            }
+//        }
+//    }
+//
+//    public void addMouseListener(MouseAdapter ma){
+//        for (Button buttons[]: playerBoard.getButtons()){
+//            for (Button b: buttons) {
+//                b.addMouseListener(ma);
+//            }
+//        }
+//    }
+//
+//    public void removeHoverListener() {
+//    for (Button buttons[]: playerBoard.getButtons()){
+//        for (Button b: buttons) {
+//            MouseListener[] ml = b.getMouseListeners();
+//            for (MouseListener x : ml)
+//                b.removeMouseListener(x);
+//        }
+//    }
+//}
+//
+//    private void addButtonsListenerOpponent(ActionListener al) {
+//        for (Button buttons[]: opponentBoard.getButtons())
+//            for (Button b: buttons)
+//                b.addActionListener(al);
+//    }
+//
+//    public void addShipSelectionListener(ActionListener actionListener) {
+//        for (JButton b : shipSelectionButtons)
+//            b.addActionListener(actionListener);
+//    }
 
    
 
