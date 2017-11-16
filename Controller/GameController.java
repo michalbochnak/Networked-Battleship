@@ -143,13 +143,13 @@ public class GameController {
     			case 1:
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
-    				this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(false);
+    				//this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(false);
     				this.gameWindowView.addContent(this.gameMenuController.getWelcomeMessageView());
     				break;
     			case 2:
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(true);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(true);
-    				this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(true);
+    				//this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(true);
     				this.gameWindowView.addContent(this.gameMenuController.getSelectGameModeView());
     				break;
     			case 3:
