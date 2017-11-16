@@ -93,5 +93,8 @@ public class GameboardView extends JPanel{
 		this.playerNameLabel.setText("Player " + this.playerName + ":");
 		this.opponentNameLabel.setText("Opponent " + this.opponentName + ":");
 	}
+
+
+
            
 }
