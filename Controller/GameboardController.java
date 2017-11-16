@@ -459,11 +459,12 @@ public class GameboardController {
         {
 			this.opponentBoardView.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor"));
         } catch(Exception e){
-        	
+        		System.err.println("Cannot create custom image:" + e.getMessage());
         }
 		
-
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+		
+		
 		
 	}
 

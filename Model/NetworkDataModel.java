@@ -10,13 +10,13 @@ public class NetworkDataModel implements Serializable{
 	private String clientPlayerName;
 	
 	private Coordinates fireCoordinates;
-	private boolean hit;
+	private boolean hitStatus;
 	
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
 		this.fireCoordinates = new Coordinates(0,0);
-		this.hit = false;
+		this.hitStatus = false;
 	}
 	
 	// Getter methods:
@@ -29,6 +29,14 @@ public class NetworkDataModel implements Serializable{
 		return this.clientPlayerName;
 	}
 	
+	public Coordinates getCoordinates() {
+		return this.fireCoordinates;
+	}
+	
+	public boolean getHitStatus( ) {
+		return this.hitStatus;
+	}
+	
 	// Setter methods:
 	
 	public void setServerPlayerName(String playerName) {
@@ -39,6 +47,12 @@ public class NetworkDataModel implements Serializable{
 		this.clientPlayerName = playerName;
 	}
 	
+	public void setCoordinates(Coordinates coordinates) {
+		this.fireCoordinates = coordinates;
+	}
 	
+	public void setHit(boolean hit) {
+		this.hitStatus = hit;
+	}
 
 }
