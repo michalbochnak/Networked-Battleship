@@ -149,11 +149,23 @@ public class GameboardController {
 		this.gameboardView.updatePlayeNames();
 	}
 
-    public void updateBoard(Coordinates c) {
-        boolean hit = gameboardView.updateBoard(c);
-
-
-
+//    public void updateBoard(Coordinates c) {
+//        boolean hit = gameboardView.updateBoard(c);
+//
+//    }
+     
+    private void removeSelectionShipBorders() {
+        for (JButton button : this.controlsView.getShipSelectionButtons())
+        		button.setBorder( BorderFactory.createEmptyBorder());
+        this.controlsView.getPlaceModeButton().setBorder( BorderFactory.createEmptyBorder());
+    }
+  
+    private void resetShipSelectionButtonsBorders() {
+		for (JButton button : this.controlsView.getShipSelectionButtons())
+			button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		this.controlsView.getPlaceModeButton().setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+	}
+    
 	private void highlightHorizontally(int shipSize, Coordinates c) {
 		 if ((10 - c.getCol()) >= shipSize) {
 			 int row = c.getRow();
@@ -275,9 +287,6 @@ public class GameboardController {
 	      return tempImage;
 	  }
 
-		  return img;
-	}
-
 	private String findShipFilepath() {
 	    String filepath = "Filepath not found";
 
@@ -301,6 +310,20 @@ public class GameboardController {
 	    return filepath;
 	}
 
+	public BufferedImage loadImage (String filepath) {
+		  BufferedImage img = null;
+		  try {
+		      File f = new File(filepath);
+		      FileInputStream fs = new FileInputStream(f);
+		      img = ImageIO.read(fs);
+		  } catch (Exception ex) {
+		      System.out.println("Loading image error");
+		      System.out.println(ex);
+		  }
+
+		  return img;
+	}
+	
 	private BufferedImage generateScaledShip() {
 	    BufferedImage tempImg = null;
 

@@ -88,5 +88,10 @@ public class GameboardView extends JPanel{
 		opponentBoardView.setVisible(false);
 		add(this.opponentBoardView);
 	}
+	
+	public void updatePlayeNames() {
+		this.playerNameLabel.setText("Player " + this.playerName + ":");
+		this.opponentNameLabel.setText("Opponent " + this.opponentName + ":");
+	}
            
 }
