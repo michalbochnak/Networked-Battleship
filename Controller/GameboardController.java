@@ -1,5 +1,6 @@
 package Controller;
 
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
@@ -29,16 +30,19 @@ import View.ControlsView;
 import View.GameboardView;
 import View.OpponentBoardView;
 import View.PlayerBoardView;
+import Model.Coordinates;
+
 
 
 public class GameboardController {
 
 	private GameController gamecontroller;
 	private GameboardView gameboardView;
+
 	private ControlsView controlsView;
 	private PlayerBoardView playerBoardView;
 	private OpponentBoardView opponentBoardView;
-	
+
 	private Set shipsOnBoard;
 	private int gameStage;
 	private PlayerBoardCellsMouseLisener playerBoardCellsMouseListener;
@@ -48,7 +52,6 @@ public class GameboardController {
 	
 	private int shipSelected;
 	private int shipDirection;
-	
 	private int shipSpace;
 	
 	// Default constructor:
@@ -57,6 +60,7 @@ public class GameboardController {
 		this.gamecontroller = gamecontroller;
 		this.gameboardView = new GameboardView();
 		
+
 		this.shipSelected = 0;
 		this.shipsOnBoard = new HashSet<Integer>(5);
 		this.shipDirection = 0;
@@ -64,6 +68,8 @@ public class GameboardController {
 		this.playerBoardCellsMouseListener = new PlayerBoardCellsMouseLisener();
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 		this.playerTurn = false;
+		this.shipSpace = 17;
+
 		
 		this.initialize();
 	}
@@ -79,6 +85,7 @@ public class GameboardController {
 	// Class methods:
 	
 	private void initialize() {
+
 		this.controlsView = this.gameboardView.getControlsView();
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
@@ -133,6 +140,7 @@ public class GameboardController {
 		});
 		
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
+
 	}
 	
 	public void setPlayerNames() {
@@ -140,19 +148,11 @@ public class GameboardController {
 		this.gameboardView.setOpponentName(this.gamecontroller.getOpponentName());
 		this.gameboardView.updatePlayeNames();
 	}
-	
 
-	private void removeSelectionShipBorders() {
-	    for (JButton button : this.controlsView.getShipSelectionButtons())
-	    		button.setBorder( BorderFactory.createEmptyBorder());
-	    this.controlsView.getPlaceModeButton().setBorder( BorderFactory.createEmptyBorder());
-	}
+    public void updateBoard(Coordinates c) {
+        boolean hit = gameboardView.updateBoard(c);
 
-	private void resetShipSelectionButtonsBorders() {
-		for (JButton button : this.controlsView.getShipSelectionButtons())
-			button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		this.controlsView.getPlaceModeButton().setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-	}
+
 
 	private void highlightHorizontally(int shipSize, Coordinates c) {
 		 if ((10 - c.getCol()) >= shipSize) {
@@ -274,18 +274,6 @@ public class GameboardController {
 
 	      return tempImage;
 	  }
-
-
-	public BufferedImage loadImage (String filepath) {
-		  BufferedImage img = null;
-		  try {
-		      File f = new File(filepath);
-		      FileInputStream fs = new FileInputStream(f);
-		      img = ImageIO.read(fs);
-		  } catch (Exception ex) {
-		      System.out.println("Loading image error");
-		      System.out.println(ex);
-		  }
 
 		  return img;
 	}
@@ -519,9 +507,6 @@ public class GameboardController {
 			public void mousePressed(MouseEvent e) {
 				//((BoardCell)e.getSource()).getCoordinates()
 				//gameController.get
-				
-				
-				
 				
 			}
 

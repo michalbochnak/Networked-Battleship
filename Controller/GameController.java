@@ -44,7 +44,11 @@ public class GameController {
 	private ClientModeController clientModeController;
 	private GameMenuController gameMenuController;
 	private GameboardController gameboardController;
+
+
+    private BattleshipModel model;
    
+    
     private String playerName;
     private String opponentName;
     private int gameMode;			// 0 - server, 1 - client

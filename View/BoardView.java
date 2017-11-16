@@ -17,6 +17,8 @@
 package View;
 
 
+import Model.Coordinates;
+
 import java.awt.Color;
 
 import java.awt.GridLayout;
@@ -141,8 +143,6 @@ public class BoardView extends JPanel{
 			}
 		}
     }
-    
-
     
 }
 
