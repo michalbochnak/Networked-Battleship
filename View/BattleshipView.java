@@ -33,8 +33,8 @@ import java.io.FileInputStream;
 public class BattleshipView {
 
     private JFrame frame;
-    private Board playerBoard;
-    private Board opponentBoard;
+    private BoardView playerBoard;
+    private BoardView opponentBoard;
 //    private MenuBar menuBar;
     private JLabel statusLabel;
     private JPanel shipSelectionPanel;
@@ -46,7 +46,6 @@ public class BattleshipView {
     public BattleshipView() {
         setupFrame();
         setupBoards();
-//        setupMenuBar();
         setupStatusBar();
         setupShipSelectionPanel();
         //opponentBoard.setVisible(false);
@@ -60,7 +59,7 @@ public class BattleshipView {
         return shipSelectionButtons;
     }
 
-    public Board getOpponentBoard() {
+    public BoardView getOpponentBoard() {
         return opponentBoard;
     }
 
@@ -80,7 +79,7 @@ public class BattleshipView {
         return shipSelectionButtons[shipID-1].getIcon();
     }
 
-    public Board getPlayerBoard() {
+    public BoardView getPlayerBoard() {
         return playerBoard;
     }
 
@@ -95,8 +94,8 @@ public class BattleshipView {
 
     private void setupBoards() {
         JPanel mainPanel = new JPanel();
-        playerBoard = new Board("You");
-        opponentBoard = new Board("Enemy");
+        playerBoard = new BoardView("You");
+        opponentBoard = new BoardView("Enemy");
         playerBoard.setBgImage("images/water_02_a.png");
         opponentBoard.setBgImage("images/water_02_b.png");
         playerBoard.setMaximumSize(new Dimension(600,600));
@@ -296,36 +295,7 @@ public class BattleshipView {
             b.addActionListener(actionListener);
     }
 
-    public void displayAboutDialog() {
-        String message = "Authors:\n\n" +
-                "Michal Bochnak\nNetid: mbochn2\n\n" +
-                "Alex Viznytsya\nNetid: avizny2\n\n" +
-                "Jakub Glebocki\nNetid: jglebo2\n\n\n" +
-                "CS 342 Project #4 - Networked battlefield\n" +
-                "Nov 16, 2017";
-        String title = "About";
-        JOptionPane.showMessageDialog(frame, message, title,
-                JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public void displayGameHelpDialog() {
-        String message = "Two player game. The goal is to sunk all the\n" +
-                "ships of the opponent player!\n\n" +
-                "Board on  the left presents your board\n" +
-                "and opponent's tries to hit your ships.\n" +
-                "Board on the right presents your tries\n" +
-                "and hits on the opponent's ships.\n\n" +
-                "Rules:\n" +
-                "1. Both players arrange their ships on the board.\n" +
-                "2. Players take turns by choosing the square\n" +
-                "on the board.\n" +
-                "3. Player who first sunk all the opponent's\n" +
-                "ships is the winner.\n\n" +
-                "Good Luck!";
-        String title = "Game help";
-        JOptionPane.showMessageDialog(frame, message, title,
-                JOptionPane.PLAIN_MESSAGE);
-    }
+   
 
     public void setBoardCursor(String filepath) {
         Toolkit toolkit = Toolkit.getDefaultToolkit();

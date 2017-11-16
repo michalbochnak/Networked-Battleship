@@ -2,3 +2,9 @@
 /BattleshipModel.class
 /Coordinates.class
 /Network.class
+/NetworkSocketData.class
+/Network$ClientConnection.class
+/NetworkData.class
+/NetworkModel$ClientConnection.class
+/NetworkModel.class
+/NetworkDataModel.class

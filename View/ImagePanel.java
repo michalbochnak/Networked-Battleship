@@ -17,69 +17,57 @@
 package View;
 
 
-/*
- Notes:
-
-*/
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+
+import java.awt.AlphaComposite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
 
 public class ImagePanel extends JPanel {
 
-    private BufferedImage bgImg;
+	private static final long serialVersionUID = 1L;
 
+	private BufferedImage backgroundImage;
 
+    // Default Constructor:
+    
     public ImagePanel() {
-        bgImg = readImageIn("images/water_02_a.png");
-        resizeImage();
-        this.setLayout(new BorderLayout());
+    		this.backgroundImage = new BufferedImage(450, 450, BufferedImage.TYPE_INT_ARGB);
+  
+        this.initialize();
     }
 
-
-    public void setBgImage(String filepath) {
-        bgImg = readImageIn(filepath);
-        resizeImage();
+    // Getter methods:
+    
+    // Setter methods:
+    
+    // Class methods:
+    
+    private void initialize() {
+    	BufferedImage tempImage = null;
+    	try {
+    		tempImage = ImageIO.read(new File("images/water_00.jpg"));
+     } catch (IOException e) {
+    	 	System.out.println("Image loading failed: " + e.getMessage());
+     }
+    	
+    Graphics2D g2d = this.backgroundImage.createGraphics();
+    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)0.6));
+    g2d.drawImage(tempImage.getScaledInstance(450, 450, Image.SCALE_DEFAULT), 0, 0, null);
+    g2d.dispose();
     }
-
-    private BufferedImage readImageIn(String filepath) {
-        BufferedImage tempImg = null;
-
-        try {
-            tempImg = ImageIO.read(new File(filepath));
-        } catch (IOException exc) {
-            System.out.println("Image loading failed");
-            exc.printStackTrace();
-        }
-
-        return tempImg;
-    }
-
+    
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(bgImg, 0, 0, null);
-    }
-
-    // resizeImage the image to 600 x 600
-    private void resizeImage() {
-        Image img = bgImg.getScaledInstance
-                (600, 600, Image.SCALE_DEFAULT);
-
-        BufferedImage scaledImg = new BufferedImage(img.getWidth(null),
-                img.getHeight(null), BufferedImage.TYPE_INT_ARGB );
-
-        // draw the image
-        Graphics2D temp = scaledImg.createGraphics();
-        temp.drawImage(img, 0, 0, null);
-        temp.dispose();
-
-        bgImg = scaledImg;
-    }
+      super.paintComponent(g);
+      g.drawImage(this.backgroundImage, 0, 0, null);
+  }
 
 }

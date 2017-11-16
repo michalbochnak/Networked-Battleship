@@ -19,18 +19,19 @@ package Model;
 
 public class Coordinates {
 
-    private int myRow, myCol;
+    private int row;
+    private int col;
 
     public Coordinates(int row, int col) {
-        myRow = row;
-        myCol = col;
+        this.row = row;
+        this.col = col;
     }
 
-    public int getMyRow() {
-        return myRow;
+    public int gerRow() {
+        return this.row;
     }
 
-    public int getMyCol() {
-        return myCol;
+    public int getCol() {
+        return this.col;
     }
 }

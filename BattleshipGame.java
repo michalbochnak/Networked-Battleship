@@ -16,13 +16,12 @@
 
 
 
-import Controller.BattleshipController;
+import Controller.GameController;
 
 public class BattleshipGame {
 
     public static void main ( String args[]) {
-
-        BattleshipController controller = new BattleshipController();
-
+        GameController battleshipGame = new GameController();
+        battleshipGame.startGame(5);
     }
 }
