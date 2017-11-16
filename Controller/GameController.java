@@ -45,7 +45,8 @@ public class GameController {
 	private GameMenuController gameMenuController;
 	private GameboardController gameboardController;
     
-
+	
+    private BattleshipView view;
     private BattleshipModel model;
    
     

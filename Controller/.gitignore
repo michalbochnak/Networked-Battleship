@@ -51,3 +51,6 @@
 /MenuBarController$AboutMenu.class
 /MenuBarController$GameRulesMenu.class
 /ServerModeController$5.class
+/GameboardController$BoardCellsMouseLisener.class
+/GameboardController$1.class
+/GameboardController$2.class
