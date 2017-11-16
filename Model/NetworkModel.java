@@ -36,6 +36,7 @@ public class NetworkModel {
 	private ObjectOutputStream dataOut;
 	
 	private boolean clientConnectionStatus;
+	private boolean serverConnectionStatus;
 	
 	// Default constructor:
 	
@@ -47,12 +48,17 @@ public class NetworkModel {
 		this.dataIn = null;
 		this.dataOut = null;
 		this.clientConnectionStatus = false;
+		this.serverConnectionStatus = false;
 	}
 	
 	// Getter methods:
 	
 	public boolean isClientConnected() {
 		return this.clientConnectionStatus;
+	}
+	
+	public boolean isServerStarted() {
+		return this.serverConnectionStatus;
 	}
 	
 	public int getServerPort() {
@@ -63,6 +69,29 @@ public class NetworkModel {
 		}
 	}
 	
+	public ServerSocket getServerSocket() {
+		return this.serverSocket; 
+	}
+	
+	public Socket getClientSocket( ) {
+		return this.clientSocket;
+	}
+	
+//	public void read() {
+//		if(this.clientSocket != null) {
+//			try {
+//				this.clientSocket.getInputStream();
+//			} catch (IOException e) {
+//				this.clientConnectionStatus = false;
+//				e.printStackTrace();
+//			}
+//			
+//			
+//		}
+//			
+//		
+//	}
+//	
 	// Setter methods:
 	
 	public void setServerIP(String serverIP) {
@@ -77,9 +106,11 @@ public class NetworkModel {
 	public boolean createConnection() {
 		try {
 			this.serverSocket = new ServerSocket(this.serverPort);
+			this.serverConnectionStatus = true;
 			Thread connectionThread = new Thread(new ClientConnection());
 			connectionThread.start();
 		} catch (IOException e) {
+			this.serverConnectionStatus = false;
 			System.err.println("Cannot create new server socket: " + e.getMessage());
 			return false;
 			
@@ -90,6 +121,7 @@ public class NetworkModel {
 	public boolean joinConnection() {
 		try {
 			this.clientSocket =  new Socket(this.serverIP, this.serverPort);
+			
 			System.out.println("Joined");
 			this.clientConnectionStatus = true;
 			this.setDataOut();
@@ -97,8 +129,10 @@ public class NetworkModel {
 
 		} catch (UnknownHostException e) {
 			System.err.println("Cannot find host to open socket: " + e.getMessage());
+			this.clientConnectionStatus = false;
 			return false;
 		} catch (IOException e) {
+			this.clientConnectionStatus = false;
 			System.err.println("Cannot create new client socket: " + e.getMessage());
 			return false;
 		}
@@ -146,6 +180,9 @@ public class NetworkModel {
 	}
 	
 	public void closeConnection() {
+		System.out.println("I am here");
+		System.out.println("Client socket: " + this.clientSocket);
+		System.out.println("Data out socket: " + this.dataOut);
 		
 		if(this.dataOut != null) {
 			try {
@@ -166,6 +203,7 @@ public class NetworkModel {
 		if(this.serverSocket != null) {
 			try {
 				this.serverSocket.close();
+				this.serverConnectionStatus = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -173,7 +211,9 @@ public class NetworkModel {
 		
 		if(this.clientSocket != null) {
 			try {
+				System.out.println("Closing Connection");
 				this.clientSocket.close();
+				this.clientConnectionStatus = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

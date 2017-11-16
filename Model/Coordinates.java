@@ -27,7 +27,7 @@ public class Coordinates {
         this.col = col;
     }
 
-    public int gerRow() {
+    public int getRow() {
         return this.row;
     }
 

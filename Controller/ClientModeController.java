@@ -41,6 +41,8 @@ public class ClientModeController {
 	
 	private void initialize() {
 		
+		
+		
 		try {
 			hostIPAddress = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
@@ -76,6 +78,7 @@ public class ClientModeController {
 	}
 	
 	private void joinHost() {
+		this.gameController.setNetworkConnection(this.networkConnection);
 		this.txData.setClientPlayerName(this.gameController.getPlayerName());
 		this.serverIP = this.joinHostView.getIPAddress();
 		this.serverPort = Integer.parseInt(this.joinHostView.getPortNumber());

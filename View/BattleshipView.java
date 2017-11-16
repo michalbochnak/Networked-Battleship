@@ -378,9 +378,12 @@ public class BattleshipView {
                         (Color.GRAY, 1));
     }
 
-
+    
 
 }   // end of BattleshipView class
+
+
+
 
 
 

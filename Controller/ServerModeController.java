@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
+
 import Model.NetworkDataModel;
 import Model.NetworkModel;
 import View.CreateHostView;
@@ -94,6 +96,7 @@ public class ServerModeController {
 	}
 	
 	private void createHost() {
+		this.gameController.setNetworkConnection(this.networkConnection);
 		this.txData.setServerPlayerName(this.gameController.getPlayerName());
 		serverIP = createHostView.getIPAddress();
 		if(this.createHostView.isRandomChecked() == true || this.createHostView.getPortNumber().length() < 1) {
@@ -110,7 +113,6 @@ public class ServerModeController {
 				this.createHostView.setPortNumber(Integer.toString(this.networkConnection.getServerPort()));
 			}
 			this.createHostView.setServerPortTextFieldState(false);
-			
 			if(waitConnectionThred == null) {
 				waitConnectionThred = new Thread(new Runnable() {
 				@Override
@@ -145,6 +147,35 @@ public class ServerModeController {
 				}
 				});
 				waitConnectionThred.start();
+//				Thread chekcConnection = new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						while(true) {
+//							if(networkConnection.getClientSocket() != null && networkConnection.isClientConnected() == false) {
+//								System.out.println("Closed connection");
+//								networkConnection.closeConnection();
+//								String message = "Client exited or closed network connection\n" + 
+//											     "You will be redirecred to main menu";
+//					        		JOptionPane.showMessageDialog(gameController.getMainWindow(), message, "Connection problem", JOptionPane.WARNING_MESSAGE);
+//					        		gameController.setDefaultMenuWindow();
+//								gameController.startGame(2);
+//								
+//							} else {
+//								System.out.println("Check for connection " + networkConnection.isClientConnected());
+//								networkConnection.read();
+//								try {
+//									Thread.sleep(1000);
+//								} catch (InterruptedException e) {
+//									System.err.println("Thread sleep got interupted: " + e.getMessage());
+//								}
+//							}
+//						
+//						}
+//	
+//					}
+//				});
+//				chekcConnection.start();
+//				
 			}
 		}
 	}

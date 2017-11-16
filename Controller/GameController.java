@@ -35,6 +35,8 @@ import java.util.Set;
 
 public class GameController {
 
+	private NetworkModel networkConnection;
+	
 	private GameWindowView gameWindowView;
 	
 	private MenuBarController menuBarController; 
@@ -51,6 +53,7 @@ public class GameController {
     private String playerName;
     private String opponentName;
     private int gameMode;			// 0 - server, 1 - client
+    private boolean gameStarted;
     
     
     // 0 - 2: 0 - connection, 1 - ship placement, 2 - game
@@ -64,6 +67,8 @@ public class GameController {
     // Default Constructor: 
     public GameController() {
     
+    		this.networkConnection  = null;
+    	
     		this.gameWindowView = new GameWindowView();
    		
     		this.serverModeController = new ServerModeController(this);
@@ -76,7 +81,6 @@ public class GameController {
     		this.playerName = null;
     		this.opponentName = null;
     		this.gameMode = 0;
-    		
     	
 //        view = new BattleshipView();
 //        model = new BattleshipModel();
@@ -112,6 +116,14 @@ public class GameController {
     		return this.gameWindowView.getGameWindow();
     }
     
+    public NetworkModel getNetworkConnection() {
+    		if(this.networkConnection != null) {
+    			return this.networkConnection;
+    		} else {
+    			return null;
+    		}
+    }
+    
     // Setter methods:
     
     public void setPlayerName(String playerName) {
@@ -124,6 +136,13 @@ public class GameController {
     
     public void setGameMode(int mode) {
     		this.gameMode = mode;
+    }
+    
+    
+    public void setNetworkConnection(NetworkModel networkConnection) {
+    		if(this.networkConnection == null) {
+    			this.networkConnection = networkConnection;
+    		}
     }
     
     // Class methods:
@@ -140,6 +159,7 @@ public class GameController {
     		this.gameWindowView.getGameWindow().getContentPane().removeAll();
     		
     		switch (gameOption) {
+    			
     			case 1:
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
@@ -147,18 +167,26 @@ public class GameController {
     				this.gameWindowView.addContent(this.gameMenuController.getWelcomeMessageView());
     				break;
     			case 2:
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(true);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(true);
+    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
     				//this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(true);
     				this.gameWindowView.addContent(this.gameMenuController.getSelectGameModeView());
     				break;
     			case 3:
+    				this.gameMode = 0;
+    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
     				this.gameWindowView.addContent(this.serverModeController.getView());
     				break;
     			case 4:
+    				this.gameMode = 1;
+    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
     				this.gameWindowView.addContent(this.clientModeController.getView());
     				break;
     			case 5:
+    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(true);
+    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(true);
     				this.gameWindowView.setNewSize(1400, 700);
     				this.gameboardController.setPlayerNames();
     				this.gameWindowView.addContent(this.gameboardController.getGameboardView());
@@ -167,6 +195,9 @@ public class GameController {
  
     }
 
+    public void setDefaultMenuWindow() {
+    		this.gameWindowView.setDefault();
+    }
 
 
 //    //FIXME: Implement specific action handlers

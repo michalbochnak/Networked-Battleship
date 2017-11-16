@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -35,6 +36,13 @@ public class ControlsView extends JPanel{
 	
 	// Getter methods:
 	
+	public JButton[] getShipSelectionButtons() {
+		return this.shipSelectionButtons;
+	}
+	
+	public JButton getPlaceModeButton() {
+		return this.placeModeButton;
+	}
 	
 	// Setter methods:
 		
@@ -50,6 +58,7 @@ public class ControlsView extends JPanel{
             this.shipSelectionButtons[i] = new JButton();
             this.shipSelectionButtons[i].setBounds(10, rowCounter, 290, 80);
             this.shipSelectionButtons[i].setBackground(bgColor);
+            this.shipSelectionButtons[i].setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             add(shipSelectionButtons[i]);
             
         }
@@ -124,6 +133,7 @@ public class ControlsView extends JPanel{
         placeModeButton = new JButton("Place Ships Horizontally");
         placeModeButton.setBounds(10, 475, 290, 80);
         placeModeButton.setFont(new Font("Arial", Font.BOLD, 17));
+        placeModeButton.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         add(placeModeButton);
     }    
 
@@ -144,6 +154,8 @@ public class ControlsView extends JPanel{
 	public void addPlaceModeButtonActionListener(ActionListener actionListener) {
 		this.placeModeButton.addActionListener(actionListener);;
 	}
+	
+	
 	
 	
 }

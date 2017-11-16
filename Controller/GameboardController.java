@@ -7,11 +7,15 @@ public class GameboardController {
 	private GameController gamecontroller;
 	private GameboardView gameboardView;
 	
+	private int shipSpace;
+	
 	// Default constructor:
 	
 	public GameboardController(GameController gamecontroller) {
 		this.gamecontroller = gamecontroller;
 		this.gameboardView = new GameboardView();
+		
+		this.shipSpace = 17;
 		
 		this.initialize();
 	}

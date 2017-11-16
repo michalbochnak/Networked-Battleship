@@ -140,7 +140,9 @@ public class BoardView extends JPanel{
 				this.buttons[i][j].removeMouseListener(mouseListener);
 			}
 		}
-}
+    }
+    
+
     
 }
 

@@ -22,10 +22,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import Model.NetworkModel;
 import View.*;
 
 class MenuBarController {
-
+	
 	private MenuBarView menuBarView;
 	
 	private GameController gameController;
@@ -72,16 +73,24 @@ class MenuBarController {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			System.out.println(gameController.getNetworkConnection());
+			if(gameController.getNetworkConnection() != null) {
+				gameController.getNetworkConnection().closeConnection();
+				gameController.setDefaultMenuWindow();
+				gameController.startGame(3);
+			}
 		}
 	}
 	
 	class JoinHost implements ActionListener {
 		
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		
+			if(gameController.getNetworkConnection() != null) {
+				gameController.getNetworkConnection().closeConnection();
+				gameController.setDefaultMenuWindow();
+				gameController.startGame(4);
+			}
 		}
 	}
 	
