@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Coordinates;
 import View.GameboardView;
 
 public class GameboardController {
@@ -39,5 +40,12 @@ public class GameboardController {
 		this.gameboardView.setOpponentName(this.gamecontroller.getOpponentName());
 		this.gameboardView.updatePlayeNames();
 	}
-	
+
+    public void updateBoard(Coordinates c) {
+        boolean hit = gameboardView.updateBoard(c);
+
+
+    }
+
+
 }
