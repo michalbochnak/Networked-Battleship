@@ -2,7 +2,6 @@ package Controller;
 
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
@@ -24,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import Model.Coordinates;
+import Model.NetworkDataModel;
 import View.BoardCell;
 import View.BoardView;
 import View.ControlsView;
@@ -31,8 +31,6 @@ import View.GameboardView;
 import View.OpponentBoardView;
 import View.PlayerBoardView;
 import Model.Coordinates;
-
-
 
 public class GameboardController {
 
@@ -43,6 +41,9 @@ public class GameboardController {
 	private PlayerBoardView playerBoardView;
 	private OpponentBoardView opponentBoardView;
 
+	private NetworkDataModel rxData;
+	private NetworkDataModel txData;
+	
 	private Set shipsOnBoard;
 	private int gameStage;
 	private PlayerBoardCellsMouseLisener playerBoardCellsMouseListener;
@@ -88,6 +89,8 @@ public class GameboardController {
 		this.controlsView = this.gameboardView.getControlsView();
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
+		
+		
 		opponentBoardView.setVisible(true);
 		this.startPlayingGame();
 		
