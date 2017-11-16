@@ -151,6 +151,7 @@ public class GameboardView extends JPanel{
 		
 		add(this.controlsView);
 		add(this.playerBoardView);
+		opponentBoardView.setVisible(false);
 		add(this.opponentBoardView);
 	}
 	
@@ -162,11 +163,13 @@ public class GameboardView extends JPanel{
 	private void removeSelectionShipBorders() {
         for (JButton button : this.controlsView.getShipSelectionButtons())
         		button.setBorder( BorderFactory.createEmptyBorder());
+        this.controlsView.getPlaceModeButton().setBorder( BorderFactory.createEmptyBorder());
     }
 	
 	private void resetShipSelectionButtonsBorders() {
 		for (JButton button : this.controlsView.getShipSelectionButtons())
 			button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		this.controlsView.getPlaceModeButton().setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 	}
 	
 	
@@ -441,7 +444,7 @@ public class GameboardView extends JPanel{
                 ImageIcon shipPieces[] = cutIcon(findShipSize());
                 this.placeShipHorizontally(shipPieces, c);
                 shipsOnBoard.add(shipSelected);
-                //getShipSelectionButtons()[findIndex(shipSelected)].setBackground(Color.gray);
+                this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)].setEnabled(false);
             }
         }
         else  {             // vertical
@@ -449,11 +452,12 @@ public class GameboardView extends JPanel{
                 ImageIcon shipPieces[] = cutIcon(findShipSize());
                 this.placeShipVertically(shipPieces, c);
                 shipsOnBoard.add(shipSelected);
-                //this.playerBoardView..getShipSelectionButtons()[findIndex(shipSelected)].setBackground(Color.gray);
+                this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)].setEnabled(false);
             }
         }
         if (shipsOnBoard.size() == 5) {
             gameStage = 2;
+            this.removeSelectionShipBorders();
             this.playerBoardView.removeCellsMouseListener(boardCellsMouseListener);
             this.clearHighlightsFromAllButtons();
             this.controlsView.setEnabledControls(false);
@@ -475,12 +479,11 @@ public class GameboardView extends JPanel{
 	            System.out.println("Click ignored...");
 	        }
 	        // Ship placement stage
-	        else if (gameStage == 1 && !shipsOnBoard.contains(shipSelected)
-	                && shipSelected != -1) {
+	        else if (gameStage == 1 && !shipsOnBoard.contains(shipSelected) && shipSelected != -1) {
 	            tryToPlaceShip(e);
-//	            if (shipsOnBoard.size() == 5) {
-//	                view.getOpponentBoard().setVisible(true);
-//	            }
+	            if (shipsOnBoard.size() == 5) {
+	            	opponentBoardView.setVisible(true);
+	            }
 	        }
 	        // Game stage
 	        else if (gameStage == 2){
@@ -511,8 +514,7 @@ public class GameboardView extends JPanel{
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			
-			
+			clearHighlightsFromAllButtons();
 		}
 	}
 
