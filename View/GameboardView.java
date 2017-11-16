@@ -518,6 +518,37 @@ public class GameboardView extends JPanel{
 		}
 	}
 
-	
+	public boolean updateBoard(Coordinates c) {
+		int row = c.getRow();
+		int col = c.getCol();
+		BoardCell bc = playerBoardView.getButtons()[col][row];
+		// miss
+		if (bc.getIcon() == null) {
+			updateMiss(bc);
+			return false;
+		}
+		// hit
+		else {
+			updateHit(bc);
+			return true;
+		}
+	}
+
+	private void updateMiss(BoardCell bc) {
+		BufferedImage img = resize(loadImage("images/miss.png"),
+				45, 45);
+		JLabel temp = new JLabel("Miss");
+		temp.setIcon(new ImageIcon(img));
+		bc.add(temp);
+	}
+
+	private void updateHit(BoardCell bc) {
+		BufferedImage img = resize(loadImage("images/hit.png"),
+				45, 45);
+		JLabel temp = new JLabel("Miss");
+		temp.setIcon(new ImageIcon(img));
+		bc.add(temp);
+
+	}
                         
 }
