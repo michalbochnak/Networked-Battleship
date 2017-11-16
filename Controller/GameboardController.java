@@ -69,7 +69,6 @@ public class GameboardController {
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 		this.playerTurn = false;
 		this.shipSpace = 17;
-
 		
 		this.initialize();
 	}
@@ -138,6 +137,7 @@ public class GameboardController {
 	            }				
 			}
 		});
+		
 		
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
 
