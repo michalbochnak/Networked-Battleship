@@ -9,9 +9,14 @@ public class NetworkDataModel implements Serializable{
 	private String serverPlayerName;
 	private String clientPlayerName;
 	
+	private Coordinates fireCoordinates;
+	private boolean hit;
+	
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
+		this.fireCoordinates = new Coordinates(0,0);
+		this.hit = false;
 	}
 	
 	// Getter methods:

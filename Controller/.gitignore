@@ -54,3 +54,5 @@
 /GameboardController$BoardCellsMouseLisener.class
 /GameboardController$1.class
 /GameboardController$2.class
+/GameboardController$OpponentBoardCellsMouseLisener.class
+/GameboardController$PlayerBoardCellsMouseLisener.class

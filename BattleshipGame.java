@@ -22,6 +22,6 @@ public class BattleshipGame {
 
     public static void main ( String args[]) {
         GameController battleshipGame = new GameController();
-        battleshipGame.startGame(1);
+        battleshipGame.startGame(5);
     }
 }

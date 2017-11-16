@@ -1,8 +1,11 @@
 package Controller;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -21,6 +24,7 @@ import javax.swing.JButton;
 
 import Model.Coordinates;
 import View.BoardCell;
+import View.BoardView;
 import View.ControlsView;
 import View.GameboardView;
 import View.OpponentBoardView;
@@ -37,7 +41,8 @@ public class GameboardController {
 	
 	private Set shipsOnBoard;
 	private int gameStage;
-	private BoardCellsMouseLisener boardCellsMouseListener;
+	private PlayerBoardCellsMouseLisener playerBoardCellsMouseListener;
+	private OpponentBoardCellsMouseLisener opponentBoardCellsMouseLisener;
 	
 	private boolean playerTurn;
 	
@@ -56,7 +61,8 @@ public class GameboardController {
 		this.shipsOnBoard = new HashSet<Integer>(5);
 		this.shipDirection = 0;
 		this.gameStage = 1;
-		this.boardCellsMouseListener = new BoardCellsMouseLisener();
+		this.playerBoardCellsMouseListener = new PlayerBoardCellsMouseLisener();
+		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 		this.playerTurn = false;
 		
 		this.initialize();
@@ -76,6 +82,8 @@ public class GameboardController {
 		this.controlsView = this.gameboardView.getControlsView();
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
+		opponentBoardView.setVisible(true);
+		this.startPlayingGame();
 		
 		this.controlsView.addShipsActionListener(new ActionListener() {
 			@Override
@@ -124,7 +132,7 @@ public class GameboardController {
 			}
 		});
 		
-		this.playerBoardView.addCellsMouseListener(boardCellsMouseListener);
+		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
 	}
 	
 	public void setPlayerNames() {
@@ -150,7 +158,7 @@ public class GameboardController {
 		 if ((10 - c.getCol()) >= shipSize) {
 			 int row = c.getRow();
 	         for (int col = c.getCol(); col < c.getCol() + shipSize; ++col) {
-	                highlighButton(new Coordinates(row, col));
+	                highlighButton(this.playerBoardView, new Coordinates(row, col));
 	         }
 	      }
 	}
@@ -159,13 +167,13 @@ public class GameboardController {
 		 if ((10 - c.getRow()) >= shipSize) {
 	        int col = c.getCol();
 	        for (int row = c.getRow(); row < c.getRow() + shipSize; ++row) {
-	        highlighButton(new Coordinates(row, col));
+	        highlighButton(this.playerBoardView, new Coordinates(row, col));
 	        }
 	     }
 	 }
  
-	private void highlighButton(Coordinates c) {
-		playerBoardView.getButtons()[c.getRow()][c.getCol()].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2));
+	private void highlighButton(BoardView board, Coordinates c) {
+		board.getButtons()[c.getRow()][c.getCol()].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2));
 	}
  
 	private int findShipSize() {
@@ -179,13 +187,13 @@ public class GameboardController {
             return -1;
     }
     
-	private void clearHighlightsFromAllButtons() {
+	private void clearHighlightsFromAllButtons(BoardView board) {
 		
 		int borderWidth  = 1;
 		Color borderColor = Color.BLACK;
 		
 		int i = 0, j = 0; 
-		for (BoardCell row[] : playerBoardView.getButtons()) {
+		for (BoardCell row[] : board.getButtons()) {
 			i++;
 	        for (BoardCell b : row) {
 	        	if (i == 0) {
@@ -429,19 +437,28 @@ public class GameboardController {
 	    if (shipsOnBoard.size() == 5) {
 	        gameStage = 2;
 	        this.removeSelectionShipBorders();
-	        this.playerBoardView.removeCellsMouseListener(boardCellsMouseListener);
-	        this.clearHighlightsFromAllButtons();
+	        this.playerBoardView.removeCellsMouseListener(playerBoardCellsMouseListener);
+	        this.clearHighlightsFromAllButtons(this.playerBoardView);
 	        this.controlsView.setEnabledControls(false);
 	    }
 	}
 
-	private void initalizeGame() {
-		System.out.println("");
+	private void startPlayingGame() {
+		try
+        {
+			this.opponentBoardView.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor"));
+        } catch(Exception e){
+        	
+        }
+		
+
+		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+		
 	}
 
 	// Inner Classes:
 	
-	class BoardCellsMouseLisener implements MouseListener {
+	class PlayerBoardCellsMouseLisener implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -456,13 +473,14 @@ public class GameboardController {
 	       if (gameStage == 1 && !shipsOnBoard.contains(shipSelected) && shipSelected != -1) {
 	            tryToPlaceShip(e);
 	            if (shipsOnBoard.size() == 5) {
-	            	opponentBoardView.setVisible(true);
+	            //	opponentBoardView.setVisible(true);
+	            
 	            }
 	        }
 	        // Game stage
 	        else if (gameStage == 2){
 	            System.out.println("Game in progress");
-	            initalizeGame();
+	            //startPlayingGame();
 	        }
 		}
 
@@ -473,7 +491,7 @@ public class GameboardController {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			clearHighlightsFromAllButtons();
+			clearHighlightsFromAllButtons(playerBoardView);
 	        if (shipDirection == 0){
 	            highlightHorizontally(findShipSize(),
 	                    ((BoardCell)e.getSource()).getCoordinates());
@@ -485,10 +503,46 @@ public class GameboardController {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				clearHighlightsFromAllButtons();
+				clearHighlightsFromAllButtons(playerBoardView);
 			}
 		}
 
+		class OpponentBoardCellsMouseLisener implements MouseListener {
 
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				//((BoardCell)e.getSource()).getCoordinates()
+				//gameController.get
+				
+				
+				
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				highlighButton(opponentBoardView, ((BoardCell)e.getSource()).getCoordinates());
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				clearHighlightsFromAllButtons(opponentBoardView);
+				
+			}
+		
+		}
 	
 }
