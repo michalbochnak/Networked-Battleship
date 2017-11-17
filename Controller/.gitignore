@@ -57,3 +57,5 @@
 /GameboardController$OpponentBoardCellsMouseLisener.class
 /GameboardController$PlayerBoardCellsMouseLisener.class
 /GameboardController$WaitForIncommingData.class
+/ServerModeController$EsteblishLientConnection.class
+/ServerModeController$EstablishLientConnection.class

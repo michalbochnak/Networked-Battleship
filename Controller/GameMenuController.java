@@ -53,14 +53,14 @@ public class GameMenuController {
 	// Class methods:
 	
 	private void initialize() {
-		this.welcomeMessageView.addSubmitButtonActionListener(new ActionListener() {
+		this.welcomeMessageView.addNextButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (welcomeMessageView.getPlayerName().length() > 0) {
 					gameController.setPlayerName(welcomeMessageView.getPlayerName());
 					gameController.startGame(2);
 				} else {
-					welcomeMessageView.setPlayerName("Enter your name here ...");
+					welcomeMessageView.setPlayerName("Name?");
 				}
 			}
 		});

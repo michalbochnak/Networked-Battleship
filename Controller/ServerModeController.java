@@ -23,11 +23,7 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.UnknownHostException;
-
-import javax.swing.JOptionPane;
 
 import Model.NetworkDataModel;
 import Model.NetworkModel;
@@ -41,14 +37,10 @@ public class ServerModeController {
 	private NetworkDataModel rxData;
 	
 	private NetworkModel networkConnection;
-	private ServerSocket serverSocket;
 	private String serverIP;
-	private int serverPort;
-	private Socket clientSocket;
-	private boolean clientConnectionStatus;
+	private int serverPort;	
 	private InetAddress hostIPAddress;
-	private Thread waitConnectionThred;
-	
+
 	private CreateHostView createHostView;
 	
 	// Default constructor:
@@ -56,18 +48,12 @@ public class ServerModeController {
 	public ServerModeController(GameController gameController) {
 		
 		this.gameController = gameController;
-		
 		this.txData = new NetworkDataModel();
 		this.rxData = null;
-		
-		this.networkConnection = new NetworkModel();
-		this.serverSocket = null;
+		this.networkConnection = null;
 		this.serverIP = null;
 		this.serverPort = 0;
-		this.clientSocket = null;
-		this.clientConnectionStatus = false;
 		this.hostIPAddress = null;
-		this.waitConnectionThred = null;
 		
 		this.createHostView = new CreateHostView();
 		
@@ -76,22 +62,11 @@ public class ServerModeController {
 	
 	// Getter methods:
 	
-	// Setter methods:
-	
-	public void setDefault() {
-		this.txData = new NetworkDataModel();
-		this.rxData = null;
-		this.networkConnection = new NetworkModel();
-		this.serverSocket = null;
-		this.serverIP = null;
-		this.serverPort = 0;
-		this.clientSocket = null;
-		this.clientConnectionStatus = false;
-		this.hostIPAddress = null;
-		this.waitConnectionThred = null;
-		this.createHostView = new CreateHostView();
-		this.initialize();
+	public CreateHostView getView() {
+		return createHostView.getView();
 	}
+	
+	// Setter methods:
 	
 	// Class Methods:
 	
@@ -117,7 +92,6 @@ public class ServerModeController {
 			public void actionPerformed(ActionEvent e) {
 				networkConnection.closeConnection();
 				createHostView.setDefault();
-				createHostView.setIPAddress(hostIPAddress.getHostAddress());
 				gameController.startGame(2);
 			}
 		});
@@ -131,9 +105,14 @@ public class ServerModeController {
 	}
 	
 	private void createHost() {
-		this.gameController.setNetworkConnection(this.networkConnection);
-		this.txData.setServerPlayerName(this.gameController.getPlayerName());
-		serverIP = createHostView.getIPAddress();
+		this.networkConnection = new NetworkModel();
+		
+		if(this.gameController.getPlayerName() == null) {
+			this.networkConnection.setClientName("Server");
+		} else {
+			this.networkConnection.setClientName(this.gameController.getPlayerName());
+		}
+		
 		if(this.createHostView.isRandomChecked() == true || this.createHostView.getPortNumber().length() < 1) {
 			this.serverPort = 0;
 		} else {
@@ -142,80 +121,56 @@ public class ServerModeController {
 		
 		this.networkConnection.setServerIP(this.serverIP);
 		this.networkConnection.setServerPort(this.serverPort);
-		if(this.networkConnection.createConnection() == true) {
-			this.createHostView.setCreateServerButtonState(false);
-			if(this.serverPort == 0) {
-				this.createHostView.setPortNumber(Integer.toString(this.networkConnection.getServerPort()));
-			}
-			this.createHostView.setServerPortTextFieldState(false);
-			if(waitConnectionThred == null) {
-				waitConnectionThred = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					int waitCounter = 0;
-					while(true && !Thread.currentThread().isInterrupted()) {
-						if(networkConnection.isClientConnected() == true) {
-							clientConnectionStatus = true;
-							createHostView.setConnectionStatus("Connected");
-							createHostView.setStartButtonState(true);
-							networkConnection.sendData(txData);
-							rxData = networkConnection.getData();							
-							createHostView.setOpponentStatusLabel(rxData.getClientPlayerName());
-							gameController.setOpponentName(rxData.getClientPlayerName());
-							break;
-						} else {
-							if((waitCounter % 3) == 0) {
-								createHostView.setOpponentStatusLabel("Waiting .");
-							} else if((waitCounter % 3) == 1) {
-								createHostView.setOpponentStatusLabel("Waiting ..");
-							} else {
-								createHostView.setOpponentStatusLabel("Waiting ...");
-							}
-							waitCounter++;
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								System.err.println("Thread sleep got interupted: " + e.getMessage());
-							}
-						}	
-					}
-				}
-				});
-				waitConnectionThred.start();
-//				Thread chekcConnection = new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						while(true) {
-//							if(networkConnection.getClientSocket() != null && networkConnection.isClientConnected() == false) {
-//								System.out.println("Closed connection");
-//								networkConnection.closeConnection();
-//								String message = "Client exited or closed network connection\n" + 
-//											     "You will be redirecred to main menu";
-//					        		JOptionPane.showMessageDialog(gameController.getMainWindow(), message, "Connection problem", JOptionPane.WARNING_MESSAGE);
-//					        		gameController.setDefaultMenuWindow();
-//								gameController.startGame(2);
-//								
-//							} else {
-//								System.out.println("Check for connection " + networkConnection.isClientConnected());
-//								networkConnection.read();
-//								try {
-//									Thread.sleep(1000);
-//								} catch (InterruptedException e) {
-//									System.err.println("Thread sleep got interupted: " + e.getMessage());
-//								}
-//							}
-//						
-//						}
-//	
-//					}
-//				});
-//				chekcConnection.start();
-//				
-			}
+		this.networkConnection.createConnection();
+		
+		this.gameController.setNetworkConnection(this.networkConnection);
+		
+		this.createHostView.setCreateServerButtonState(false);
+		this.createHostView.setServerPortTextFieldState(false);
+		
+		if(this.serverPort == 0) {
+			this.createHostView.setPortNumber(Integer.toString(this.networkConnection.getServerPort()));
 		}
+		
+		this.txData.setServerPlayerName(this.gameController.getPlayerName());
+		
+		Thread establishConnectionThred = new Thread(new EstablishLientConnection());
+		establishConnectionThred.start();
 	}
 	
-	public CreateHostView getView() {
-		return createHostView.getView();
+	// Inner Classes:
+	
+	class EstablishLientConnection implements Runnable {
+
+		@Override
+		public void run() {
+			int waitingCounter = 0;
+			while(true) {
+				if(networkConnection.isClientConnected() == true) {
+					createHostView.setConnectionStatus("Connected");
+					createHostView.setStartButtonState(true);
+					serverIP = createHostView.getIPAddress();
+					networkConnection.sendData(txData);
+					rxData = networkConnection.getData();							
+					createHostView.setOpponentStatusLabel(rxData.getClientPlayerName());
+					gameController.setOpponentName(rxData.getClientPlayerName());
+					break;
+				} else {
+					if((waitingCounter % 3) == 0) {
+						createHostView.setOpponentStatusLabel("Waiting .");
+					} else if((waitingCounter % 3) == 1) {
+						createHostView.setOpponentStatusLabel("Waiting ..");
+					} else {
+						createHostView.setOpponentStatusLabel("Waiting ...");
+					}
+					waitingCounter++;
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						System.err.println("Thread sleep got interupted: " + e.getMessage());
+					}
+				}	
+			}
+		}
 	}
 }

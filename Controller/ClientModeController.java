@@ -27,7 +27,6 @@ import java.net.UnknownHostException;
 
 import Model.NetworkDataModel;
 import Model.NetworkModel;
-import View.CreateHostView;
 import View.JoinHostView;
 
 public class ClientModeController {
@@ -43,13 +42,15 @@ public class ClientModeController {
 	private JoinHostView joinHostView;
 	private GameController gameController;
 	
+	// Default constructor:
+	
 	public ClientModeController(GameController gameController) {
 		
 		this.gameController = gameController;
 		
-		this.networkConnection = new NetworkModel();
+		this.networkConnection = null;
 		this.rxData = null;
-		this.txData = new NetworkDataModel();
+		this.txData = null;
 		this.serverIP = null;
 		this.serverPort = 0;
 		this.hostIPAddress = null;
@@ -59,23 +60,18 @@ public class ClientModeController {
 		this.initialize();
 	}
 	
-	public void setDefault() {
-		this.networkConnection = new NetworkModel();
-		this.rxData = null;
-		this.txData = new NetworkDataModel();
-		this.serverIP = null;
-		this.serverPort = 0;
-		this.hostIPAddress = null;
-		
-		this.joinHostView = new JoinHostView();
-		
-		this.initialize();
+	// Getter methods:
+	
+	public JoinHostView getView() {
+		return this.joinHostView.getView();
 	}
 	
+	// Setter methods:
+	
+	
+	// Class methods:
 	
 	private void initialize() {
-		
-		
 		
 		try {
 			hostIPAddress = InetAddress.getLocalHost();
@@ -84,7 +80,6 @@ public class ClientModeController {
 		}
 		
 		this.joinHostView.setIPAddress(hostIPAddress.getHostAddress());
-		
 		this.joinHostView.addJoinHostButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -97,7 +92,6 @@ public class ClientModeController {
 			public void actionPerformed(ActionEvent e) {
 				networkConnection.closeConnection();
 				joinHostView.setDefault();
-				joinHostView.setIPAddress(hostIPAddress.getHostAddress());
 				gameController.startGame(2);
 			}
 		});
@@ -110,28 +104,42 @@ public class ClientModeController {
 		});
 		
 	}
-	
+
 	private void joinHost() {
-		this.gameController.setNetworkConnection(this.networkConnection);
-		this.txData.setClientPlayerName(this.gameController.getPlayerName());
+		this.networkConnection = new NetworkModel();
+		this.txData = new NetworkDataModel();
+		
+		if(this.gameController.getPlayerName() == null) {
+			this.networkConnection.setClientName("Client");
+		} else {
+			this.networkConnection.setClientName(this.gameController.getPlayerName());
+			this.txData.setClientPlayerName(this.gameController.getPlayerName());
+		}
+		
 		this.serverIP = this.joinHostView.getIPAddress();
-		this.serverPort = Integer.parseInt(this.joinHostView.getPortNumber());
+		
+		if(this.joinHostView.getPortNumber().length() > 0) {
+			this.serverPort = Integer.parseInt(this.joinHostView.getPortNumber());
+		} 
+		
 		this.networkConnection.setServerIP(this.serverIP);
 		this.networkConnection.setServerPort(this.serverPort);
-		if(this.networkConnection.joinConnection() == true) {
+		this.networkConnection.joinConnection();
+		if(this.networkConnection.isClientConnected() == true) {
+			
+			this.gameController.setNetworkConnection(this.networkConnection);
+			
 			this.joinHostView.setJoinServerButtonState(false);
 			this.joinHostView.setConnectionStatus("Connected");
 			this.joinHostView.setStartButtonState(true);
+			
+			this.txData.setClientPlayerName(this.gameController.getPlayerName());
 			this.networkConnection.sendData(this.txData);
-			rxData = this.networkConnection.getData();
 			
+			this.rxData = this.networkConnection.getData();
 			
-			joinHostView.setOpponentStatusLabel(rxData.getServerPlayerName());
-			gameController.setOpponentName(rxData.getServerPlayerName());
+			this.joinHostView.setOpponentStatusLabel(rxData.getServerPlayerName());
+			this.gameController.setOpponentName(rxData.getServerPlayerName());
 		}
-	}
-	
-	public JoinHostView getView() {
-		return this.joinHostView.getView();
 	}
 }

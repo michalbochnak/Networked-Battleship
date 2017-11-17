@@ -34,6 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -117,6 +118,7 @@ public class GameboardController {
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
 		
 		this.txData = new NetworkDataModel();
+		this.networkConnection = this.gamecontroller.getNetworkConnection();
 		
 		if(this.gamecontroller.getGameMode() == 1) {
 			this.playerTurn = false;
@@ -178,10 +180,6 @@ public class GameboardController {
 		
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
 
-	}
-	
-	public void  updateNetworkConnection(NetworkModel networkConnection) {
-		this.networkConnection = networkConnection;
 	}
 	
 	
@@ -718,25 +716,21 @@ public class GameboardController {
 
 //				playerTurn = false;
 //				toggleTurn();
-
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				highlighButton(opponentBoardView, ((BoardCell)e.getSource()).getCoordinates());
-				
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				clearHighlightsFromAllButtons(opponentBoardView);
-				
 			}
 		
 		}
@@ -771,15 +765,12 @@ public class GameboardController {
 								networkConnection.sendData(txData);
 								// respond
 							}
-
-							
-
-						} catch (Exception e) {}
+						} catch (Exception e) {
+							System.err.println(e.getMessage());
+						}
 					}
 
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					
 				}			
 			}
 		}

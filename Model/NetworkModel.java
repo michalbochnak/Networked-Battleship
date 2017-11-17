@@ -19,6 +19,8 @@
 
 package Model;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,6 +31,9 @@ import java.net.UnknownHostException;
 
 public class NetworkModel {
 	
+	private String clientName;
+	
+
 	private ServerSocket serverSocket;
 	private String serverIP;
 	private int serverPort;
@@ -39,11 +44,11 @@ public class NetworkModel {
 	private ObjectOutputStream dataOut;
 	
 	private boolean clientConnectionStatus;
-	private boolean serverConnectionStatus;
 	
 	// Default constructor:
 	
 	public NetworkModel() {
+		this.clientName = null;
 		this.serverSocket = null;
 		this.clientSocket = null;
 		this.serverIP = null;
@@ -51,17 +56,16 @@ public class NetworkModel {
 		this.dataIn = null;
 		this.dataOut = null;
 		this.clientConnectionStatus = false;
-		this.serverConnectionStatus = false;
 	}
 	
 	// Getter methods:
 	
+	public String getClientName() {
+		return this.clientName;
+	}
+
 	public boolean isClientConnected() {
 		return this.clientConnectionStatus;
-	}
-	
-	public boolean isServerStarted() {
-		return this.serverConnectionStatus;
 	}
 	
 	public int getServerPort() {
@@ -82,6 +86,10 @@ public class NetworkModel {
 	
 	// Setter methods:
 	
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+	
 	public void setServerIP(String serverIP) {
 		this.serverIP = serverIP;
 	}
@@ -91,58 +99,45 @@ public class NetworkModel {
 	}
 	
 	// Class methods:
-	public boolean createConnection() {
+	public void createConnection() {
 		try {
 			this.serverSocket = new ServerSocket(this.serverPort);
-			this.serverConnectionStatus = true;
 			Thread connectionThread = new Thread(new ClientConnection());
 			connectionThread.start();
 		} catch (IOException e) {
-			this.serverConnectionStatus = false;
-			System.err.println("Cannot create new server socket: " + e.getMessage());
-			return false;
-			
+			System.err.println(this.clientName +": Cannot create new server socket: " + e.getMessage());
 		}
-		return true;
 	}
 	
-	public boolean joinConnection() {
+	public void joinConnection() {
 		try {
-			this.clientSocket =  new Socket(this.serverIP, this.serverPort);
-			
-			System.out.println("Joined");
+			this.clientSocket = new Socket(this.serverIP, this.serverPort);
+			System.out.println(this.clientName +": Client joined to socket.");
 			this.clientConnectionStatus = true;
 			this.setDataOut();
 			this.setDataIn();
-
 		} catch (UnknownHostException e) {
-			System.err.println("Cannot find host to open socket: " + e.getMessage());
+			System.err.println(this.clientName +": Cannot find host to open socket: " + e.getMessage());
 			this.clientConnectionStatus = false;
-			return false;
 		} catch (IOException e) {
 			this.clientConnectionStatus = false;
-			System.err.println("Cannot create new client socket: " + e.getMessage());
-			return false;
 		}
-		return true;
 	}
 	
 	private void setDataIn() {
 		try {
 			this.dataIn = new ObjectInputStream(this.clientSocket.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		} 
 	}
 	
 	private void setDataOut() {
 		try {
 			this.dataOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
-		} catch(EOFException e) {
-	
-			this.clientConnectionStatus = false;
 		}catch (IOException e) {
-			e.printStackTrace();
+			this.clientConnectionStatus = false;
+			System.err.println(e.getMessage());
 		} 
 	}
 
@@ -150,64 +145,73 @@ public class NetworkModel {
 	public NetworkDataModel getData() {
 		NetworkDataModel data = null;
 		try {
+			System.out.println(this.clientName +": Receiving object...");
 			data = (NetworkDataModel)dataIn.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-			
+		} catch (IOException | ClassNotFoundException e) {
+			System.err.println(this.clientName +": Receiving objData failed. " + e.getMessage());
 		}
-
+		System.out.println(this.clientName +": Object has been received.");
 		return data;
 	}
 	
 	public void sendData(NetworkDataModel data) {
 		try {
-			System.out.println("Sending: " + data);
+			System.out.println(this.clientName +": Sending object...");
 			this.dataOut.writeObject(data);
 			this.dataOut.flush();
 			this.dataOut.reset();
-			
 		} catch (IOException e) {
-			System.out.println("Sending failed.............");
-			e.printStackTrace();
+			System.err.println(this.clientName +": Sending objData failed. " + e.getMessage());
 		} 
-		
-	   
+		System.out.println(this.clientName +": Object has been sent.");
 	}
 	
 	public void closeConnection() {
-		System.out.println("I am here");
-		System.out.println("Client socket: " + this.clientSocket);
-		System.out.println("Data out socket: " + this.dataOut);
+		
+		System.out.println(this.clientName +": Closing sockets:");
+		System.out.println(this.clientName +": Server socket: " + this.serverSocket);
+		System.out.println(this.clientName +": Client socket: " + this.clientSocket);
+		System.out.println(this.clientName +": Data out stream: " + this.dataOut);
+		System.out.println(this.clientName +": Data in stream: " + this.dataIn);
 		
 		if(this.dataOut != null) {
 			try {
-				dataOut.close();
+				System.out.println(this.clientName +": Closing data out stream.");
+				this.dataOut.close();
+				this.dataOut = null;
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			} 
 		}
 		
 		if(this.dataIn != null) {
 			try {
-				dataIn.close();
+				System.out.println(this.clientName +": Closing data in stream.");
+				this.dataIn.close();
+				this.dataIn = null;
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			} 
 		}
 		
 		if(this.serverSocket != null) {
 			try {
+				System.out.println(this.clientName +": Closing Server socket.");
 				this.serverSocket.close();
+				this.serverSocket = null;
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 		}
 		
 		if(this.clientSocket != null) {
-			try {
-				System.out.println("Closing Connection");
+			try {	
+				System.out.println(this.clientName +": Closing Client socket.");
+				this.clientConnectionStatus = false;
 				this.clientSocket.close();
+				this.clientSocket = null;
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 		}
 	}
@@ -216,17 +220,16 @@ public class NetworkModel {
 	class ClientConnection implements Runnable {
 		@Override
 		public void run() {
-			try { 
+			try {
+				System.out.println(clientName +": Waiting for client to connect ...");
 				clientSocket = serverSocket.accept(); 
 				clientConnectionStatus = true;
 				setDataOut();
 				setDataIn();	
 			} catch (IOException e) { 
-				e.printStackTrace(); 	
+				clientConnectionStatus = false;
+				System.err.println(e.getMessage());
 			} 		
 		}
-    }
-	
-	
-	
+    }	
 }

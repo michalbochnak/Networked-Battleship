@@ -32,13 +32,13 @@ public class WelcomeMessageView extends JPanel {
 	private JLabel welcomeLabel;
 	private JLabel usernameLabel;
 	private JTextField playerNameTextField;
-	private JButton submitNameButton;
+	private JButton nextButton;
 	
 	public WelcomeMessageView() {
 		this.welcomeLabel = new JLabel("Welcome to Network Batleship Game!");
 		this.usernameLabel = new JLabel("Please enter you name: ");
 		this.playerNameTextField = new JTextField();
-		this.submitNameButton = new JButton("Next");
+		this.nextButton = new JButton("Next");
 	
 		this.initialize();
 	}
@@ -51,29 +51,34 @@ public class WelcomeMessageView extends JPanel {
 		this.welcomeLabel.setBounds(130, 0, 300, 20);
 		this.usernameLabel.setBounds(70, 50, 150, 20);
 		this.playerNameTextField.setBounds(220, 50, 200, 20);
-		this.submitNameButton.setBounds(420, 50, 100, 20);
+		this.nextButton.setBounds(420, 50, 100, 20);
 		
+		add(welcomeLabel);
+		add(usernameLabel);
+		add(playerNameTextField);
+		add(nextButton);	
+		this.revalidate();
 	}
+	
+	// Getter methods:
 	
 	public String getPlayerName() {
 		return this.playerNameTextField.getText();
 	}
 	
+	// Setter methods:
 	
 	public void setPlayerName(String playerName) {
 		this.playerNameTextField.setText(playerName);
 	}
 	
+	// Class methods:
+	
 	public WelcomeMessageView getView() {
-		add(welcomeLabel);
-		add(usernameLabel);
-		add(playerNameTextField);
-		add(submitNameButton);
-		this.revalidate();
 		return this;
 	}
 	
-	public void addSubmitButtonActionListener(ActionListener actionListener) {
-		this.submitNameButton.addActionListener(actionListener);
+	public void addNextButtonActionListener(ActionListener actionListener) {
+		this.nextButton.addActionListener(actionListener);
 	}
 }

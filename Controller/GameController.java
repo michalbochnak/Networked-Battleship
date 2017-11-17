@@ -68,11 +68,11 @@ public class GameController {
     	
     		this.gameWindowView = new GameWindowView();
    		
-    		this.serverModeController = new ServerModeController(this);
-    		this.clientModeController = new ClientModeController(this);
+    		this.serverModeController = null;
+    		this.clientModeController = null;
     		this.gameMenuController = new GameMenuController(this);
     		this.menuBarController = new MenuBarController(this);
-    		this.gameboardController = new GameboardController(this);
+    		this.gameboardController = null;
     		
     		
     		this.playerName = null;
@@ -126,7 +126,6 @@ public class GameController {
     public void setNetworkConnection(NetworkModel networkConnection) {
     		if(this.networkConnection == null) {
     			this.networkConnection = networkConnection;
-    			this.gameboardController.updateNetworkConnection(networkConnection);
     		}
     }
     
@@ -161,19 +160,24 @@ public class GameController {
     				this.gameMode = 0;
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
+    				
+    				this.serverModeController = new ServerModeController(this);
     				this.gameWindowView.addContent(this.serverModeController.getView());
     				break;
     			case 4:
     				this.gameMode = 1;
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
+    				
+    				this.clientModeController = new ClientModeController(this);
     				this.gameWindowView.addContent(this.clientModeController.getView());
     				break;
     			case 5:
     				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(true);
     				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(true);
     				this.gameWindowView.setNewSize(1400, 700);
-    				this.gameboardController.setPlayerNames();
+    				
+    				this.gameboardController = new GameboardController(this);
     				this.gameWindowView.addContent(this.gameboardController.getGameboardView());
     				break;
     		}
@@ -182,14 +186,11 @@ public class GameController {
 
     public void setDefaultMenuWindow() {
     		this.gameWindowView.setDefault();
-    		this.serverModeController.setDefault();
-    		this.clientModeController.setDefault();
-    		this.gameboardController = new GameboardController(this);
+//    		this.serverModeController.setDefault();
+//    		this.clientModeController.setDefault();
+//    		this.gameboardController = new GameboardController(this);
     		
     }
-
-    
-    
 
 }
 
