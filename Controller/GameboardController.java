@@ -78,6 +78,8 @@ public class GameboardController {
 	private int hits;
 	private int misses;
 	
+	private boolean exitFlag;
+	
 	// Default constructor:
 	
 	public GameboardController(GameController gamecontroller) {
@@ -97,17 +99,26 @@ public class GameboardController {
 		
 		this.hits = 0;
 		this.misses = 0;
+		this.exitFlag = false;
 		
 		this.initialize();
 	}
 	
 	// Getter methods:
 	
+	public boolean isExitFlag() {
+		return exitFlag;
+	}
+
 	public GameboardView getGameboardView( ) {
 		return this.gameboardView;
 	}
 	
 	// Setter methods:
+	
+	public void setExitFlag(boolean exitFlag) {
+		this.exitFlag = exitFlag;
+	}
 	
 	// Class methods:
 	
@@ -745,6 +756,11 @@ public class GameboardController {
 
 				while(true) {
 					if(networkConnection != null) {
+						
+						if(exitFlag == true) {
+							break;
+						}
+
 						try {
 	                        rxData = networkConnection.getData();
 	                        Coordinates c = rxData.getCoordinates();

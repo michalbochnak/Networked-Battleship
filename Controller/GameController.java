@@ -53,6 +53,7 @@ public class GameController {
     private boolean gameStarted;
     
     
+    
     // 0 - 2: 0 - connection, 1 - ship placement, 2 - game
     private int gameStage;
     // 5 - 1: 5 - aircraft, 4 - battleship, 3 - destroyer, 2 - submarine, 1 - patrol boat
@@ -78,6 +79,7 @@ public class GameController {
     		this.playerName = null;
     		this.opponentName = null;
     		this.gameMode = 0;
+    		
     	
     		initialize();
     }
@@ -190,6 +192,12 @@ public class GameController {
 //    		this.clientModeController.setDefault();
 //    		this.gameboardController = new GameboardController(this);
     		
+    }
+    
+    public void exitFromStartedGame() {
+    		if(this.gameboardController != null) {
+    			this.gameboardController.setExitFlag(true);
+    		}
     }
 
 }
