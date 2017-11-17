@@ -152,4 +152,14 @@ public class NetworkDataModel implements Serializable{
 		this.playAgainRespond = flag;
 	}
 
+	public  void  resetFlags() {
+		this.hitStatus = false;
+		this.hitAttempt = false;
+		this.respond = false;
+		this.disconectSignal = false;
+		this.winner = false;
+		this.playAgain = false;
+		this.playAgainRespond = false;
+	}
+
 }
