@@ -785,6 +785,7 @@ public class GameboardController {
 								showDisconectMessage();
 								gamecontroller.setDefaultMenuWindow();
 								networkConnection.closeConnection();
+								gamecontroller.resetGameboardController();
 								gamecontroller.startGame(2);
 								break;
 							}

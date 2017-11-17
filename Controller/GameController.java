@@ -206,6 +206,10 @@ public class GameController {
     			return false;
     		}
     }
+    
+    public void resetGameboardController() {
+    		this.gameboardController = null;
+    }
 
 }
 
