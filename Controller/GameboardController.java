@@ -1,11 +1,15 @@
 package Controller;
 
 
+<<<<<<< HEAD
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+=======
+import java.awt.*;
+>>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,7 +32,11 @@ import View.ControlsView;
 import View.GameboardView;
 import View.OpponentBoardView;
 import View.PlayerBoardView;
+<<<<<<< HEAD
 import Model.Coordinates;
+=======
+
+>>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
 
 public class GameboardController {
 
@@ -388,6 +396,9 @@ public class GameboardController {
 	        gr.dispose();
 	    }
 
+		for (int i = 0; i < pieces; ++i)
+			imgs[i] = resize(imgs[i], 45, 45);
+
 	    ImageIcon icons[] = new ImageIcon[pieces];
 	    for (int i = 0; i < imgs.length; ++i) {
 	        // placing vertically -> rotate
@@ -474,15 +485,24 @@ public class GameboardController {
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		
+<<<<<<< HEAD
 		waitForData.start();
 	}
+=======
+		
+    }
+>>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
 
 
 	public boolean updateBoard(Coordinates c) {
 
+        System.out.println("updateBoard....");
+
 		int row = c.getRow();
 		int col = c.getCol();
-		BoardCell bc = playerBoardView.getButtons()[col][row];
+        BoardCell bc = this.playerBoardView.getButtons()[row][col];
+        //this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
+
 		// miss
 		if (bc.getIcon() == null) {
 			updateMiss(bc);
@@ -496,20 +516,43 @@ public class GameboardController {
 	}
 
 	private void updateMiss(BoardCell bc) {
-		BufferedImage img = resize(loadImage("images/miss.png"),
-				45, 45);
-		JLabel temp = new JLabel("Miss");
-		temp.setIcon(new ImageIcon(img));
-		bc.add(temp);
-	}
+        System.out.println("Miss " );
+        BufferedImage img = resize(loadImage("images/miss.png"),
+				40, 40);
+		bc.setIcon(new ImageIcon(img));
+    }
 
 	private void updateHit(BoardCell bc) {
-		BufferedImage img = resize(loadImage("images/hit.png"),
-				45, 45);
-		JLabel temp = new JLabel("Miss");
-		temp.setIcon(new ImageIcon(img));
-		bc.add(temp);
 
+        System.out.println("Hit");
+        BufferedImage img = iconToBuffImg((ImageIcon)bc.getIcon());
+        bc.setIcon(new ImageIcon(redrawIcon(img)));
+	}
+
+	// draw explosion image on the top of the current icon
+	private BufferedImage redrawIcon(BufferedImage img) {
+		BufferedImage temp = new BufferedImage(img.getWidth(), img.getHeight(),
+				img.getType());
+		BufferedImage explosion = resize(loadImage("images/hit.png"),
+			45, 45);
+		Graphics2D gr = (Graphics2D)temp.getGraphics();
+		gr.drawImage(img, 0, 0, null);
+		gr.drawImage(explosion, 0, 0, null);
+		gr.dispose();
+		return temp;
+	}
+
+	private BufferedImage iconToBuffImg(ImageIcon i) {
+		BufferedImage img = new BufferedImage(
+				i.getIconWidth(),
+				i.getIconHeight(),
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.createGraphics();
+		// paint the Icon to the BufferedImage.
+		i.paintIcon(null, g, 0,0);
+		g.dispose();
+
+		return img;
 	}
 
 	// Inner Classes:
@@ -523,21 +566,25 @@ public class GameboardController {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			
-	        // Ship placement stage
-	       if (gameStage == 1 && !shipsOnBoard.contains(shipSelected) && shipSelected != -1) {
-	            tryToPlaceShip(e);
-	            if (shipsOnBoard.size() == 5) {
-	            //	opponentBoardView.setVisible(true);
-	            
-	            }
-	        }
+
+
+            // Ship placement stage
+            if (gameStage == 1 && !shipsOnBoard.contains(shipSelected) && shipSelected != -1) {
+                tryToPlaceShip(e);
+
+                if (shipsOnBoard.size() == 5) {
+                    //	opponentBoardView.setVisible(true);
+
+                }
+            }
 	        // Game stage
 	        else if (gameStage == 2){
-	            System.out.println("Game in progress");
-	            //startPlayingGame();
-	        }
-		}
+                System.out.println("Game in progress");
+				updateBoard( ((BoardCell) e.getSource()).getCoordinates() );
+                //startPlayingGame();
+            }
+
+        }
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
