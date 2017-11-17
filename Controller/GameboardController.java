@@ -547,6 +547,7 @@ public class GameboardController {
 
 		System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
+
 		// miss
 		if (bc.getIcon() == null) {
 			updateMiss(bc);
@@ -554,7 +555,7 @@ public class GameboardController {
 			return false;
 		}
 		// hit
-		else if ( ! (bc.getIcon().toString().equals("Miss") )) {
+		else if ( ! (bc.getName().equals("Miss") )) {
 			updateHit(bc);
 			hits++;
 			return true;
