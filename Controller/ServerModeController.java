@@ -90,7 +90,9 @@ public class ServerModeController {
 		this.createHostView.addGoBackButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				networkConnection.closeConnection();
+				if(networkConnection != null) {
+					networkConnection.closeConnection();
+				}
 				createHostView.setDefault();
 				gameController.startGame(2);
 			}

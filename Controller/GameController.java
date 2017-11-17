@@ -50,7 +50,7 @@ public class GameController {
     private String playerName;
     private String opponentName;
     private int gameMode;			// 0 - server, 1 - client
-    private boolean gameStarted;
+    
     
     
     // 0 - 2: 0 - connection, 1 - ship placement, 2 - game
@@ -78,6 +78,7 @@ public class GameController {
     		this.playerName = null;
     		this.opponentName = null;
     		this.gameMode = 0;
+    		
     	
     		initialize();
     }
@@ -124,9 +125,7 @@ public class GameController {
     
     
     public void setNetworkConnection(NetworkModel networkConnection) {
-    		if(this.networkConnection == null) {
-    			this.networkConnection = networkConnection;
-    		}
+    		this.networkConnection = networkConnection;
     }
     
     // Class methods:
@@ -178,6 +177,8 @@ public class GameController {
     				this.gameWindowView.setNewSize(1400, 700);
     				
     				this.gameboardController = new GameboardController(this);
+    				this.gameboardController.setPlayerNames();
+    				
     				this.gameWindowView.addContent(this.gameboardController.getGameboardView());
     				break;
     		}
@@ -190,6 +191,24 @@ public class GameController {
 //    		this.clientModeController.setDefault();
 //    		this.gameboardController = new GameboardController(this);
     		
+    }
+    
+    public void exitFromStartedGame() {
+    		if(this.gameboardController != null) {
+    			this.gameboardController.setExitFlag(true);
+    		}
+    }
+    
+    public boolean isGameStarted() {
+    		if(this.gameboardController != null) {
+    			return true;
+    		} else {
+    			return false;
+    		}
+    }
+    
+    public void resetGameboardController() {
+    		this.gameboardController = null;
     }
 
 }

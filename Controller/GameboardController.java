@@ -34,6 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,6 +78,8 @@ public class GameboardController {
 	private int hits;
 	private int misses;
 	
+	private boolean exitFlag;
+
 	// Default constructor:
 	
 	public GameboardController(GameController gamecontroller) {
@@ -96,18 +99,27 @@ public class GameboardController {
 		
 		this.hits = 0;
 		this.misses = 0;
-		
+		this.exitFlag = false;
+
 		this.initialize();
 	}
 	
 	// Getter methods:
 	
+	public boolean isExitFlag() {
+		return exitFlag;
+	}
+
 	public GameboardView getGameboardView( ) {
 		return this.gameboardView;
 	}
 	
 	// Setter methods:
 	
+	public void setExitFlag(boolean exitFlag) {
+		this.exitFlag = exitFlag;
+	}
+
 	// Class methods:
 	
 	private void initialize() {
@@ -541,9 +553,6 @@ public class GameboardController {
 		int row = c.getRow();
 		int col = c.getCol();
 		BoardCell bc = this.playerBoardView.getButtons()[row][col];
-		//this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
-
-		//System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
 		// miss
 		if (bc.getIcon() == null) {
@@ -627,14 +636,17 @@ public class GameboardController {
 		return img;
 	}
 
-	private void toggleTurn() {
+	private void toggleTurn(boolean playerTurn) {
+		this.playerTurn = playerTurn;
 		if(this.playerTurn == false) {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.clearHighlightsFromAllButtons(this.opponentBoardView);
 			this.opponentBoardView.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			this.opponentBoardView.validate();
 		} else {
 			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.opponentBoardView.setCursor(this.customCusrsor);
+			this.opponentBoardView.validate();
 		}
 	}
 
@@ -650,9 +662,8 @@ public class GameboardController {
 		String message = "Congratulation " + this.gamecontroller.getPlayerName() + ", you WON!";
         String title = "You Win!";
         JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
-		this.networkConnection.closeConnection();
-        this.gamecontroller.setDefaultMenuWindow();
-		this.gamecontroller.startGame(2);
+
+
 	}
 
 	private void showLoseMessage() {
@@ -677,6 +688,11 @@ public class GameboardController {
         }
     }
 
+	private void showDisconectMessage() {
+		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but your opponent " + this.gamecontroller.getOpponentName() + " closed his/her connection.";
+        String title = "Attantion!";
+        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.WARNING_MESSAGE);
+	}
 	// Inner Classes:
 
 	class PlayerBoardCellsMouseLisener implements MouseListener {
@@ -757,16 +773,6 @@ public class GameboardController {
                     networkConnection.sendData(txData);
                 }
 
-
-
-				
-				//toggleTurn(false);
-
-
-//				playerTurn = false;
-//				toggleTurn();
-			}
-
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
@@ -793,8 +799,6 @@ public class GameboardController {
 					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
-//	                        playerTurn = true;
-//	                        toggleTurn();
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
@@ -803,37 +807,18 @@ public class GameboardController {
 
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
+								// update opp board
+								System.out.println("Responding....");
 
-                                updateOpponentBoard(c, rxData.getHitStatus());
-
-                                if (rxData.isWinner()) {
-                                    showWinMessage();
-                                    txData.setPlayAgain(askToPlayAgain());
-                                    txData.setRespond(true);
-                                    txData.setHitAttempt(false);
-                                    txData.setPlayAgainRespond(true);
-                                }
-                                System.out.println("Responding....");
+								updateOpponentBoard(c, rxData.getHitStatus());
 							}
 							// opponent tried to hit, update and send message back
 							else if (rxData.getHitAttempt() == true) {
 								boolean hit = updatePlayerBoard(c);
-
-								if (rxData.isWinner()) {
-								    showLoseMessage();
-								    txData.setPlayAgain(askToPlayAgain());
-								    txData.setRespond(true);
-								    txData.setHitAttempt(false);
-								    txData.setPlayAgainRespond(true);
-								    txData.setWinner(true);
-								    networkConnection.sendData(txData);
-                                }
-
 								txData.setCoordinates(c);
 								txData.setHitStatus(hit);
 								txData.setHitAttempt(false);
 								txData.setRespond(true);
-                                txData.setPlayAgainRespond(false);
 								networkConnection.sendData(txData);
 								// respond
 							}
