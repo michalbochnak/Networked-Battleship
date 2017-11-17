@@ -19,6 +19,7 @@
 
 package Model;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -137,7 +138,10 @@ public class NetworkModel {
 	private void setDataOut() {
 		try {
 			this.dataOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
-		} catch (IOException e) {
+		} catch(EOFException e) {
+	
+			this.clientConnectionStatus = false;
+		}catch (IOException e) {
 			e.printStackTrace();
 		} 
 	}
@@ -148,7 +152,7 @@ public class NetworkModel {
 		try {
 			data = (NetworkDataModel)dataIn.readObject();
 		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+			
 		}
 		return data;
 	}
@@ -157,7 +161,7 @@ public class NetworkModel {
 		try {
 			System.out.println("Sending: " + data);
 			this.dataOut.writeObject(data);
-			this.dataOut.reset();
+			
 		} catch (IOException e) {
 			System.out.println("Sending failed.............");
 			e.printStackTrace();
@@ -166,6 +170,12 @@ public class NetworkModel {
 	    try {
 	    		this.dataOut.flush();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    try {
+			this.dataOut.reset();
+		} catch (IOException e) {
+		
 			e.printStackTrace();
 		}
 	}
