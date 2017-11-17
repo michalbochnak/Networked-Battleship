@@ -77,21 +77,6 @@ public class NetworkModel {
 		return this.clientSocket;
 	}
 	
-//	public void read() {
-//		if(this.clientSocket != null) {
-//			try {
-//				this.clientSocket.getInputStream();
-//			} catch (IOException e) {
-//				this.clientConnectionStatus = false;
-//				e.printStackTrace();
-//			}
-//			
-//			
-//		}
-//			
-//		
-//	}
-//	
 	// Setter methods:
 	
 	public void setServerIP(String serverIP) {
@@ -154,6 +139,8 @@ public class NetworkModel {
 			e.printStackTrace();
 		} 
 	}
+	
+	
 	
 	public NetworkDataModel getData() {
 		NetworkDataModel data = null;
