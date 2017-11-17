@@ -24,24 +24,21 @@ import java.io.Serializable;
 
 public class NetworkDataModel implements Serializable{
 	
-
 	private static final long serialVersionUID = 1L;
 	private String serverPlayerName;
 	private String clientPlayerName;
 	
 	private int row;
 	private int col;
-	private boolean hitStatus;			// flag to see if hit was succersfull
-	private boolean hitAttempt;		// opponent was tryin g to hit
-	private boolean respond;			// response about attempted hit
+	private boolean hitStatus;		   // flag to see if hit was succersfull
+	private boolean hitAttempt;		   // opponent was tryin g to hit
+	private boolean respond;		       // response about attempted hit
 	private boolean disconectSignal;
 	private boolean winner;
 	private boolean playAgain;
 
-
-
-
-
+	// Default constructor:
+	
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
@@ -53,12 +50,9 @@ public class NetworkDataModel implements Serializable{
 		this.disconectSignal = false;
 		this.winner = false;
 		this.playAgain = false;
-		
 	}
 	
 	// Getter methods:
-	
-	
 	
 	public boolean isDisconected() {
 		return this.disconectSignal;
@@ -84,7 +78,6 @@ public class NetworkDataModel implements Serializable{
 		this.playAgain = playAgain;
 	}
 	
-
 	public void setCoordinates(Coordinates c) {
 		this.row = c.getRow();
 		this.col = c.getCol();

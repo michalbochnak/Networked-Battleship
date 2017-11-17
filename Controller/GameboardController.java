@@ -507,8 +507,6 @@ public class GameboardController {
 
 		System.out.println(this.playerTurn);
 
-		//this.toggleTurn();
-
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 		this.opponentBoardView.setCursor(this.customCusrsor);
 
@@ -605,7 +603,8 @@ public class GameboardController {
 		return img;
 	}
 
-	private void toggleTurn() {
+	private void toggleTurn(boolean playerTurn) {
+		this.playerTurn = playerTurn;
 		if(this.playerTurn == false) {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.clearHighlightsFromAllButtons(this.opponentBoardView);
@@ -715,12 +714,7 @@ public class GameboardController {
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
 
-				
-				//toggleTurn(false);
-
-
-//				playerTurn = false;
-//				toggleTurn();
+				toggleTurn(false);
 			}
 
 			@Override
@@ -749,8 +743,6 @@ public class GameboardController {
 					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
-//	                        playerTurn = true;
-//	                        toggleTurn();
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
@@ -761,7 +753,7 @@ public class GameboardController {
 							if (rxData.getRespond() == true) {
 								// update opp board
 
-		                        	//toggleTurn(true);
+		                        	toggleTurn(true);
 
 								System.out.println("Responding....");
 
