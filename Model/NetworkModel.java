@@ -1,19 +1,19 @@
-/* Network.java
- *
- * Michal Bochnak, Netid: mbochn2
- * Alex Viznytsya, Netid: avizny2
- * Jakub Glebocki, Netid: jglebo2
- *
- * CS 342 Project #4 - Networked Battleship
- * Nov 16, 2017
- * UIC, Pat Troy
- *
- * Class description:
- * 
- * This class is responsible for network interactions between
- * two games.
- * 
- */
+//
+// Michal Bochnak, Netid: mbochn2
+// Alex Viznytsya, Netid: avizny2
+// Jakub Glebocki: Netid: jglebo2
+//
+// CS 342 Project #4 - Networked Battleship
+// Nov 16, 2017
+// UIC, Pat Troy
+//
+// NetworkModel.java
+//
+
+//
+//  class description...
+//
+
 
 package Model;
 
