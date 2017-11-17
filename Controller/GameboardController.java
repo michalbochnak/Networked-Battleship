@@ -721,42 +721,34 @@ public class GameboardController {
 					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
-	                        playerTurn = true;
-	                        toggleTurn();
-	                        System.out.println("Get new Data: "
-	                                + rxData.getCoordinates().getRow() + " "
-	                                + rxData.getCoordinates().getCol());
-						}catch (Exception e) {}
+	                        Coordinates c = rxData.getCoordinates();
+							System.out.println("Get new Data: "
+	                                + c.getRow() + " " + c.getCol());
+
+							// respond message, update board only
+							if (rxData.getRespond() == true) {
+								// update opp board
+								updateOpponentBoard(c, rxData.getHitStatus());
+							}
+							// opponent tried to hit, update and send message back
+							else if (rxData.getHitAttempt() == true) {
+								boolean hit = updatePlayerBoard(c);
+								txData.setCoordinates(c);
+								txData.setHitStatus(hit);
+								txData.setHitAttempt(false);
+								txData.setRespond(true);
+								networkConnection.sendData(txData);
+								// respond
+							}
+
+
+							rxData = null;
+
+						} catch (Exception e) {}
+						
 					}
 
-					try {
-                        rxData = networkConnection.getData();
-                        Coordinates c = rxData.getCoordinates();
-						System.out.println("Get new Data: "
-                                + c.getRow() + " " + c.getCol());
-
-						// respond message, update board only
-						if (rxData.getRespond() == true) {
-							// update opp board
-							updateOpponentBoard(c, rxData.getHitStatus());
-						}
-						// opponent tried to hit, update and send message back
-						else if (rxData.getHitAttempt() == true) {
-							boolean hit = updatePlayerBoard(c);
-							txData.setCoordinates(c);
-							txData.setHitStatus(hit);
-							txData.setHitAttempt(false);
-							txData.setRespond(true);
-							networkConnection.sendData(txData);
-							// respond
-						}
-
-
-						rxData = null;
-
-					} catch (Exception e) {}
-
-					
+			
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {}
