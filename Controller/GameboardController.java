@@ -514,7 +514,7 @@ public class GameboardController {
 
 	public boolean updateBoard(Coordinates c) {
 
-        System.out.println("updateBoard....");
+        System.out.println("updateBoard.................");
 
 		int row = c.getRow();
 		int col = c.getCol();
@@ -539,7 +539,7 @@ public class GameboardController {
         }
 	}
 
-	private void updateMiss(BoardCell bc) {
+	public void updateMiss(BoardCell bc) {
         System.out.println("Miss" );
         BufferedImage img = resize(loadImage("images/miss.png"),
 				40, 40);
@@ -679,10 +679,16 @@ public class GameboardController {
 				while(true) {
 					try {
                         rxData = networkConnection.getData();
+                        Coordinates c = rxData.getCoordinates();
 						System.out.println("Get new Data: "
-                                + rxData.getCoordinates().getRow() + " "
-                                + rxData.getCoordinates().getCol());
+                                + c.getRow() + " " + c.getCol());
 						rxData = null;
+
+						boolean success = updateBoard(c);
+						txData.setCoordinates(c.getRow(), c.getCol());
+						txData.setHit(success);
+						networkConnection.sendData(txData);
+
 					} catch (Exception e) {}
 					
 					try {
@@ -694,5 +700,7 @@ public class GameboardController {
 				}			
 			}
 		}
+
+
 }
 
