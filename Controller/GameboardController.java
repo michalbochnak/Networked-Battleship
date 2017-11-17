@@ -682,7 +682,7 @@ public class GameboardController {
 						System.out.println("Get new Data: "
                                 + rxData.getCoordinates().getRow() + " "
                                 + rxData.getCoordinates().getCol());
-						
+						rxData = null;
 					} catch (Exception e) {}
 					
 					try {

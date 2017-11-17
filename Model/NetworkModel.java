@@ -157,6 +157,7 @@ public class NetworkModel {
 		try {
 			System.out.println("Sending: " + data);
 			this.dataOut.writeObject(data);
+			this.dataOut.reset();
 		} catch (IOException e) {
 			System.out.println("Sending failed.............");
 			e.printStackTrace();
