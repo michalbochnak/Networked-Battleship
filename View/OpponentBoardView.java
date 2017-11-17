@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  OpponentBoardView class is a class in which we view the opponents board.
+//  we initialize it here
 //
 
 

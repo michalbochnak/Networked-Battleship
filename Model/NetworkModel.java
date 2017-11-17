@@ -11,8 +11,10 @@
 //
 
 //
-//  class description...
-//
+//  This class is the class that has getter and setter functions for all ports
+// and connections that will be used for gameplay, and for them to interact
+// between each other. This class sends and recivees data between the server
+// in order to be able to communcaie correctly with each other.
 
 
 package Model;

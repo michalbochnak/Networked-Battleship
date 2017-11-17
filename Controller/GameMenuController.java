@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  GameMenuController class is in charge of giving the welcome statement for
+// player and opponent as well as initializes the name's(letting each person
+// input their name).
 //
 
 

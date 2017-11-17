@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  WelcomeMessageView is a class in which welcome message and user and opponent
+// names are initialized and displayed tot he board
 //
 
 

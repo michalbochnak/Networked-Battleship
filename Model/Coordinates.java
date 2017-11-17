@@ -12,7 +12,8 @@
 //
 
 //
-//  class description...
+//  This class initializes the coordinates of row and column, has setter functions
+// for it as well as getter functions for it.
 //
 
 package Model;

@@ -11,7 +11,10 @@
 //
 
 //
-//  class description...
+//  The BoardCell class is a class in which we have getter and setter methods
+// for the board at each individual position, hence the word "BoardCell". It
+// also includes opacity which is how much transparency it currently lacks,
+// as well as sets the dimension of each cell
 //
 
 

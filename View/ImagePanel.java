@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  ImagePanel class is a class in which the image is loaded in as the background
+// image. This class intializes, sets and then stores the graphics of a given selected
+// image.
 //
 
 package View;

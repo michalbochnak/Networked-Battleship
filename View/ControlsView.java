@@ -9,9 +9,14 @@
 //
 // ControlsView.java
 //
-
 //
-//  class description...
+// Shows battleShips and allows the user both player and opponent to select
+// their battleship and toggle whether they would like to place these battleship's
+// horizontally or vertically. For each button here we set the transparency,
+// background color, bounds, etc. It also buffers in images of each of the
+// five battleships: AircraftBattleship, Submarine, Destroyer, PatrolBoat.
+// This also has implemented to know which ship the user clicked and where user
+// would like to place it
 //
 
 
@@ -33,6 +38,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
 
 public class ControlsView extends JPanel{
 	

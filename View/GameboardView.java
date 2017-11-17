@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+// GameBoardView is a class which allows the view of the Board pertaining to the
+// opponent & player. It also gets the info of names and labels and initializes everything
+// as well as gets and sets the name of the player and opponent
 //
 
 
@@ -108,7 +110,7 @@ public class GameboardView extends JPanel{
 		add(this.opponentBoardView);
 	}
 	
-	public void updatePlayeNames() {
+	public void updatePlayerNames() {
 		this.playerNameLabel.setText("Player " + this.playerName + ":");
 		this.opponentNameLabel.setText("Opponent " + this.opponentName + ":");
 	}

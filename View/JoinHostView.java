@@ -11,7 +11,10 @@
 //
 
 //
-//  class description...
+//  JoinHostView is a class in which the class gets and sets a number of things
+// such as the IP address, connection status. It joins the servers together through
+// the click of a button. There is an ActionListener implemented for each of these
+// as it is constantly listening for a click.
 //
 
 
