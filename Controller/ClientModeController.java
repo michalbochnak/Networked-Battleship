@@ -27,6 +27,7 @@ import java.net.UnknownHostException;
 
 import Model.NetworkDataModel;
 import Model.NetworkModel;
+import View.CreateHostView;
 import View.JoinHostView;
 
 public class ClientModeController {
@@ -46,6 +47,19 @@ public class ClientModeController {
 		
 		this.gameController = gameController;
 		
+		this.networkConnection = new NetworkModel();
+		this.rxData = null;
+		this.txData = new NetworkDataModel();
+		this.serverIP = null;
+		this.serverPort = 0;
+		this.hostIPAddress = null;
+		
+		this.joinHostView = new JoinHostView();
+		
+		this.initialize();
+	}
+	
+	public void setDefault() {
 		this.networkConnection = new NetworkModel();
 		this.rxData = null;
 		this.txData = new NetworkDataModel();

@@ -78,6 +78,21 @@ public class ServerModeController {
 	
 	// Setter methods:
 	
+	public void setDefault() {
+		this.txData = new NetworkDataModel();
+		this.rxData = null;
+		this.networkConnection = new NetworkModel();
+		this.serverSocket = null;
+		this.serverIP = null;
+		this.serverPort = 0;
+		this.clientSocket = null;
+		this.clientConnectionStatus = false;
+		this.hostIPAddress = null;
+		this.waitConnectionThred = null;
+		this.createHostView = new CreateHostView();
+		this.initialize();
+	}
+	
 	// Class Methods:
 	
 	private void initialize() {

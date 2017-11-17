@@ -19,8 +19,6 @@
 
 package Controller;
 
-
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -71,7 +69,7 @@ public class GameboardController {
 	private OpponentBoardCellsMouseLisener opponentBoardCellsMouseLisener;
 	
 	private boolean playerTurn;
-	
+	private Cursor customCusrsor;
 	private int shipSelected;
 	private int shipDirection;
 	private int shipSpace;
@@ -92,9 +90,10 @@ public class GameboardController {
 		this.gameStage = 1;
 		this.playerBoardCellsMouseListener = new PlayerBoardCellsMouseLisener();
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
-		this.playerTurn = false;
-		this.shipSpace = 17;
 
+		this.shipSpace = 17;
+		this.customCusrsor = null;
+		
 		this.hits = 0;
 		this.misses = 0;
 		
@@ -118,6 +117,12 @@ public class GameboardController {
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
 		
 		this.txData = new NetworkDataModel();
+		
+		if(this.gamecontroller.getGameMode() == 1) {
+			this.playerTurn = false;
+		} else {
+			this.playerTurn = true;
+		}
 		
 		
 		opponentBoardView.setVisible(true);
@@ -495,17 +500,18 @@ public class GameboardController {
 	}
 
 	private void startPlayingGame() {
-		try
-        {
-			this.opponentBoardView.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor"));
+		try{
+			this.customCusrsor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor");
+			
         } catch(Exception e){
         		System.err.println("Cannot create custom image:" + e.getMessage());
         }
 		
-		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
-		Thread waitForData = new Thread(new WaitForIncommingData());
+		System.out.println(this.playerTurn);
 		
-
+		this.toggleTurn();
+		
+		Thread waitForData = new Thread(new WaitForIncommingData());
 		waitForData.start();
 	}
 
@@ -579,6 +585,19 @@ public class GameboardController {
 		return img;
 	}
 
+
+	private void toggleTurn() {
+		if(this.playerTurn == false) {
+			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
+			this.clearHighlightsFromAllButtons(this.opponentBoardView);
+			this.opponentBoardView.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		} else {
+			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+			this.opponentBoardView.setCursor(this.customCusrsor);
+		}
+	}
+	
+	
 	// Inner Classes:
 	
 	class PlayerBoardCellsMouseLisener implements MouseListener {
@@ -649,6 +668,8 @@ public class GameboardController {
                 System.out.println("txROW: " + txData.getCoordinates().getRow()
                         + " txCOL: " + txData.getCoordinates().getCol());
 				networkConnection.sendData(txData);
+				playerTurn = false;
+				toggleTurn();
 			}
 
 			@Override
@@ -677,22 +698,20 @@ public class GameboardController {
 			public void run() {
 				
 				while(true) {
-					try {
-                        rxData = networkConnection.getData();
-						System.out.println("Get new Data: "
-                                + rxData.getCoordinates().getRow() + " "
-                                + rxData.getCoordinates().getCol());
-					}catch (Exception e) {
-						
+					if(networkConnection != null) {
+						try {
+	                        rxData = networkConnection.getData();
+	                        playerTurn = true;
+	                        toggleTurn();
+	                        System.out.println("Get new Data: "
+	                                + rxData.getCoordinates().getRow() + " "
+	                                + rxData.getCoordinates().getCol());
+						}catch (Exception e) {}
 					}
-					
 					
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-                    }
+					} catch (InterruptedException e) {}
 				}			
 			}
 		}

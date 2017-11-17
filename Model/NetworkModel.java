@@ -204,7 +204,6 @@ public class NetworkModel {
 		if(this.serverSocket != null) {
 			try {
 				this.serverSocket.close();
-				this.serverConnectionStatus = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -214,7 +213,6 @@ public class NetworkModel {
 			try {
 				System.out.println("Closing Connection");
 				this.clientSocket.close();
-				this.clientConnectionStatus = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

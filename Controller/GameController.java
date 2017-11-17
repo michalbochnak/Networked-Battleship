@@ -79,19 +79,6 @@ public class GameController {
     		this.opponentName = null;
     		this.gameMode = 0;
     	
-//        view = new BattleshipView();
-//        model = new BattleshipModel();
-//        
-//        
-//        gameStage = 1;
-//        shipDirection = 0;
-//        shipSelected = -1;
-//        shipsOnBoard = new HashSet<Integer>();
-//        
-//        view.addButtonsListener(new buttonHandler());
-//        view.addMouseListener(new hoverHandlerShipSelection());
-//        view.addShipSelectionListener(new shipSelectorHandler());
-//        view.addPlaceModeButtonListener(new placeModeButtonListener());
     		initialize();
     }
 
@@ -195,6 +182,9 @@ public class GameController {
 
     public void setDefaultMenuWindow() {
     		this.gameWindowView.setDefault();
+    		this.serverModeController.setDefault();
+    		this.clientModeController.setDefault();
+    		
     }
 
     
