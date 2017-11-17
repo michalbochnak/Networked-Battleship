@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  ServerModeController is a class in which it checks the beginning of the game
+// and tells user "waiting" and such to let them know it is trying to connect in
+// order to be able to play the game.
 //
 
 

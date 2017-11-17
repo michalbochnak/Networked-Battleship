@@ -11,7 +11,10 @@
 //
 
 //
-//  class description...
+//  ClientModeController class is a class in which it calls instances of other
+// variables to nicely have ports connected between each other. This class mostly
+// focuses on JoinHost
+
 //
 
 

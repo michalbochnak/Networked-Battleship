@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  This class switches between game modes. There is a switch statement which
+// sets it to either true or false
 //
 
 package Controller;
