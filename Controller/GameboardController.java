@@ -721,7 +721,7 @@ public class GameboardController {
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
 				
-				toggleTurn(false);
+				//toggleTurn(false);
 			}
 
 			@Override
@@ -758,7 +758,7 @@ public class GameboardController {
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
 								// update opp board
-		                        	toggleTurn(true);
+		                        	//toggleTurn(true);
 								updateOpponentBoard(c, rxData.getHitStatus());
 							}
 							// opponent tried to hit, update and send message back
