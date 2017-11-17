@@ -117,20 +117,19 @@ public class GameboardController {
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
 		
-		this.setPlayerNames();
-		
 		this.txData = new NetworkDataModel();
 		this.networkConnection = this.gamecontroller.getNetworkConnection();
-		
+
 		if(this.gamecontroller.getGameMode() == 1) {
 			this.playerTurn = false;
 		} else {
 			this.playerTurn = true;
 		}
-		
-		
+
+
 		opponentBoardView.setVisible(true);
-		
+		this.startPlayingGame();
+
 		this.controlsView.addShipsActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -160,10 +159,10 @@ public class GameboardController {
 	                        createLineBorder(Color.DARK_GRAY, 4));
 	            }
 
-	            System.out.println(shipSelected + " was selected.");	
+	            System.out.println(shipSelected + " was selected.");
 			}
 		});
-		
+
 		this.controlsView.addPlaceModeButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -174,16 +173,16 @@ public class GameboardController {
 	            else if (shipDirection == 0) {
 	                shipDirection = 1;
 	                controlsView.getPlaceModeButton().setText("Placing vertically");
-	            }				
+	            }
 			}
 		});
-		
-		
+
+
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
-		this.startPlayingGame();
 
 	}
-	
+
+
 	public void setPlayerNames() {
 		this.gameboardView.setPlayerName(this.gamecontroller.getPlayerName());
 		this.gameboardView.setOpponentName(this.gamecontroller.getOpponentName());
@@ -194,19 +193,19 @@ public class GameboardController {
 //        boolean hit = gameboardView.updatePlayerBoard(c);
 //
 //    }
-     
+
     private void removeSelectionShipBorders() {
         for (JButton button : this.controlsView.getShipSelectionButtons())
         		button.setBorder( BorderFactory.createEmptyBorder());
         this.controlsView.getPlaceModeButton().setBorder( BorderFactory.createEmptyBorder());
     }
-  
+
     private void resetShipSelectionButtonsBorders() {
 		for (JButton button : this.controlsView.getShipSelectionButtons())
 			button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 		this.controlsView.getPlaceModeButton().setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 	}
-    
+
 	private void highlightHorizontally(int shipSize, Coordinates c) {
 		 if ((10 - c.getCol()) >= shipSize) {
 			 int row = c.getRow();
@@ -224,11 +223,11 @@ public class GameboardController {
 	        }
 	     }
 	 }
- 
+
 	private void highlighButton(BoardView board, Coordinates c) {
 		board.getButtons()[c.getRow()][c.getCol()].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2));
 	}
- 
+
 	private int findShipSize() {
         // size same as ID
     if (shipSelected == 5 || shipSelected == 4 || shipSelected == 3)
@@ -239,13 +238,13 @@ public class GameboardController {
         else
             return 0;
     }
-    
+
 	private void clearHighlightsFromAllButtons(BoardView board) {
-		
+
 		int borderWidth  = 1;
 		Color borderColor = Color.BLACK;
-		
-		int i = 0, j = 0; 
+
+		int i = 0, j = 0;
 		for (BoardCell row[] : board.getButtons()) {
 			i++;
 	        for (BoardCell b : row) {
@@ -364,7 +363,7 @@ public class GameboardController {
 
 		  return img;
 	}
-	
+
 	private BufferedImage generateScaledShip() {
 	    BufferedImage tempImg = null;
 
@@ -501,19 +500,18 @@ public class GameboardController {
 	private void startPlayingGame() {
 		try{
 			this.customCusrsor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor");
-			
+
         } catch(Exception e){
         		System.err.println("Cannot create custom image:" + e.getMessage());
         }
-		
+
 		System.out.println(this.playerTurn);
-		
+
+		//this.toggleTurn();
+
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 		this.opponentBoardView.setCursor(this.customCusrsor);
-		this.opponentBoardView.revalidate();
-		
-		
-		
+
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		waitForData.start();
 	}
@@ -522,6 +520,8 @@ public class GameboardController {
 		int row = c.getRow();
 		int col = c.getCol();
 		BoardCell bc = this.opponentBoardView.getButtons()[row][col];
+
+		System.out.println("updateOpponentBoard.................");
 
 		if (hit == true) {
 			updateHitJustExplosion(bc);
@@ -539,13 +539,12 @@ public class GameboardController {
 
 	public boolean updatePlayerBoard(Coordinates c) {
 
-
 		int row = c.getRow();
 		int col = c.getCol();
 		BoardCell bc = this.playerBoardView.getButtons()[row][col];
 		//this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
 
-		System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
+		//System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
 		// miss
 		if (bc.getIcon() == null) {
@@ -606,23 +605,18 @@ public class GameboardController {
 		return img;
 	}
 
-	private void toggleTurn(boolean playerTurn) {
-		this.playerTurn = playerTurn;
+	private void toggleTurn() {
 		if(this.playerTurn == false) {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.clearHighlightsFromAllButtons(this.opponentBoardView);
 			this.opponentBoardView.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			this.opponentBoardView.revalidate();
-			//this.opponentBoardView.repaint();
 		} else {
 			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.opponentBoardView.setCursor(this.customCusrsor);
-			this.opponentBoardView.revalidate();
-			//this.opponentBoardView.repaint();
 		}
 	}
-	
-	
+
+
 	public void sendAnswer(Coordinates c) {
 		boolean success = updatePlayerBoard(c);
 		txData.setCoordinates(c.getRow(), c.getCol());
@@ -638,7 +632,7 @@ public class GameboardController {
         this.gamecontroller.setDefaultMenuWindow();
 		this.gamecontroller.startGame(2);
 	}
-	
+
 	private void showLoseMessage() {
 		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but you lose :(";
         String title = "You Lose!";
@@ -647,9 +641,9 @@ public class GameboardController {
         this.gamecontroller.setDefaultMenuWindow();
 		this.gamecontroller.startGame(2);
 	}
-	
+
 	// Inner Classes:
-	
+
 	class PlayerBoardCellsMouseLisener implements MouseListener {
 
 		@Override
@@ -720,8 +714,9 @@ public class GameboardController {
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
-				
-				toggleTurn(false);
+
+//				playerTurn = false;
+//				toggleTurn();
 			}
 
 			@Override
@@ -738,27 +733,30 @@ public class GameboardController {
 			public void mouseExited(MouseEvent e) {
 				clearHighlightsFromAllButtons(opponentBoardView);
 			}
-		
+
 		}
-		
+
 		class WaitForIncommingData implements Runnable {
 
 			@Override
 			public void run() {
-				
+
 				while(true) {
-					if(networkConnection != null && networkConnection.isClientConnected() == true) {
+					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
-	                        
+//	                        playerTurn = true;
+//	                        toggleTurn();
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
 
+							System.out.println("Respond():  " + rxData.getRespond());
+
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
 								// update opp board
-		                        	toggleTurn(true);
+								System.out.println("Responding....");
 								updateOpponentBoard(c, rxData.getHitStatus());
 							}
 							// opponent tried to hit, update and send message back
