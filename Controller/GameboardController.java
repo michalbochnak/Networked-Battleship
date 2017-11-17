@@ -721,6 +721,8 @@ public class GameboardController {
 					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
+	                        playerTurn = true;
+	                        toggleTurn();
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
@@ -745,10 +747,11 @@ public class GameboardController {
 							rxData = null;
 
 						} catch (Exception e) {}
-						
 					}
 
-			
+					
+
+					
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {}
