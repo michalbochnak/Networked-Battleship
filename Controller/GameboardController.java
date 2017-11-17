@@ -1,15 +1,15 @@
 package Controller;
 
 
-<<<<<<< HEAD
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-=======
+
 import java.awt.*;
->>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -32,11 +32,8 @@ import View.ControlsView;
 import View.GameboardView;
 import View.OpponentBoardView;
 import View.PlayerBoardView;
-<<<<<<< HEAD
-import Model.Coordinates;
-=======
 
->>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
+import Model.Coordinates;
 
 public class GameboardController {
 
@@ -485,13 +482,11 @@ public class GameboardController {
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		
-<<<<<<< HEAD
+
 		waitForData.start();
 	}
-=======
-		
-    }
->>>>>>> 99ef3e318fff1d4b531d3c5316e98e6e16a21772
+
+
 
 
 	public boolean updateBoard(Coordinates c) {
