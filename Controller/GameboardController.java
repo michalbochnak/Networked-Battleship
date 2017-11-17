@@ -629,9 +629,8 @@ public class GameboardController {
 		String message = "Congratulation " + this.gamecontroller.getPlayerName() + ", you WON!";
         String title = "You Win!";
         JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
-		this.networkConnection.closeConnection();
-        this.gamecontroller.setDefaultMenuWindow();
-		this.gamecontroller.startGame(2);
+        
+
 	}
 
 	private void showLoseMessage() {
@@ -643,6 +642,11 @@ public class GameboardController {
 		this.gamecontroller.startGame(2);
 	}
 
+	private void showDisconectMessage() {
+		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but your opponent " + this.gamecontroller.getOpponentName() + " closed his/her connection.";
+        String title = "Attantion!";
+        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.WARNING_MESSAGE);
+	}
 	// Inner Classes:
 
 	class PlayerBoardCellsMouseLisener implements MouseListener {
@@ -765,6 +769,12 @@ public class GameboardController {
 								txData.setRespond(true);
 								networkConnection.sendData(txData);
 								// respond
+							} else if (rxData.isDisconected() == true) {
+								showDisconectMessage();
+								gamecontroller.setDefaultMenuWindow();
+								networkConnection.closeConnection();
+								gamecontroller.startGame(2);
+								break;
 							}
 						} catch (Exception e) {
 							System.err.println(e.getMessage());

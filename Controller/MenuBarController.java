@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import Model.NetworkDataModel;
 import Model.NetworkModel;
 import View.*;
 
@@ -32,6 +33,7 @@ class MenuBarController {
 	
 	private GameController gameController;
 	
+	private NetworkDataModel txData;
 	private JFrame mainWindow;
 	
 	// Default constructor:
@@ -100,6 +102,9 @@ class MenuBarController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(gameController.getNetworkConnection() != null) {
+				txData = new NetworkDataModel();
+				txData.setDisconectSignal(true);
+				gameController.getNetworkConnection().sendData(txData);
 				gameController.getNetworkConnection().closeConnection();
 			}
 			System.exit(0);
