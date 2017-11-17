@@ -11,7 +11,11 @@
 //
 
 //
-//  class description...
+//  CreateHostView is a class where is allows the Two players to connect to the
+//same network to be able to play against each other. This add the buttons as well
+//as generates and host and allows other person to connect to generated host. This
+// class deals with Ports, connections, and servers as well as adds back button,
+// start button, and host button
 //
 
 
@@ -48,7 +52,6 @@ public class CreateHostView extends JPanel{
 	private JButton startGameButton;
 	private ImageIcon connectedImageIcon;
 	private ImageIcon disconnectedImageIcon;
-	
 	private boolean isConnected;
 	
 	

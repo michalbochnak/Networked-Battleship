@@ -11,7 +11,10 @@
 //
 
 //
-//  class description...
+//  The class BoardView sets things such as backgroundPanel, buttons, the background color,
+// and sets the layout. This class extends JPanel and adds sideMenu's and topMenu's. Also
+//implemented in this class is simply adding MouseListener to each of the buttons and giving
+//the possibility of removing them as well
 //
 
 package View;

@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  The GameWIndowView is a class in which the gamewindow is the main focus. It
+// sets up, initializes, addcontent, adds menubar and etc to the window and lastly
+// it sets it to true in order for it to be visible to both players
 //
 
 
@@ -28,7 +30,7 @@ public class GameWindowView {
 	
 	private JFrame gameWindow;
 	
-	// Default Constructor:
+	// Default Constructor:.
 	public GameWindowView() {
 		this.gameWindow = new JFrame("Networked Battleship");
 
