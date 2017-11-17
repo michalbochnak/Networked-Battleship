@@ -524,46 +524,53 @@ public class GameboardController {
 		BoardCell bc = this.opponentBoardView.getButtons()[row][col];
 
 		if (hit == true) {
-			updateHit(bc);
+			updateHitJustExplosion(bc);
 		}
 		else {
 			updateMiss(bc);
 		}
 	}
 
+	private void updateHitJustExplosion(BoardCell bc) {
+		BufferedImage img = loadImage("images/hit.png");
+		bc.setIcon(new ImageIcon(img));
+	}
+
 
 	public boolean updatePlayerBoard(Coordinates c) {
 
-        System.out.println("updatePlayerBoard.................");
 
 		int row = c.getRow();
 		int col = c.getCol();
-        BoardCell bc = this.playerBoardView.getButtons()[row][col];
-        //this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
+		BoardCell bc = this.playerBoardView.getButtons()[row][col];
+		//this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
+
+		System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
 		// miss
 		if (bc.getIcon() == null) {
 			updateMiss(bc);
-            misses++;
+			misses++;
 			return false;
 		}
 		// hit
-		else if ( ! (bc.getIcon().toString().equals("Miss")) ) {
+		else if ( ! (bc.getIcon().toString().equals("Miss") )) {
 			updateHit(bc);
 			hits++;
 			return true;
 		}
 		// clicked button already marked as miss / hit
 		else {
-		    return false;
-        }
+			return false;
+		}
+
 	}
 
 	public void updateMiss(BoardCell bc) {
         System.out.println("Miss" );
         BufferedImage img = resize(loadImage("images/miss.png"),
 				40, 40);
-		bc.setIcon(new ImageIcon(img));
+		bc.setIcon(new ImageIcon(img, "Miss"));
     }
 
 	private void updateHit(BoardCell bc) {
@@ -705,6 +712,7 @@ public class GameboardController {
 				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
                 //System.out.println("txROW: " + txData.getCoordinates().getRow()
 				//+ " txCOL: " + txData.getCoordinates().getCol());
+				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
 
@@ -763,7 +771,6 @@ public class GameboardController {
 								networkConnection.sendData(txData);
 								// respond
 							}
-
 
 							rxData = null;
 
