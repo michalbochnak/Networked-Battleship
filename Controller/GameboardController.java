@@ -714,14 +714,13 @@ public class GameboardController {
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
-<<<<<<< HEAD
+
 				
 				//toggleTurn(false);
-=======
+
 
 //				playerTurn = false;
 //				toggleTurn();
->>>>>>> 5d777444584a1b75a2324c076ba7962978ccc7b2
 			}
 
 			@Override
@@ -761,11 +760,11 @@ public class GameboardController {
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
 								// update opp board
-<<<<<<< HEAD
+
 		                        	//toggleTurn(true);
-=======
+
 								System.out.println("Responding....");
->>>>>>> 5d777444584a1b75a2324c076ba7962978ccc7b2
+
 								updateOpponentBoard(c, rxData.getHitStatus());
 							}
 							// opponent tried to hit, update and send message back

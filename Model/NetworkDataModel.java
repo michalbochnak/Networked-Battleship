@@ -36,7 +36,7 @@ public class NetworkDataModel implements Serializable{
 	private boolean respond;			// response about attempted hit
 	private boolean disconectSignal;
 	private boolean winner;
-	private boolean loser;
+	private boolean playAgain;
 
 
 
@@ -45,14 +45,56 @@ public class NetworkDataModel implements Serializable{
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
+		int row = 0;
+		int col = 0;
 		this.hitStatus = false;
+		this.hitAttempt = false;
+		this.respond = false;
 		this.disconectSignal = false;
 		this.winner = false;
-		this.loser = false;
+		this.playAgain = false;
 		
 	}
 	
 	// Getter methods:
+	
+	
+	
+	public boolean isDisconected() {
+		return this.disconectSignal;
+	}
+
+	public boolean isWinner() {
+		return this.winner;
+	}
+
+	public boolean isPlayAgain() {
+		return this.playAgain;
+	}
+	
+	public void setWinner(boolean winner) {
+		this.winner = winner;
+	}
+
+	public void setDisconectSignal(boolean disconectSignal) {
+		this.disconectSignal = disconectSignal;
+	}
+	
+	public void setPlayAgain(boolean playAgain) {
+		this.playAgain = playAgain;
+	}
+	
+
+	public void setCoordinates(Coordinates c) {
+		this.row = c.getRow();
+		this.col = c.getCol();
+	}
+	
+	public boolean getHitStatus( ) {
+		return this.hitStatus;
+	}
+	
+	// Setter methods:
 	
 	public String getServerPlayerName() {
 		return this.serverPlayerName;
@@ -65,17 +107,6 @@ public class NetworkDataModel implements Serializable{
 	public Coordinates getCoordinates() {
 		return new Coordinates(this.row, this.col);
 	}
-
-	public void setCoordinates(Coordinates c) {
-		this.row = c.getRow();
-		this.col = c.getCol();
-	}
-	
-	public boolean getHitStatus( ) {
-		return this.hitStatus;
-	}
-	
-	// Setter methods:
 	
 	public void setServerPlayerName(String playerName) {
 		this.serverPlayerName = playerName;
@@ -95,20 +126,19 @@ public class NetworkDataModel implements Serializable{
 	}
 
 	public boolean getHitAttempt () {
-		return hitAttempt;
+		return this.hitAttempt;
 	}
 
 	public boolean getRespond () {
-		return respond;
+		return this.respond;
 	}
 
 	public void setHitAttempt (boolean flag) {
-		hitAttempt =  flag;
+		this.hitAttempt =  flag;
 	}
 
-
 	public void setRespond (boolean flag) {
-		respond = flag;
+		this.respond = flag;
 	}
 
 }
