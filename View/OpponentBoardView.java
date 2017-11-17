@@ -1,3 +1,21 @@
+//
+// Michal Bochnak, Netid: mbochn2
+// Alex Viznytsya, Netid: avizny2
+// Jakub Glebocki: Netid: jglebo2
+//
+// CS 342 Project #4 - Networked Battleship
+// Nov 16, 2017
+// UIC, Pat Troy
+//
+// OpponentBoardView.java
+//
+
+//
+//  class description...
+//
+
+
+
 package View;
 
 public class OpponentBoardView extends BoardView {

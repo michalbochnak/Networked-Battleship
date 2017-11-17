@@ -7,7 +7,7 @@
 // Nov 16, 2017
 // UIC, Pat Troy
 //
-// MenuBar.java
+// MenuBarView.java
 //
 
 //
