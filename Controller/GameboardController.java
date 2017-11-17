@@ -609,9 +609,11 @@ public class GameboardController {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.clearHighlightsFromAllButtons(this.opponentBoardView);
 			this.opponentBoardView.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			this.opponentBoardView.validate();
 		} else {
 			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.opponentBoardView.setCursor(this.customCusrsor);
+			this.opponentBoardView.validate();
 		}
 	}
 
@@ -713,8 +715,6 @@ public class GameboardController {
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
-
-				toggleTurn(false);
 			}
 
 			@Override
@@ -752,9 +752,6 @@ public class GameboardController {
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
 								// update opp board
-
-		                        	toggleTurn(true);
-
 								System.out.println("Responding....");
 
 								updateOpponentBoard(c, rxData.getHitStatus());
