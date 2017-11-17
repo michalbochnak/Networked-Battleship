@@ -798,6 +798,11 @@ public class GameboardController {
 
 				while(true) {
 					if(networkConnection != null) {
+						
+						if(exitFlag == true) {
+							break;
+						}
+
 						try {
 	                        rxData = networkConnection.getData();
 	                        Coordinates c = rxData.getCoordinates();
@@ -822,6 +827,13 @@ public class GameboardController {
 								txData.setRespond(true);
 								networkConnection.sendData(txData);
 								// respond
+							} else if (rxData.isDisconected() == true) {
+								showDisconectMessage();
+								gamecontroller.setDefaultMenuWindow();
+								networkConnection.closeConnection();
+								gamecontroller.resetGameboardController();
+								gamecontroller.startGame(2);
+								break;
 							}
 						} catch (Exception e) {
 							System.err.println(e.getMessage());
