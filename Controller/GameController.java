@@ -124,9 +124,7 @@ public class GameController {
     
     
     public void setNetworkConnection(NetworkModel networkConnection) {
-    		if(this.networkConnection == null) {
-    			this.networkConnection = networkConnection;
-    		}
+    		this.networkConnection = networkConnection;
     }
     
     // Class methods:
@@ -178,6 +176,8 @@ public class GameController {
     				this.gameWindowView.setNewSize(1400, 700);
     				
     				this.gameboardController = new GameboardController(this);
+    				this.gameboardController.setPlayerNames();
+    				
     				this.gameWindowView.addContent(this.gameboardController.getGameboardView());
     				break;
     		}
