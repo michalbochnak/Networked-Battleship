@@ -162,23 +162,15 @@ public class NetworkModel {
 		try {
 			System.out.println("Sending: " + data);
 			this.dataOut.writeObject(data);
+			this.dataOut.flush();
+			this.dataOut.reset();
 			
 		} catch (IOException e) {
 			System.out.println("Sending failed.............");
 			e.printStackTrace();
 		} 
 		
-	    try {
-	    		this.dataOut.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    try {
-			this.dataOut.reset();
-		} catch (IOException e) {
-		
-			e.printStackTrace();
-		}
+	   
 	}
 	
 	public void closeConnection() {

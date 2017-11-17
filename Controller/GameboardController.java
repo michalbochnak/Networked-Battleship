@@ -778,9 +778,6 @@ public class GameboardController {
 						} catch (Exception e) {}
 					}
 
-					
-
-					
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {}

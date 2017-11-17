@@ -124,6 +124,8 @@ public class ClientModeController {
 			this.joinHostView.setStartButtonState(true);
 			this.networkConnection.sendData(this.txData);
 			rxData = this.networkConnection.getData();
+			
+			
 			joinHostView.setOpponentStatusLabel(rxData.getServerPlayerName());
 			gameController.setOpponentName(rxData.getServerPlayerName());
 		}
