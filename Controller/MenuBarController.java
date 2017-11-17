@@ -99,6 +99,9 @@ class MenuBarController {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(gameController.getNetworkConnection() != null) {
+				gameController.getNetworkConnection().closeConnection();
+			}
 			System.exit(0);
 		}
 	}
