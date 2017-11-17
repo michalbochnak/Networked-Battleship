@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  This class gets all needed information for player and opponent and then sets
+// a hit when there is a hit, as well as settingt he coordinates of where the hit
+// is
 //
 
 

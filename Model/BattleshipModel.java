@@ -12,7 +12,8 @@
 //
 
 //
-//  class description...
+//  This class creates an enum for each ship, giving it a uniquie number to later
+// use when creating the game
 //
 
 package Model;

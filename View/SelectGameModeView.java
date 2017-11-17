@@ -11,7 +11,9 @@
 //
 
 //
-//  class description...
+//  SelectGameModeView is a class in which we can select the game mode view
+// and essentially this class deals with connecting as either host, or joining
+// somebody that is a host for the game.
 //
 
 

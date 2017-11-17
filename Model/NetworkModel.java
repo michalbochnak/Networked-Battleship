@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  This class is the class that has getter and setter functions for all ports
+// and connections that will be used for gameplay, and for them to interact between each other.
 //
 
 

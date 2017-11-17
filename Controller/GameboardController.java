@@ -52,8 +52,6 @@ import View.GameboardView;
 import View.OpponentBoardView;
 import View.PlayerBoardView;
 
-import Model.Coordinates;
-
 public class GameboardController {
 
 	private GameController gamecontroller;
@@ -179,7 +177,7 @@ public class GameboardController {
 	public void setPlayerNames() {
 		this.gameboardView.setPlayerName(this.gamecontroller.getPlayerName());
 		this.gameboardView.setOpponentName(this.gamecontroller.getOpponentName());
-		this.gameboardView.updatePlayeNames();
+		this.gameboardView.updatePlayerNames();
 	}
 
 //    public void updateBoard(Coordinates c) {

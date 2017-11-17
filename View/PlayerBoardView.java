@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  PlayerBoardView class is a class in which we view the player board.
+//  We initialize it here.
 //
 
 

@@ -11,7 +11,8 @@
 //
 
 //
-//  class description...
+//  MenuBarView class is a class in which we display the contents of the menubar,
+// adding file menu and submenu's for user interference
 //
 
 package View;
