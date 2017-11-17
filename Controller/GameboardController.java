@@ -768,7 +768,7 @@ public class GameboardController {
 								networkConnection.sendData(txData);
 							}
 
-							rxData = null;
+							
 
 						} catch (Exception e) {}
 					}
