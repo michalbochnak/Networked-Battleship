@@ -76,7 +76,7 @@ class MenuBarController {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(gameController.getNetworkConnection());
+
 			if(gameController.getNetworkConnection() != null) {
 				txData = new NetworkDataModel();
 				txData.setDisconectSignal(true);
@@ -109,10 +109,12 @@ class MenuBarController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(gameController.getNetworkConnection() != null) {
-				txData = new NetworkDataModel();
-				txData.setDisconectSignal(true);
-				gameController.getNetworkConnection().sendData(txData);
-				gameController.getNetworkConnection().closeConnection();
+				if(gameController.isGameStarted()) {
+					txData = new NetworkDataModel();
+					txData.setDisconectSignal(true);
+					gameController.getNetworkConnection().sendData(txData);
+					gameController.getNetworkConnection().closeConnection();
+				}
 			}
 			System.exit(0);
 		}

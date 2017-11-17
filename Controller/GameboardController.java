@@ -551,9 +551,6 @@ public class GameboardController {
 		int row = c.getRow();
 		int col = c.getCol();
 		BoardCell bc = this.playerBoardView.getButtons()[row][col];
-		//this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
-
-		//System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
 		// miss
 		if (bc.getIcon() == null) {
@@ -571,7 +568,6 @@ public class GameboardController {
 		else {
 			return false;
 		}
-
 	}
 
 	public void updateMiss(BoardCell bc) {

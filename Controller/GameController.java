@@ -50,7 +50,6 @@ public class GameController {
     private String playerName;
     private String opponentName;
     private int gameMode;			// 0 - server, 1 - client
-    private boolean gameStarted;
     
     
     
@@ -197,6 +196,14 @@ public class GameController {
     public void exitFromStartedGame() {
     		if(this.gameboardController != null) {
     			this.gameboardController.setExitFlag(true);
+    		}
+    }
+    
+    public boolean isGameStarted() {
+    		if(this.gameboardController != null) {
+    			return true;
+    		} else {
+    			return false;
     		}
     }
 
