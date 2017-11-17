@@ -154,6 +154,7 @@ public class NetworkModel {
 		} catch (ClassNotFoundException | IOException e) {
 			
 		}
+
 		return data;
 	}
 	

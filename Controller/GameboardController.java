@@ -191,8 +191,8 @@ public class GameboardController {
 		this.gameboardView.updatePlayerNames();
 	}
 
-//    public void updateBoard(Coordinates c) {
-//        boolean hit = gameboardView.updateBoard(c);
+//    public void updatePlayerBoard(Coordinates c) {
+//        boolean hit = gameboardView.updatePlayerBoard(c);
 //
 //    }
      
@@ -515,12 +515,23 @@ public class GameboardController {
 		waitForData.start();
 	}
 
+	public void updateOpponentBoard(Coordinates c,  boolean hit) {
+		int row = c.getRow();
+		int col = c.getCol();
+		BoardCell bc = this.opponentBoardView.getButtons()[row][col];
+
+		if (hit == true) {
+			updateHit(bc);
+		}
+		else {
+			updateMiss(bc);
+		}
+	}
 
 
+	public boolean updatePlayerBoard(Coordinates c) {
 
-	public boolean updateBoard(Coordinates c) {
-
-        System.out.println("updateBoard....");
+        System.out.println("updatePlayerBoard.................");
 
 		int row = c.getRow();
 		int col = c.getCol();
@@ -545,7 +556,7 @@ public class GameboardController {
         }
 	}
 
-	private void updateMiss(BoardCell bc) {
+	public void updateMiss(BoardCell bc) {
         System.out.println("Miss" );
         BufferedImage img = resize(loadImage("images/miss.png"),
 				40, 40);
@@ -585,7 +596,6 @@ public class GameboardController {
 		return img;
 	}
 
-
 	private void toggleTurn() {
 		if(this.playerTurn == false) {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
@@ -598,6 +608,13 @@ public class GameboardController {
 	}
 	
 	
+	public void sendAnswer(Coordinates c) {
+		boolean success = updatePlayerBoard(c);
+		txData.setCoordinates(c.getRow(), c.getCol());
+		txData.setHitStatus(success);
+		networkConnection.sendData(txData);
+	}
+
 	// Inner Classes:
 	
 	class PlayerBoardCellsMouseLisener implements MouseListener {
@@ -623,7 +640,7 @@ public class GameboardController {
 	        // Game stage
 	        else if (gameStage == 2){
                 System.out.println("Game in progress");
-				updateBoard( ((BoardCell) e.getSource()).getCoordinates() );
+				updatePlayerBoard( ((BoardCell) e.getSource()).getCoordinates() );
                 //startPlayingGame();
             }
 
@@ -664,12 +681,15 @@ public class GameboardController {
 			public void mousePressed(MouseEvent e) {
 				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
 				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
-				System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
-                System.out.println("txROW: " + txData.getCoordinates().getRow()
-                        + " txCOL: " + txData.getCoordinates().getCol());
+				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
+                //System.out.println("txROW: " + txData.getCoordinates().getRow()
+				//+ " txCOL: " + txData.getCoordinates().getCol());
+                txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
+
 				playerTurn = false;
 				toggleTurn();
+
 			}
 
 			@Override
@@ -708,6 +728,34 @@ public class GameboardController {
 	                                + rxData.getCoordinates().getCol());
 						}catch (Exception e) {}
 					}
+
+					try {
+                        rxData = networkConnection.getData();
+                        Coordinates c = rxData.getCoordinates();
+						System.out.println("Get new Data: "
+                                + c.getRow() + " " + c.getCol());
+
+						// respond message, update board only
+						if (rxData.getRespond() == true) {
+							// update opp board
+							updateOpponentBoard(c, rxData.getHitStatus());
+						}
+						// opponent tried to hit, update and send message back
+						else if (rxData.getHitAttempt() == true) {
+							boolean hit = updatePlayerBoard(c);
+							txData.setCoordinates(c);
+							txData.setHitStatus(hit);
+							txData.setHitAttempt(false);
+							txData.setRespond(true);
+							networkConnection.sendData(txData);
+							// respond
+						}
+
+
+						rxData = null;
+
+					} catch (Exception e) {}
+
 					
 					try {
 						Thread.sleep(1000);
@@ -715,5 +763,7 @@ public class GameboardController {
 				}			
 			}
 		}
+
+
 }
 

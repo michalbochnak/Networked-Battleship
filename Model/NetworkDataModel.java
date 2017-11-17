@@ -31,8 +31,13 @@ public class NetworkDataModel implements Serializable{
 	
 	private int row;
 	private int col;
-	private boolean hitStatus;
-	
+	private boolean hitStatus;			// flag to see if hit was succersfull
+	private boolean hitAttempt;		// opponent was tryin g to hit
+	private boolean respond;			// response about attempted hit
+
+
+
+
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
@@ -51,6 +56,11 @@ public class NetworkDataModel implements Serializable{
 	
 	public Coordinates getCoordinates() {
 		return new Coordinates(this.row, this.col);
+	}
+
+	public void setCoordinates(Coordinates c) {
+		this.row = c.getRow();
+		this.col = c.getCol();
 	}
 	
 	public boolean getHitStatus( ) {
@@ -72,8 +82,25 @@ public class NetworkDataModel implements Serializable{
 		this.col = col;
 	}
 	
-	public void setHit(boolean hit) {
+	public void setHitStatus(boolean hit) {
 		this.hitStatus = hit;
+	}
+
+	public boolean getHitAttempt () {
+		return hitAttempt;
+	}
+
+	public boolean getRespond () {
+		return respond;
+	}
+
+	public void setHitAttempt (boolean flag) {
+		hitAttempt =  flag;
+	}
+
+
+	public void setRespond (boolean flag) {
+		respond = flag;
 	}
 
 }
