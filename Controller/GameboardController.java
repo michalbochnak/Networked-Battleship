@@ -21,6 +21,7 @@ import javax.swing.*;
 
 import Model.Coordinates;
 import Model.NetworkDataModel;
+import Model.NetworkModel;
 import View.BoardCell;
 import View.BoardView;
 import View.ControlsView;
@@ -40,6 +41,7 @@ public class GameboardController {
 
 	private NetworkDataModel rxData;
 	private NetworkDataModel txData;
+	private NetworkModel networkConnection;
 	
 	private Set shipsOnBoard;
 	private int gameStage;
@@ -86,6 +88,8 @@ public class GameboardController {
 		this.controlsView = this.gameboardView.getControlsView();
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
+		
+		this.txData = new NetworkDataModel();
 		
 		
 		opponentBoardView.setVisible(true);
@@ -142,6 +146,11 @@ public class GameboardController {
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
 
 	}
+	
+	public void  updateNetworkConnection(NetworkModel networkConnection) {
+		this.networkConnection = networkConnection;
+	}
+	
 	
 	public void setPlayerNames() {
 		this.gameboardView.setPlayerName(this.gamecontroller.getPlayerName());
@@ -463,9 +472,9 @@ public class GameboardController {
         }
 		
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+		Thread waitForData = new Thread(new WaitForIncommingData());
 		
-		
-		
+		waitForData.start();
 	}
 
 
@@ -510,7 +519,6 @@ public class GameboardController {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
@@ -564,9 +572,10 @@ public class GameboardController {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//((BoardCell)e.getSource()).getCoordinates()
-				//gameController.get
-				
+				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
+				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
+				System.out.println("ROW: " + coordinates.getRow() + " COL: " + coordinates.getCol());
+				networkConnection.sendData(txData);
 			}
 
 			@Override
@@ -587,6 +596,29 @@ public class GameboardController {
 				
 			}
 		
+		}
+		
+		class WaitForIncommingData implements Runnable {
+
+			@Override
+			public void run() {
+				
+				while(true) {
+					try {
+						rxData = networkConnection.getData();
+						//System.out.println("Get new Data:" + rxData.getCoordinates().getRow() + rxData.getCoordinates().getCol());
+						
+					} catch (Exception e) {}
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}			
+			}
+			
 		}
 
 
