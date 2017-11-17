@@ -757,21 +757,22 @@ public class GameboardController {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Coordinates c = ((BoardCell)e.getSource()).getCoordinates();
-				txData.setCoordinates(c.getRow(), c.getCol());
-				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
+                Coordinates c = ((BoardCell) e.getSource()).getCoordinates();
+                txData.setCoordinates(c.getRow(), c.getCol());
+                //System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
                 //System.out.println("txROW: " + txData.getCoordinates().getRow()
-				//+ " txCOL: " + txData.getCoordinates().getCol());
-				txData.setRespond(false);
+                //+ " txCOL: " + txData.getCoordinates().getCol());
+                txData.setRespond(false);
                 txData.setHitAttempt(true);
                 txData.setPlayAgainRespond(false);
                 txData.setWinner(winDetected());
 
                 if (tryIsValid(c)) {
-					System.out.println("if   tryValid()");
-					//toggleTurn();
+                    System.out.println("if   tryValid()");
+                    //toggleTurn();
                     networkConnection.sendData(txData);
                 }
+            }
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
