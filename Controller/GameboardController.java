@@ -532,7 +532,7 @@ public class GameboardController {
 	}
 
 	private void updateHitJustExplosion(BoardCell bc) {
-		BufferedImage img = loadImage("images/hit.png");
+		BufferedImage img = resize(loadImage("images/hit.png"), 45, 45);
 		bc.setIcon(new ImageIcon(img));
 	}
 
