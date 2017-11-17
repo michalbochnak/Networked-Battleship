@@ -615,6 +615,24 @@ public class GameboardController {
 		networkConnection.sendData(txData);
 	}
 
+	private void showWinMessage() {
+		String message = "Congratulation " + this.gamecontroller.getPlayerName() + ", you WON!";
+        String title = "You Win!";
+        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
+		this.networkConnection.closeConnection();
+        this.gamecontroller.setDefaultMenuWindow();
+		this.gamecontroller.startGame(2);
+	}
+	
+	private void showLoseMessage() {
+		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but you lose :(";
+        String title = "You Lose!";
+        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
+        this.networkConnection.closeConnection();
+        this.gamecontroller.setDefaultMenuWindow();
+		this.gamecontroller.startGame(2);
+	}
+	
 	// Inner Classes:
 	
 	class PlayerBoardCellsMouseLisener implements MouseListener {
