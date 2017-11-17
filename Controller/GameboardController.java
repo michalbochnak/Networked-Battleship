@@ -186,8 +186,8 @@ public class GameboardController {
 		this.gameboardView.updatePlayerNames();
 	}
 
-//    public void updateBoard(Coordinates c) {
-//        boolean hit = gameboardView.updateBoard(c);
+//    public void updatePlayerBoard(Coordinates c) {
+//        boolean hit = gameboardView.updatePlayerBoard(c);
 //
 //    }
      
@@ -509,12 +509,23 @@ public class GameboardController {
 		waitForData.start();
 	}
 
+	public void updateOpponentBoard(Coordinates c,  boolean hit) {
+		int row = c.getRow();
+		int col = c.getCol();
+		BoardCell bc = this.opponentBoardView.getButtons()[row][col];
+
+		if (hit == true) {
+			updateHit(bc);
+		}
+		else {
+			updateMiss(bc);
+		}
+	}
 
 
+	public boolean updatePlayerBoard(Coordinates c) {
 
-	public boolean updateBoard(Coordinates c) {
-
-        System.out.println("updateBoard.................");
+        System.out.println("updatePlayerBoard.................");
 
 		int row = c.getRow();
 		int col = c.getCol();
@@ -579,6 +590,13 @@ public class GameboardController {
 		return img;
 	}
 
+	public void sendAnswer(Coordinates c) {
+		boolean success = updatePlayerBoard(c);
+		txData.setCoordinates(c.getRow(), c.getCol());
+		txData.setHitStatus(success);
+		networkConnection.sendData(txData);
+	}
+
 	// Inner Classes:
 	
 	class PlayerBoardCellsMouseLisener implements MouseListener {
@@ -604,7 +622,7 @@ public class GameboardController {
 	        // Game stage
 	        else if (gameStage == 2){
                 System.out.println("Game in progress");
-				updateBoard( ((BoardCell) e.getSource()).getCoordinates() );
+				updatePlayerBoard( ((BoardCell) e.getSource()).getCoordinates() );
                 //startPlayingGame();
             }
 
@@ -645,10 +663,12 @@ public class GameboardController {
 			public void mousePressed(MouseEvent e) {
 				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
 				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
-				System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
-                System.out.println("txROW: " + txData.getCoordinates().getRow()
-                        + " txCOL: " + txData.getCoordinates().getCol());
+				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
+                //System.out.println("txROW: " + txData.getCoordinates().getRow()
+				//+ " txCOL: " + txData.getCoordinates().getCol());
+                txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
+
 			}
 
 			@Override
@@ -682,12 +702,24 @@ public class GameboardController {
                         Coordinates c = rxData.getCoordinates();
 						System.out.println("Get new Data: "
                                 + c.getRow() + " " + c.getCol());
-						rxData = null;
 
-						boolean success = updateBoard(c);
-						txData.setCoordinates(c.getRow(), c.getCol());
-						txData.setHit(success);
-						networkConnection.sendData(txData);
+						// respond message, update board only
+						if (rxData.getRespond() == true) {
+							// update opp board
+							updateOpponentBoard(c, rxData.getHitStatus());
+						}
+						// opponent tried to hit, update and send message back
+						else if (rxData.getHitAttempt() == true) {
+							boolean hit = updatePlayerBoard(c);
+							txData.setCoordinates(c);
+							txData.setHitStatus(hit);
+							txData.setHitAttempt(false);
+							txData.setRespond(true);
+							// respond
+						}
+
+
+						rxData = null;
 
 					} catch (Exception e) {}
 					
