@@ -73,9 +73,9 @@ public class GameboardController {
 	private Cursor customCusrsor;
 	private int shipSelected;
 	private int shipDirection;
-	private int shipSpace;
 
 	private int hits;
+
 	private int misses;
 	
 	// Default constructor:
@@ -92,7 +92,6 @@ public class GameboardController {
 		this.playerBoardCellsMouseListener = new PlayerBoardCellsMouseLisener();
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 
-		this.shipSpace = 17;
 		this.customCusrsor = null;
 		
 		this.hits = 0;
@@ -105,6 +104,13 @@ public class GameboardController {
 	
 	public GameboardView getGameboardView( ) {
 		return this.gameboardView;
+	}
+	public int getHits() {
+		return hits;
+	}
+
+	public int getMisses() {
+		return misses;
 	}
 	
 	// Setter methods:
@@ -533,7 +539,7 @@ public class GameboardController {
 
 	private void updateHitJustExplosion(BoardCell bc) {
 		BufferedImage img = resize(loadImage("images/hit.png"), 45, 45);
-		bc.setIcon(new ImageIcon(img));
+		bc.setIcon(new ImageIcon(img, "Explosion"));
 	}
 
 
@@ -576,7 +582,15 @@ public class GameboardController {
 
         System.out.println("Hit");
         BufferedImage img = iconToBuffImg((ImageIcon)bc.getIcon());
-        bc.setIcon(new ImageIcon(redrawIcon(img)));
+        bc.setIcon(new ImageIcon(redrawIcon(img), "Explosion"));
+	}
+
+	public boolean tryIsValid(Coordinates c) {
+		int row = c.getRow();
+		int col = c.getCol();
+		BoardCell bc = opponentBoardView.getButtons()[row][col];
+
+		return !(bc.getName().equals("Miss") || bc.getName().equals("Explosion"));
 	}
 
 	// draw explosion image on the top of the current icon
@@ -706,14 +720,16 @@ public class GameboardController {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
-				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
+				Coordinates c = ((BoardCell)e.getSource()).getCoordinates();
+				txData.setCoordinates(c.getRow(), c.getCol());
 				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
                 //System.out.println("txROW: " + txData.getCoordinates().getRow()
 				//+ " txCOL: " + txData.getCoordinates().getCol());
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
-				networkConnection.sendData(txData);
+                if (tryIsValid(c)) {
+					networkConnection.sendData(txData);
+				}
 
 				
 				//toggleTurn(false);
@@ -766,6 +782,9 @@ public class GameboardController {
 								System.out.println("Responding....");
 
 								updateOpponentBoard(c, rxData.getHitStatus());
+
+
+
 							}
 							// opponent tried to hit, update and send message back
 							else if (rxData.getHitAttempt() == true) {
@@ -777,6 +796,7 @@ public class GameboardController {
 								networkConnection.sendData(txData);
 								// respond
 							}
+
 						} catch (Exception e) {
 							System.err.println(e.getMessage());
 						}
