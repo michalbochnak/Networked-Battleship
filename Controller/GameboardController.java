@@ -117,6 +117,8 @@ public class GameboardController {
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
 		
+		this.setPlayerNames();
+		
 		this.txData = new NetworkDataModel();
 		this.networkConnection = this.gamecontroller.getNetworkConnection();
 		
@@ -128,7 +130,6 @@ public class GameboardController {
 		
 		
 		opponentBoardView.setVisible(true);
-		this.startPlayingGame();
 		
 		this.controlsView.addShipsActionListener(new ActionListener() {
 			@Override
@@ -179,9 +180,9 @@ public class GameboardController {
 		
 		
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
+		this.startPlayingGame();
 
 	}
-	
 	
 	public void setPlayerNames() {
 		this.gameboardView.setPlayerName(this.gamecontroller.getPlayerName());
@@ -507,10 +508,11 @@ public class GameboardController {
 		
 		System.out.println(this.playerTurn);
 		
-		//this.toggleTurn();
-		
 		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 		this.opponentBoardView.setCursor(this.customCusrsor);
+		this.opponentBoardView.revalidate();
+		
+		
 		
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		waitForData.start();
@@ -604,14 +606,19 @@ public class GameboardController {
 		return img;
 	}
 
-	private void toggleTurn() {
+	private void toggleTurn(boolean playerTurn) {
+		this.playerTurn = playerTurn;
 		if(this.playerTurn == false) {
 			this.opponentBoardView.removeCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.clearHighlightsFromAllButtons(this.opponentBoardView);
 			this.opponentBoardView.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			this.opponentBoardView.revalidate();
+			//this.opponentBoardView.repaint();
 		} else {
 			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
 			this.opponentBoardView.setCursor(this.customCusrsor);
+			this.opponentBoardView.revalidate();
+			//this.opponentBoardView.repaint();
 		}
 	}
 	
@@ -713,9 +720,8 @@ public class GameboardController {
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
-
-//				playerTurn = false;
-//				toggleTurn();
+				
+				toggleTurn(false);
 			}
 
 			@Override
@@ -741,11 +747,10 @@ public class GameboardController {
 			public void run() {
 				
 				while(true) {
-					if(networkConnection != null) {
+					if(networkConnection != null && networkConnection.isClientConnected() == true) {
 						try {
 	                        rxData = networkConnection.getData();
-//	                        playerTurn = true;
-//	                        toggleTurn();
+	                        
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
@@ -753,6 +758,7 @@ public class GameboardController {
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
 								// update opp board
+		                        	toggleTurn(true);
 								updateOpponentBoard(c, rxData.getHitStatus());
 							}
 							// opponent tried to hit, update and send message back

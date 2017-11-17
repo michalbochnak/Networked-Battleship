@@ -34,6 +34,8 @@ public class NetworkDataModel implements Serializable{
 	private boolean hitStatus;			// flag to see if hit was succersfull
 	private boolean hitAttempt;		// opponent was tryin g to hit
 	private boolean respond;			// response about attempted hit
+	private boolean disconectSignal;
+
 
 
 
@@ -42,6 +44,8 @@ public class NetworkDataModel implements Serializable{
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
 		this.hitStatus = false;
+		this.disconectSignal = false;
+		
 	}
 	
 	// Getter methods:
