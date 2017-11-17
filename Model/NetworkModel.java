@@ -139,8 +139,7 @@ public class NetworkModel {
 			e.printStackTrace();
 		} 
 	}
-	
-	
+
 	
 	public NetworkDataModel getData() {
 		NetworkDataModel data = null;
@@ -154,8 +153,10 @@ public class NetworkModel {
 	
 	public void sendData(NetworkDataModel data) {
 		try {
+			System.out.println("Sending: " + data);
 			this.dataOut.writeObject(data);
 		} catch (IOException e) {
+			System.out.println("Sending failed.............");
 			e.printStackTrace();
 		} 
 		

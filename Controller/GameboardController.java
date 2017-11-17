@@ -77,6 +77,9 @@ public class GameboardController {
 	private int shipSelected;
 	private int shipDirection;
 	private int shipSpace;
+
+	private int hits;
+	private int misses;
 	
 	// Default constructor:
 	
@@ -93,6 +96,9 @@ public class GameboardController {
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 		this.playerTurn = false;
 		this.shipSpace = 17;
+
+		this.hits = 0;
+		this.misses = 0;
 		
 		this.initialize();
 	}
@@ -229,7 +235,7 @@ public class GameboardController {
         else if (shipSelected == 2 || shipSelected == 1)
             return shipSelected + 1;
         else
-            return -1;
+            return 0;
     }
     
 	private void clearHighlightsFromAllButtons(BoardView board) {
@@ -520,17 +526,23 @@ public class GameboardController {
 		// miss
 		if (bc.getIcon() == null) {
 			updateMiss(bc);
+            misses++;
 			return false;
 		}
 		// hit
-		else {
+		else if ( ! (bc.getIcon().toString().equals("Miss")) ) {
 			updateHit(bc);
+			hits++;
 			return true;
 		}
+		// clicked button already marked as miss / hit
+		else {
+		    return false;
+        }
 	}
 
 	private void updateMiss(BoardCell bc) {
-        System.out.println("Miss " );
+        System.out.println("Miss" );
         BufferedImage img = resize(loadImage("images/miss.png"),
 				40, 40);
 		bc.setIcon(new ImageIcon(img));
@@ -628,14 +640,16 @@ public class GameboardController {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
 				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
-				System.out.println("ROW: " + coordinates.getRow() + " COL: " + coordinates.getCol());
+				System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
+                System.out.println("txROW: " + txData.getCoordinates().getRow()
+                        + " txCOL: " + txData.getCoordinates().getCol());
 				networkConnection.sendData(txData);
 			}
 
@@ -666,8 +680,10 @@ public class GameboardController {
 				
 				while(true) {
 					try {
-						rxData = networkConnection.getData();
-						//System.out.println("Get new Data:" + rxData.getCoordinates().getRow() + rxData.getCoordinates().getCol());
+                        rxData = networkConnection.getData();
+						System.out.println("Get new Data: "
+                                + rxData.getCoordinates().getRow() + " "
+                                + rxData.getCoordinates().getCol());
 						
 					} catch (Exception e) {}
 					
@@ -676,11 +692,9 @@ public class GameboardController {
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+                    }
 				}			
 			}
-			
 		}
-
-
 }
+
