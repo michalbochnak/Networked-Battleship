@@ -31,8 +31,14 @@ public class NetworkDataModel implements Serializable{
 	private int row;
 	private int col;
 	private boolean hitStatus;		   // flag to see if hit was succersfull
+
 	private boolean hitAttempt;		   // opponent was tryin g to hit
 	private boolean respond;		       // response about attempted hit
+
+
+
+	private  boolean playAgainRespond;
+
 	private boolean disconectSignal;
 	private boolean winner;
 	private boolean playAgain;
@@ -50,6 +56,7 @@ public class NetworkDataModel implements Serializable{
 		this.disconectSignal = false;
 		this.winner = false;
 		this.playAgain = false;
+		this.playAgainRespond = false;
 	}
 	
 	// Getter methods:
@@ -86,6 +93,13 @@ public class NetworkDataModel implements Serializable{
 	public boolean getHitStatus( ) {
 		return this.hitStatus;
 	}
+
+
+	public boolean isPlayAgainRespond() {
+		return playAgainRespond;
+	}
+
+
 	
 	// Setter methods:
 	
@@ -132,6 +146,10 @@ public class NetworkDataModel implements Serializable{
 
 	public void setRespond (boolean flag) {
 		this.respond = flag;
+	}
+
+	public void setPlayAgainRespond(boolean flag) {
+		this.playAgainRespond = flag;
 	}
 
 }

@@ -34,7 +34,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -533,7 +532,7 @@ public class GameboardController {
 
 	private void updateHitJustExplosion(BoardCell bc) {
 		BufferedImage img = resize(loadImage("images/hit.png"), 45, 45);
-		bc.setIcon(new ImageIcon(img));
+		bc.setIcon(new ImageIcon(img, "Explosion"));
 	}
 
 
@@ -576,8 +575,31 @@ public class GameboardController {
 
         System.out.println("Hit");
         BufferedImage img = iconToBuffImg((ImageIcon)bc.getIcon());
-        bc.setIcon(new ImageIcon(redrawIcon(img)));
+        bc.setIcon(new ImageIcon(redrawIcon(img), "Explosion"));
 	}
+
+	public boolean tryIsValid(Coordinates c) {
+	    int row = c.getRow();
+	    int col = c.getCol();
+
+	    // no icon
+	    if (opponentBoardView.getButtons()[row][col].getIcon() == null ) {
+	    	return true;
+		}
+		// ship icon
+		else if (  ! ( (opponentBoardView.getButtons()[row][col].getIcon()
+				.toString().equals("Explosion"))
+				|| (opponentBoardView.getButtons()[row][col].getIcon()
+				.toString().equals("Miss")) )   ) {
+	    	return true;
+		}
+
+		return false;
+    }
+
+    public boolean winDetected() {
+	    return hits == 17;
+    }
 
 	// draw explosion image on the top of the current icon
 	private BufferedImage redrawIcon(BufferedImage img) {
@@ -641,6 +663,19 @@ public class GameboardController {
         this.gamecontroller.setDefaultMenuWindow();
 		this.gamecontroller.startGame(2);
 	}
+
+	public boolean askToPlayAgain() {
+        int reply = JOptionPane.showConfirmDialog
+                (this.gamecontroller.getMainWindow(), "Would you like to pay again?"
+                        , "Play again", JOptionPane.YES_NO_OPTION);
+
+        if (reply == JOptionPane.YES_OPTION) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 	// Inner Classes:
 
@@ -706,14 +741,23 @@ public class GameboardController {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Coordinates coordinates = ((BoardCell)e.getSource()).getCoordinates();
-				txData.setCoordinates(coordinates.getRow(), coordinates.getCol());
+				Coordinates c = ((BoardCell)e.getSource()).getCoordinates();
+				txData.setCoordinates(c.getRow(), c.getCol());
 				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
                 //System.out.println("txROW: " + txData.getCoordinates().getRow()
 				//+ " txCOL: " + txData.getCoordinates().getCol());
 				txData.setRespond(false);
                 txData.setHitAttempt(true);
-				networkConnection.sendData(txData);
+                txData.setPlayAgainRespond(false);
+                txData.setWinner(winDetected());
+
+                if (tryIsValid(c)) {
+					System.out.println("if   tryValid()");
+					//toggleTurn();
+                    networkConnection.sendData(txData);
+                }
+
+
 
 				
 				//toggleTurn(false);
@@ -759,21 +803,37 @@ public class GameboardController {
 
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
-								// update opp board
 
-		                        	//toggleTurn(true);
+                                updateOpponentBoard(c, rxData.getHitStatus());
 
-								System.out.println("Responding....");
-
-								updateOpponentBoard(c, rxData.getHitStatus());
+                                if (rxData.isWinner()) {
+                                    showWinMessage();
+                                    txData.setPlayAgain(askToPlayAgain());
+                                    txData.setRespond(true);
+                                    txData.setHitAttempt(false);
+                                    txData.setPlayAgainRespond(true);
+                                }
+                                System.out.println("Responding....");
 							}
 							// opponent tried to hit, update and send message back
 							else if (rxData.getHitAttempt() == true) {
 								boolean hit = updatePlayerBoard(c);
+
+								if (rxData.isWinner()) {
+								    showLoseMessage();
+								    txData.setPlayAgain(askToPlayAgain());
+								    txData.setRespond(true);
+								    txData.setHitAttempt(false);
+								    txData.setPlayAgainRespond(true);
+								    txData.setWinner(true);
+								    networkConnection.sendData(txData);
+                                }
+
 								txData.setCoordinates(c);
 								txData.setHitStatus(hit);
 								txData.setHitAttempt(false);
 								txData.setRespond(true);
+                                txData.setPlayAgainRespond(false);
 								networkConnection.sendData(txData);
 								// respond
 							}
