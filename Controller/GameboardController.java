@@ -715,6 +715,7 @@ public class GameboardController {
 							txData.setHitStatus(hit);
 							txData.setHitAttempt(false);
 							txData.setRespond(true);
+							networkConnection.sendData(txData);
 							// respond
 						}
 
