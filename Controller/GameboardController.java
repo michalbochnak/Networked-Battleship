@@ -545,8 +545,7 @@ public class GameboardController {
 		BoardCell bc = this.playerBoardView.getButtons()[row][col];
 		//this.playerBoardView.getButtons()[row][col++].setIcon(shipIcons[i]);
 
-		System.out.println("updatePlayerBoard................." + bc.getName().toString());
-
+		System.out.println("updatePlayerBoard................." + bc.getIcon().toString());
 
 		// miss
 		if (bc.getIcon() == null) {
@@ -555,10 +554,14 @@ public class GameboardController {
 			return false;
 		}
 		// hit
-		else {
+		else if ( ! (bc.getIcon().toString().equals("Miss") )) {
 			updateHit(bc);
 			hits++;
 			return true;
+		}
+		// clicked button already marked as miss / hit
+		else {
+			return false;
 		}
 
 	}
@@ -709,7 +712,7 @@ public class GameboardController {
 				//System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
                 //System.out.println("txROW: " + txData.getCoordinates().getRow()
 				//+ " txCOL: " + txData.getCoordinates().getCol());
-				//txData.setRespond(false);
+				txData.setRespond(false);
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
 
@@ -766,6 +769,7 @@ public class GameboardController {
 								txData.setHitAttempt(false);
 								txData.setRespond(true);
 								networkConnection.sendData(txData);
+								// respond
 							}
 
 							rxData = null;
