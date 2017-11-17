@@ -184,6 +184,7 @@ public class GameController {
     		this.gameWindowView.setDefault();
     		this.serverModeController.setDefault();
     		this.clientModeController.setDefault();
+    		this.gameboardController = new GameboardController(this);
     		
     }
 

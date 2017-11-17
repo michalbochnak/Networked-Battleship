@@ -509,7 +509,10 @@ public class GameboardController {
 		
 		System.out.println(this.playerTurn);
 		
-		this.toggleTurn();
+		//this.toggleTurn();
+		
+		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+		this.opponentBoardView.setCursor(this.customCusrsor);
 		
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		waitForData.start();
@@ -705,8 +708,8 @@ public class GameboardController {
                 txData.setHitAttempt(true);
 				networkConnection.sendData(txData);
 
-				playerTurn = false;
-				toggleTurn();
+//				playerTurn = false;
+//				toggleTurn();
 
 			}
 
@@ -739,8 +742,8 @@ public class GameboardController {
 					if(networkConnection != null) {
 						try {
 	                        rxData = networkConnection.getData();
-	                        playerTurn = true;
-	                        toggleTurn();
+//	                        playerTurn = true;
+//	                        toggleTurn();
 	                        Coordinates c = rxData.getCoordinates();
 							System.out.println("Get new Data: "
 	                                + c.getRow() + " " + c.getCol());
