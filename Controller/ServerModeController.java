@@ -17,34 +17,31 @@
 //
 
 
-
 package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import Model.NetworkDataModel;
 import Model.NetworkModel;
 import View.CreateHostView;
 
+
 public class ServerModeController {
 
 	private GameController gameController;
-	
 	private NetworkDataModel txData;
 	private NetworkDataModel rxData;
-	
 	private NetworkModel networkConnection;
 	private String serverIP;
 	private int serverPort;	
 	private InetAddress hostIPAddress;
-
 	private CreateHostView createHostView;
-	
+
+	//
 	// Default constructor:
-	
+	//
 	public ServerModeController(GameController gameController) {
 		
 		this.gameController = gameController;
@@ -59,17 +56,17 @@ public class ServerModeController {
 		
 		this.initialize();
 	}
-	
+
+	//
 	// Getter methods:
-	
+	//
 	public CreateHostView getView() {
 		return createHostView.getView();
 	}
-	
-	// Setter methods:
-	
+
+	//
 	// Class Methods:
-	
+	//
 	private void initialize() {
 		
 		try {
@@ -115,7 +112,8 @@ public class ServerModeController {
 			this.networkConnection.setClientName(this.gameController.getPlayerName());
 		}
 		
-		if(this.createHostView.isRandomChecked() == true || this.createHostView.getPortNumber().length() < 1) {
+		if(this.createHostView.isRandomChecked() == true
+				|| this.createHostView.getPortNumber().length() < 1) {
 			this.serverPort = 0;
 		} else {
 			this.serverPort = Integer.parseInt(this.createHostView.getPortNumber());
@@ -131,7 +129,8 @@ public class ServerModeController {
 		this.createHostView.setServerPortTextFieldState(false);
 		
 		if(this.serverPort == 0) {
-			this.createHostView.setPortNumber(Integer.toString(this.networkConnection.getServerPort()));
+			this.createHostView.setPortNumber(Integer.toString
+					(this.networkConnection.getServerPort()));
 		}
 		
 		this.txData.setServerPlayerName(this.gameController.getPlayerName());
@@ -139,9 +138,10 @@ public class ServerModeController {
 		Thread establishConnectionThred = new Thread(new EstablishLientConnection());
 		establishConnectionThred.start();
 	}
-	
+
+	//
 	// Inner Classes:
-	
+	//
 	class EstablishLientConnection implements Runnable {
 
 		@Override

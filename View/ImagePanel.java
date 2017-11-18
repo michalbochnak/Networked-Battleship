@@ -21,13 +21,11 @@ package View;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -38,20 +36,18 @@ public class ImagePanel extends JPanel {
 
 	private BufferedImage backgroundImage;
 
+	//
     // Default Constructor:
-    
+    //
     public ImagePanel() {
     		this.backgroundImage = new BufferedImage(450, 450, BufferedImage.TYPE_INT_ARGB);
   
         this.initialize();
     }
 
-    // Getter methods:
-    
-    // Setter methods:
-    
+    //
     // Class methods:
-    
+    //
     private void initialize() {
     	BufferedImage tempImage = null;
     	try {
@@ -62,7 +58,8 @@ public class ImagePanel extends JPanel {
     	
     Graphics2D g2d = this.backgroundImage.createGraphics();
     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)0.6));
-    g2d.drawImage(tempImage.getScaledInstance(450, 450, Image.SCALE_DEFAULT), 0, 0, null);
+    g2d.drawImage(tempImage.getScaledInstance(450, 450,
+            Image.SCALE_DEFAULT), 0, 0, null);
     g2d.dispose();
     }
     

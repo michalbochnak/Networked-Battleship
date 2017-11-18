@@ -12,15 +12,14 @@
 
 //
 //  This class gets all needed information for player and opponent and then sets
-// a hit when there is a hit, as well as settingt he coordinates of where the hit
-// is
+// a hit when there is a hit, as well as settingt he coordinates of where the hit is
 //
-
 
 
 package Model;
 
 import java.io.Serializable;
+
 
 public class NetworkDataModel implements Serializable{
 	
@@ -35,12 +34,10 @@ public class NetworkDataModel implements Serializable{
 	private boolean hitAttempt;		   // opponent was tryin g to hit
 	private boolean respond;		       // response about attempted hit
 
-
-
 	private  boolean playAgainRespond;
 
 	private boolean disconectSignal;
-	private boolean winner;
+	private boolean loser;
 	private boolean playAgain;
 
 	// Default constructor:
@@ -48,33 +45,32 @@ public class NetworkDataModel implements Serializable{
 	public NetworkDataModel() {
 		this.serverPlayerName = null;
 		this.clientPlayerName = null;
-		int row = 0;
-		int col = 0;
 		this.hitStatus = false;
 		this.hitAttempt = false;
 		this.respond = false;
 		this.disconectSignal = false;
-		this.winner = false;
+		this.loser = false;
 		this.playAgain = false;
 		this.playAgainRespond = false;
 	}
-	
+
+	//
 	// Getter methods:
-	
+	//
 	public boolean isDisconected() {
 		return this.disconectSignal;
 	}
 
-	public boolean isWinner() {
-		return this.winner;
+	public boolean isLoser() {
+		return this.loser;
 	}
 
 	public boolean isPlayAgain() {
 		return this.playAgain;
 	}
 	
-	public void setWinner(boolean winner) {
-		this.winner = winner;
+	public void setLoser(boolean loser) {
+		this.loser = loser;
 	}
 
 	public void setDisconectSignal(boolean disconectSignal) {
@@ -100,9 +96,9 @@ public class NetworkDataModel implements Serializable{
 	}
 
 
-	
+	//
 	// Setter methods:
-	
+	//
 	public String getServerPlayerName() {
 		return this.serverPlayerName;
 	}
@@ -157,7 +153,7 @@ public class NetworkDataModel implements Serializable{
 		this.hitAttempt = false;
 		this.respond = false;
 		this.disconectSignal = false;
-		this.winner = false;
+		this.loser = false;
 		this.playAgain = false;
 		this.playAgainRespond = false;
 	}

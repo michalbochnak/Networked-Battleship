@@ -28,13 +28,11 @@ public class PlayerBoardView extends BoardView {
 		
 		this.initialize();
 	}
-	
-	// Getter methods:
-		
-	// Setter methods:
-			
+
+
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 		setBounds(340, 30, 500, 500);
 	}

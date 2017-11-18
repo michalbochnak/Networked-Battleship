@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 public class WelcomeMessageView extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -59,21 +60,24 @@ public class WelcomeMessageView extends JPanel {
 		add(nextButton);	
 		this.revalidate();
 	}
-	
+
+	//
 	// Getter methods:
-	
+	//
 	public String getPlayerName() {
 		return this.playerNameTextField.getText();
 	}
-	
+
+	//
 	// Setter methods:
-	
+	//
 	public void setPlayerName(String playerName) {
 		this.playerNameTextField.setText(playerName);
 	}
-	
+
+	//
 	// Class methods:
-	
+	//
 	public WelcomeMessageView getView() {
 		return this;
 	}

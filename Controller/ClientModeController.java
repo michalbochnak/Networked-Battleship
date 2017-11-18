@@ -11,10 +11,9 @@
 //
 
 //
-//  ClientModeController class is a class in which it calls instances of other
+// ClientModeController class is a class in which it calls instances of other
 // variables to nicely have ports connected between each other. This class mostly
 // focuses on JoinHost
-
 //
 
 
@@ -24,26 +23,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
 import Model.NetworkDataModel;
 import Model.NetworkModel;
 import View.JoinHostView;
+
 
 public class ClientModeController {
 
 	private NetworkDataModel txData;
 	private NetworkDataModel rxData;
-	
 	private NetworkModel networkConnection;
-	private String serverIP;
-	private int serverPort;
 	private InetAddress hostIPAddress;
-	
-	private JoinHostView joinHostView;
 	private GameController gameController;
-	
-	// Default constructor:
-	
+	private String serverIP;
+	private JoinHostView joinHostView;
+	private int serverPort;
+
+	//
+	// Default constructor
+	//
 	public ClientModeController(GameController gameController) {
 		
 		this.gameController = gameController;
@@ -54,23 +52,21 @@ public class ClientModeController {
 		this.serverIP = null;
 		this.serverPort = 0;
 		this.hostIPAddress = null;
-		
 		this.joinHostView = new JoinHostView();
 		
 		this.initialize();
 	}
-	
-	// Getter methods:
-	
+
+	//
+	// Getter methods
+	//
 	public JoinHostView getView() {
 		return this.joinHostView.getView();
 	}
 	
-	// Setter methods:
-	
-	
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 		
 		try {

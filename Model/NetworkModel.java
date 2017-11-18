@@ -15,13 +15,11 @@
 // and connections that will be used for gameplay, and for them to interact
 // between each other. This class sends and recivees data between the server
 // in order to be able to communcaie correctly with each other.
+//
 
 
 package Model;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,24 +27,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+
 public class NetworkModel {
 	
 	private String clientName;
-	
-
 	private ServerSocket serverSocket;
 	private String serverIP;
 	private int serverPort;
-	
 	private Socket clientSocket;
-	
 	private ObjectInputStream dataIn;
 	private ObjectOutputStream dataOut;
-	
 	private boolean clientConnectionStatus;
-	
+
+	//
 	// Default constructor:
-	
+	//
 	public NetworkModel() {
 		this.clientName = null;
 		this.serverSocket = null;
@@ -57,13 +52,10 @@ public class NetworkModel {
 		this.dataOut = null;
 		this.clientConnectionStatus = false;
 	}
-	
-	// Getter methods:
-	
-	public String getClientName() {
-		return this.clientName;
-	}
 
+	//
+	// Getter methods:
+	//
 	public boolean isClientConnected() {
 		return this.clientConnectionStatus;
 	}
@@ -75,17 +67,10 @@ public class NetworkModel {
 			return 0;
 		}
 	}
-	
-	public ServerSocket getServerSocket() {
-		return this.serverSocket; 
-	}
-	
-	public Socket getClientSocket( ) {
-		return this.clientSocket;
-	}
-	
+
+	//
 	// Setter methods:
-	
+	//
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
 	}
@@ -105,7 +90,8 @@ public class NetworkModel {
 			Thread connectionThread = new Thread(new ClientConnection());
 			connectionThread.start();
 		} catch (IOException e) {
-			System.err.println(this.clientName +": Cannot create new server socket: " + e.getMessage());
+			System.err.println(this.clientName
+					+ ": Cannot create new server socket: " + e.getMessage());
 		}
 	}
 	
@@ -117,7 +103,8 @@ public class NetworkModel {
 			this.setDataOut();
 			this.setDataIn();
 		} catch (UnknownHostException e) {
-			System.err.println(this.clientName +": Cannot find host to open socket: " + e.getMessage());
+			System.err.println(this.clientName
+					+": Cannot find host to open socket: " + e.getMessage());
 			this.clientConnectionStatus = false;
 		} catch (IOException e) {
 			this.clientConnectionStatus = false;
@@ -145,25 +132,19 @@ public class NetworkModel {
 	public NetworkDataModel getData() {
 		NetworkDataModel data = null;
 		try {
-			System.out.println(this.clientName +": Receiving object...");
 			data = (NetworkDataModel)dataIn.readObject();
 		} catch (IOException | ClassNotFoundException e) {
-			System.err.println(this.clientName +": Receiving objData failed. " + e.getMessage());
 		}
-		System.out.println(this.clientName +": Object has been received.");
 		return data;
 	}
 	
 	public void sendData(NetworkDataModel data) {
 		try {
-			System.out.println(this.clientName +": Sending object...");
 			this.dataOut.writeObject(data);
 			this.dataOut.flush();
 			this.dataOut.reset();
 		} catch (IOException e) {
-			System.err.println(this.clientName +": Sending objData failed. " + e.getMessage());
-		} 
-		System.out.println(this.clientName +": Object has been sent.");
+		}
 	}
 	
 	public void closeConnection() {

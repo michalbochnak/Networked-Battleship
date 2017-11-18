@@ -29,10 +29,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.FileInputStream;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -47,9 +45,9 @@ public class ControlsView extends JPanel{
 	private JButton placeModeButton;
 	private Color bgColor = Color.white;
 
-	
+	//
 	// Default constructor:
-	
+	//
 	public ControlsView() {
 		
 		this.shipSelectionButtons = new JButton[5];
@@ -57,9 +55,10 @@ public class ControlsView extends JPanel{
 		
 		this.initialize();
 	}
-	
+
+	//
 	// Getter methods:
-	
+	//
 	public JButton[] getShipSelectionButtons() {
 		return this.shipSelectionButtons;
 	}
@@ -67,24 +66,23 @@ public class ControlsView extends JPanel{
 	public JButton getPlaceModeButton() {
 		return this.placeModeButton;
 	}
-	
-	// Setter methods:
-		
+
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 		setLayout(null);
-		setBounds(0, 0, 300, 700);
+		setBounds(0, 78, 300, 700);
 		setBackground(bgColor);
 	    //setBorder(BorderFactory.createLineBorder(Color.white, 8));
 	    
-        for (int i = 0, rowCounter = 55; i< 5; ++i, rowCounter += 84) {
+        for (int i = 0, rowCounter = 0; i< 5; ++i, rowCounter += 84) {
             this.shipSelectionButtons[i] = new JButton();
             this.shipSelectionButtons[i].setBounds(10, rowCounter, 290, 80);
             this.shipSelectionButtons[i].setBackground(bgColor);
-            this.shipSelectionButtons[i].setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+            this.shipSelectionButtons[i].setBorder
+					(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             add(shipSelectionButtons[i]);
-            
         }
        
         this.addShips();
@@ -113,7 +111,8 @@ public class ControlsView extends JPanel{
 	
 	private BufferedImage resizeImage(BufferedImage img, int width, int height) {
         Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
-        BufferedImage tempImage = new BufferedImage(scaledImg.getWidth(null), scaledImg.getHeight(null), BufferedImage.TYPE_INT_ARGB );
+        BufferedImage tempImage = new BufferedImage(scaledImg.getWidth(null),
+				scaledImg.getHeight(null), BufferedImage.TYPE_INT_ARGB );
 
         // draw the image
         Graphics2D temp = tempImage.createGraphics();
@@ -124,40 +123,46 @@ public class ControlsView extends JPanel{
     }
 
 	private void addAircraft() {
-		BufferedImage image = this.resizeImage(this.loadImage("images/russia-kuznetsov.png"), 260, 60);
+		BufferedImage image = this.resizeImage(this.loadImage
+				("images/russia-kuznetsov.png"), 260, 60);
 	    ImageIcon icon = new ImageIcon(image, "Aircraft Carrier");
 	    this.shipSelectionButtons[0].setIcon(icon);
 	}
 
 	private void addBattleship() {
-	    BufferedImage image = this.resizeImage(this.loadImage("images/yamato.png"), 208, 60);
+	    BufferedImage image = this.resizeImage(this.loadImage
+				("images/yamato.png"), 208, 60);
 	    ImageIcon icon = new ImageIcon(image, "Battleship");
 	    this.shipSelectionButtons[1].setIcon(icon);
 	}
 
 	private void addDestroyer() {
-		BufferedImage image = this.resizeImage(this.loadImage("images/destroyer.png"), 154, 60);
+		BufferedImage image = this.resizeImage(this.loadImage
+				("images/destroyer.png"), 154, 60);
 	    ImageIcon icon = new ImageIcon(image, "Destroyer");
 	    this.shipSelectionButtons[2].setIcon(icon);
 	}
 
 	private void addSubmarine() {
-	    BufferedImage image = this.resizeImage(this.loadImage("images/typhoon.png"), 154, 60);
+	    BufferedImage image = this.resizeImage(this.loadImage
+				("images/typhoon.png"), 154, 60);
 	    ImageIcon icon = new ImageIcon(image, "Submarine");
 	    shipSelectionButtons[3].setIcon(icon);
 	}
 
 	private void addPatrolBoat() {
-	    BufferedImage image = this.resizeImage(this.loadImage("images/patrol_boat.png"), 102, 50);
+	    BufferedImage image = this.resizeImage(this.loadImage
+				("images/patrol_boat.png"), 102, 50);
 	    ImageIcon icon = new ImageIcon(image, "Patrol Boat");
 	    shipSelectionButtons[4].setIcon(icon);
 	}
 
 	private void addPlaceModeButton() {
         placeModeButton = new JButton("Place Ships Horizontally");
-        placeModeButton.setBounds(10, 475, 290, 80);
+        placeModeButton.setBounds(10, 423, 290, 80);
         placeModeButton.setFont(new Font("Arial", Font.BOLD, 17));
-        placeModeButton.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+        placeModeButton.setBorder
+				(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         add(placeModeButton);
     }    
 

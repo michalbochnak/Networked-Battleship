@@ -22,9 +22,9 @@
 package View;
 
 import java.awt.Component;
-
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
 
 public class GameWindowView {
 	

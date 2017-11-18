@@ -11,11 +11,8 @@
 //
 
 //
-//  class description...
-//testing
-
-
-
+// Controls all the operation related to board
+//
 
 package Controller;
 
@@ -24,9 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-
 import java.awt.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -34,58 +29,48 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import Model.Coordinates;
 import Model.NetworkDataModel;
 import Model.NetworkModel;
-import View.BoardCell;
-import View.BoardView;
-import View.ControlsView;
-import View.GameboardView;
-import View.OpponentBoardView;
-import View.PlayerBoardView;
+import View.*;
+
 
 public class GameboardController {
 
-	private GameController gamecontroller;
+	private GameController gameController;
 	private GameboardView gameboardView;
-
 	private ControlsView controlsView;
 	private PlayerBoardView playerBoardView;
 	private OpponentBoardView opponentBoardView;
-
+	private StatusBarView statusBarView;
 	private NetworkDataModel rxData;
 	private NetworkDataModel txData;
 	private NetworkModel networkConnection;
-	
 	private Set shipsOnBoard;
 	private int gameStage;
 	private PlayerBoardCellsMouseLisener playerBoardCellsMouseListener;
 	private OpponentBoardCellsMouseLisener opponentBoardCellsMouseLisener;
-	
 	private boolean playerTurn;
-	private Cursor customCusrsor;
+	private Cursor customCursor;
 	private int shipSelected;
 	private int shipDirection;
 	private int shipSpace;
-
 	private int hits;
 	private int misses;
-	
+	private boolean controlsOn;
 	private boolean exitFlag;
 
-	// Default constructor:
-	
-	public GameboardController(GameController gamecontroller) {
-		this.gamecontroller = gamecontroller;
+	//
+	// Default constructor
+	//
+	public GameboardController(GameController gameController) {
+
+		this.gameController = gameController;
 		this.gameboardView = new GameboardView();
-		
 
 		this.shipSelected = 0;
 		this.shipsOnBoard = new HashSet<Integer>(5);
@@ -95,17 +80,19 @@ public class GameboardController {
 		this.opponentBoardCellsMouseLisener = new OpponentBoardCellsMouseLisener();
 
 		this.shipSpace = 17;
-		this.customCusrsor = null;
-		
+		this.customCursor = null;
+
 		this.hits = 0;
 		this.misses = 0;
 		this.exitFlag = false;
+		controlsOn = true;
 
 		this.initialize();
 	}
-	
-	// Getter methods:
-	
+
+	//
+	// Getter methods
+	//
 	public boolean isExitFlag() {
 		return exitFlag;
 	}
@@ -113,33 +100,40 @@ public class GameboardController {
 	public GameboardView getGameboardView( ) {
 		return this.gameboardView;
 	}
-	
+
+	public int getHits() {
+		return this.hits;
+	}
+
+	public int getMisses() {
+		return this.misses;
+	}
+
+	//
 	// Setter methods:
-	
+	//
 	public void setExitFlag(boolean exitFlag) {
 		this.exitFlag = exitFlag;
 	}
 
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 
 		this.controlsView = this.gameboardView.getControlsView();
 		this.playerBoardView = this.gameboardView.getPlayerBoardView();
 		this.opponentBoardView = this.gameboardView.getOpponentBoardView();
-		
-		this.txData = new NetworkDataModel();
-		this.networkConnection = this.gamecontroller.getNetworkConnection();
+		this.statusBarView = gameboardView.getStatusBarView();
 
-		if(this.gamecontroller.getGameMode() == 1) {
+		this.txData = new NetworkDataModel();
+		this.networkConnection = this.gameController.getNetworkConnection();
+
+		if(this.gameController.getGameMode() == 1) {
 			this.playerTurn = false;
 		} else {
 			this.playerTurn = true;
 		}
-
-
-		opponentBoardView.setVisible(true);
-		this.startPlayingGame();
 
 		this.controlsView.addShipsActionListener(new ActionListener() {
 			@Override
@@ -170,7 +164,6 @@ public class GameboardController {
 	                        createLineBorder(Color.DARK_GRAY, 4));
 	            }
 
-	            System.out.println(shipSelected + " was selected.");
 			}
 		});
 
@@ -188,22 +181,14 @@ public class GameboardController {
 			}
 		});
 
-
 		this.playerBoardView.addCellsMouseListener(playerBoardCellsMouseListener);
-
 	}
-
 
 	public void setPlayerNames() {
-		this.gameboardView.setPlayerName(this.gamecontroller.getPlayerName());
-		this.gameboardView.setOpponentName(this.gamecontroller.getOpponentName());
+		this.gameboardView.setPlayerName(this.gameController.getPlayerName());
+		this.gameboardView.setOpponentName(this.gameController.getOpponentName());
 		this.gameboardView.updatePlayerNames();
 	}
-
-//    public void updatePlayerBoard(Coordinates c) {
-//        boolean hit = gameboardView.updatePlayerBoard(c);
-//
-//    }
 
     private void removeSelectionShipBorders() {
         for (JButton button : this.controlsView.getShipSelectionButtons())
@@ -214,7 +199,8 @@ public class GameboardController {
     private void resetShipSelectionButtonsBorders() {
 		for (JButton button : this.controlsView.getShipSelectionButtons())
 			button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		this.controlsView.getPlaceModeButton().setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		this.controlsView.getPlaceModeButton().setBorder
+				(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 	}
 
 	private void highlightHorizontally(int shipSize, Coordinates c) {
@@ -236,7 +222,8 @@ public class GameboardController {
 	 }
 
 	private void highlighButton(BoardView board, Coordinates c) {
-		board.getButtons()[c.getRow()][c.getCol()].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2));
+		board.getButtons()[c.getRow()][c.getCol()].setBorder
+				(BorderFactory.createLineBorder(Color.ORANGE, 2));
 	}
 
 	private int findShipSize() {
@@ -261,15 +248,19 @@ public class GameboardController {
 	        for (BoardCell b : row) {
 	        	if (i == 0) {
 	    			if (j == 0) {
-	    				b.setBorder(BorderFactory.createMatteBorder(borderWidth, borderWidth, borderWidth, borderWidth, borderColor));
+	    				b.setBorder(BorderFactory.createMatteBorder
+								(borderWidth, borderWidth, borderWidth, borderWidth, borderColor));
 	    			} else {
-	    				b.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth, borderWidth, borderColor));
+	    				b.setBorder(BorderFactory.createMatteBorder
+								(borderWidth, 0, borderWidth, borderWidth, borderColor));
 	    			}
 	    		} else {
 	    			if (j == 0) {
-	    				b.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth, borderWidth, borderColor));
+	    				b.setBorder(BorderFactory.createMatteBorder
+								(0, borderWidth, borderWidth, borderWidth, borderColor));
 	    			} else {
-	    				b.setBorder(BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth, borderColor));
+	    				b.setBorder(BorderFactory.createMatteBorder
+								(0, 0, borderWidth, borderWidth, borderColor));
 	    			}
 	    		}
 	        	j++;
@@ -484,19 +475,21 @@ public class GameboardController {
 	private void tryToPlaceShip(MouseEvent e) {
 	    Coordinates c = ((BoardCell) e.getSource()).getCoordinates();
 	    if (shipDirection == 0) {       // horizontal
-	        if (enoughSpaceForShip(c)) {
+	        if (enoughSpaceForShip(c) && (!shipsOnBoard.contains(shipSelected))) {
 	            ImageIcon shipPieces[] = cutIcon(findShipSize());
 	            this.placeShipHorizontally(shipPieces, c);
 	            shipsOnBoard.add(shipSelected);
-	            this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)].setEnabled(false);
+	            this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)]
+						.setEnabled(false);
 	        }
 	    }
 	    else  {             // vertical
-	        if (enoughSpaceForShip(c)) {
+	        if (enoughSpaceForShip(c) && (!shipsOnBoard.contains(shipSelected))) {
 	            ImageIcon shipPieces[] = cutIcon(findShipSize());
 	            this.placeShipVertically(shipPieces, c);
 	            shipsOnBoard.add(shipSelected);
-	            this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)].setEnabled(false);
+	            this.controlsView.getShipSelectionButtons()[findIndex(shipSelected)]
+						.setEnabled(false);
 	        }
 	    }
 	    if (shipsOnBoard.size() == 5) {
@@ -510,18 +503,14 @@ public class GameboardController {
 
 	private void startPlayingGame() {
 		try{
-			this.customCusrsor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("images/skull_02_cursor_orange.png").getImage(),new Point(22,22),"custom cursor");
+			this.customCursor = Toolkit.getDefaultToolkit().createCustomCursor
+					(new ImageIcon("images/skull_02_cursor_orange.png")
+							.getImage(),new Point(22,22),"custom cursor");
 
         } catch(Exception e){
         		System.err.println("Cannot create custom image:" + e.getMessage());
         }
 
-		System.out.println(this.playerTurn);
-
-		//this.toggleTurn();
-
-		this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
-		this.opponentBoardView.setCursor(this.customCusrsor);
 
 		Thread waitForData = new Thread(new WaitForIncommingData());
 		waitForData.start();
@@ -532,24 +521,21 @@ public class GameboardController {
 		int col = c.getCol();
 		BoardCell bc = this.opponentBoardView.getButtons()[row][col];
 
-		System.out.println("updateOpponentBoard.................");
-
 		if (hit == true) {
 			updateHitJustExplosion(bc);
 			hits++;
+			statusBarView.setHitMissMsg("You scored : )");
 		}
 		else {
 			updateMiss(bc);
 			misses++;
+			statusBarView.setHitMissMsg("You missed : (");
 		}
-
-		System.out.println("Hits: " + hits);
-		System.out.println("Misses: " + misses);
 
 		// send info
 		if (winDetected())  {
 			txData.resetFlags();
-			txData.setWinner(true);
+			txData.setLoser(true);
 			txData.setRespond(true);
 			networkConnection.sendData(txData);
 			showWinMessage();
@@ -558,14 +544,13 @@ public class GameboardController {
 	}
 
 	private void updateHitJustExplosion(BoardCell bc) {
-		BufferedImage img = resize(loadImage("images/hit.png"), 45, 45);
+		BufferedImage img = resize(loadImage
+				("images/hit.png"), 45, 45);
 		bc.setIcon(new ImageIcon(img, "Explosion"));
 	}
 
 
 	public boolean updatePlayerBoard(Coordinates c) {
-
-		System.out.println("updatePlayerBoard.................");
 
 		int row = c.getRow();
 		int col = c.getCol();
@@ -590,15 +575,12 @@ public class GameboardController {
 	}
 
 	public void updateMiss(BoardCell bc) {
-        System.out.println("Miss" );
         BufferedImage img = resize(loadImage("images/miss.png"),
 				40, 40);
 		bc.setIcon(new ImageIcon(img, "Miss"));
     }
 
 	private void updateHit(BoardCell bc) {
-
-        System.out.println("Hit");
         BufferedImage img = iconToBuffImg((ImageIcon)bc.getIcon());
         bc.setIcon(new ImageIcon(redrawIcon(img), "Explosion"));
 	}
@@ -661,7 +643,7 @@ public class GameboardController {
 			this.opponentBoardView.validate();
 		} else {
 			this.opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
-			this.opponentBoardView.setCursor(this.customCusrsor);
+			this.opponentBoardView.setCursor(this.customCursor);
 			this.opponentBoardView.validate();
 		}
 	}
@@ -675,25 +657,54 @@ public class GameboardController {
 	}
 
 	private void showWinMessage() {
-		String message = "Congratulation " + this.gamecontroller.getPlayerName() + ", you WON!";
+		String message = "Congratulation " + this.gameController.getPlayerName()
+				+ ", you WON!\n\nWould yu like to play again?\n";
         String title = "You Win!";
-        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
 
+		int playAgain = JOptionPane.showConfirmDialog(this.gameController.getMainWindow(),
+				message, title, JOptionPane.YES_NO_OPTION);
 
+		txData.resetFlags();
+		if (playAgain == JOptionPane.YES_OPTION) {
+			exitFlag = true;
+			gameController.startGame(5);
+		}
+		else {
+			if(gameController.isGameStarted()) {
+				txData = new NetworkDataModel();
+				txData.setDisconectSignal(true);
+				gameController.getNetworkConnection().sendData(txData);
+				gameController.getNetworkConnection().closeConnection();
+			}
+		}
 	}
 
 	private void showLoseMessage() {
-		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but you lose :(";
+		String message = "Sorry " + this.gameController.getPlayerName() + ", but you lose :(\n\n" +
+				"Would yu like to play again?\n";
         String title = "You Lose!";
-        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.PLAIN_MESSAGE);
-        this.networkConnection.closeConnection();
-        this.gamecontroller.setDefaultMenuWindow();
-		this.gamecontroller.startGame(2);
+       	int playAgain = JOptionPane.showConfirmDialog(this.gameController.getMainWindow(),
+				message, title, JOptionPane.YES_NO_OPTION);
+
+       	txData.resetFlags();
+       	if (playAgain == JOptionPane.YES_OPTION) {
+       		exitFlag = true;
+			gameController.startGame(5);
+		}
+		else {
+			if(gameController.isGameStarted()) {
+				txData = new NetworkDataModel();
+				txData.setDisconectSignal(true);
+				gameController.getNetworkConnection().sendData(txData);
+				gameController.getNetworkConnection().closeConnection();
+			}
+		}
+
 	}
 
 	public boolean askToPlayAgain() {
         int reply = JOptionPane.showConfirmDialog
-                (this.gamecontroller.getMainWindow(), "Would you like to pay again?"
+                (this.gameController.getMainWindow(), "Would you like to pay again?"
                         , "Play again", JOptionPane.YES_NO_OPTION);
 
         if (reply == JOptionPane.YES_OPTION) {
@@ -705,9 +716,12 @@ public class GameboardController {
     }
 
 	private void showDisconectMessage() {
-		String message = "Sorry " + this.gamecontroller.getPlayerName() + ", but your opponent " + this.gamecontroller.getOpponentName() + " closed his/her connection.";
+		String message = "Sorry " + this.gameController.getPlayerName()
+				+ ", but your opponent " + this.gameController.getOpponentName()
+				+ " closed his/her connection.";
         String title = "Attantion!";
-        JOptionPane.showMessageDialog(this.gamecontroller.getMainWindow(), message, title, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this.gameController.getMainWindow(),
+				message, title, JOptionPane.WARNING_MESSAGE);
 	}
 	// Inner Classes:
 
@@ -721,24 +735,26 @@ public class GameboardController {
 		@Override
 		public void mousePressed(MouseEvent e) {
 
+			// Ship placement stage
+			tryToPlaceShip(e);
 
-            // Ship placement stage
-            if (gameStage == 1 && !shipsOnBoard.contains(shipSelected) && shipSelected != -1) {
-                tryToPlaceShip(e);
+			if (shipsOnBoard.size() == 5) {
+				playerBoardView.removeCellsMouseListener(playerBoardCellsMouseListener);
+				opponentBoardView.addCellsMouseListener(opponentBoardCellsMouseLisener);
+				opponentBoardView.setCursor(customCursor);
+				opponentBoardView.setVisible(true);
+				if (gameController.getGameMode() == 1) {
+					controlsOn = false;
+					statusBarView.setStatusMessage("Now is " + gameController.getOpponentName()
+							+ " turn.");
+				}
+				else {
+					statusBarView.setStatusMessage("Now is your turn.");
+				}
+				startPlayingGame();
+			}
+		}
 
-                if (shipsOnBoard.size() == 5) {
-                    //	opponentBoardView.setVisible(true);
-
-                }
-            }
-	        // Game stage
-	        else if (gameStage == 2){
-                System.out.println("Game in progress");
-				// updatePlayerBoard( ((BoardCell) e.getSource()).getCoordinates() );
-                //startPlayingGame();
-            }
-
-        }
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -773,26 +789,25 @@ public class GameboardController {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-                Coordinates c = ((BoardCell) e.getSource()).getCoordinates();
-                txData.setCoordinates(c.getRow(), c.getCol());
-                //System.out.println("cordROW: " + coordinates.getRow() + " coordCOL: " + coordinates.getCol());
-                //System.out.println("txROW: " + txData.getCoordinates().getRow()
-                //+ " txCOL: " + txData.getCoordinates().getCol());
-                txData.setRespond(false);
-                txData.setHitAttempt(true);
-                txData.setPlayAgainRespond(false);
-                txData.setWinner(false);
 
-                if (tryIsValid(c)) {
-                    //System.out.println("if   tryValid()");
-                    //toggleTurn(false);
-                    networkConnection.sendData(txData);
-                }
             }
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				if (controlsOn) {
+					Coordinates c = ((BoardCell) e.getSource()).getCoordinates();
+					txData.setCoordinates(c.getRow(), c.getCol());
+					txData.resetFlags();
+					txData.setHitAttempt(true);
+
+					if (tryIsValid(c)) {
+						controlsOn = false;
+						statusBarView.setStatusMessage("Now is " + gameController.getOpponentName()
+								+ " turn.");
+						networkConnection.sendData(txData);
+					}
+				}
 			}
 
 			@Override
@@ -815,50 +830,59 @@ public class GameboardController {
 				while(true) {
 					if(networkConnection != null) {
 						try {
+
+							if(exitFlag == true) {
+								break;
+							}
+
 	                        rxData = networkConnection.getData();
 	                        Coordinates c = rxData.getCoordinates();
-							//System.out.println("Get new Data: "
-	                         //       + c.getRow() + " " + c.getCol());
-
-							//System.out.println("Respond():  " + rxData.getRespond());
 
 							// respond message, update board only
 							if (rxData.getRespond() == true) {
-								// update opp board
-								//System.out.println("Responding....");
-
 								updateOpponentBoard(c, rxData.getHitStatus());
-								if (rxData.isWinner()) {
+								txData.resetFlags();
+								if (rxData.isLoser()) {
 									showLoseMessage();
 								}
-
 							}
+
 							// opponent tried to hit, update and send message back
 							else if (rxData.getHitAttempt() == true) {
+								txData.resetFlags();
 								//toggleTurn(true);
+								controlsOn = true;
+								statusBarView.setStatusMessage("Now is your turn.");
 								txData.setHitStatus(updatePlayerBoard(c));
 								txData.setCoordinates(c);
-								txData.setHitAttempt(false);
 								txData.setRespond(true);
 								if (winDetected()) {
-									rxData.setWinner(true);
+									rxData.setLoser(true);
 								}
 								else {
-									rxData.setWinner(false);
+									rxData.setLoser(false);
 								}
 								networkConnection.sendData(txData);
-								// respond
+							}
+							// connection broke
+							else if (rxData.isDisconected() == true) {
+								showDisconectMessage();
+								gameController.setDefaultMenuWindow();
+								networkConnection.closeConnection();
+								gameController.resetGameboardController();
+								gameController.startGame(2);
+								break;
 							}
 						} catch (Exception e) {
 							System.err.println(e.getMessage());
 						}
 					}
 
-					
-				}			
+
+				}
 			}
 		}
 
-
 }
+
 

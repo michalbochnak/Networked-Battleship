@@ -25,13 +25,13 @@ package View;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 
 public class CreateHostView extends JPanel{
 	
@@ -54,8 +54,11 @@ public class CreateHostView extends JPanel{
 	private ImageIcon disconnectedImageIcon;
 	private boolean isConnected;
 	
-	
+
+
+
 	// Default constructor:
+	//
 	public CreateHostView() {
 		this.connectionTypeLabel = new JLabel("Create New Host:");
 		this.serverIPLabel = new JLabel("Server IP address:");
@@ -151,9 +154,9 @@ public class CreateHostView extends JPanel{
 		this.serverPortLabel.setBounds(0, 60, 120, 20);
 		this.serverPortTextField.setBounds(125, 60, 150, 20);
 		this.serverRandomPortCheckBox.setBounds(120, 85, 160, 20);
-		this.createHostButton.setBounds(50, 115, 150, 20);
-		this.goBackButton.setBounds(210, 115, 150, 20);
-		this.startGameButton.setBounds(370, 115, 150, 20);
+		this.createHostButton.setBounds(50, 110, 150, 20);
+		this.goBackButton.setBounds(210, 110, 150, 20);
+		this.startGameButton.setBounds(370, 110, 150, 20);
 		this.startGameButton.setEnabled(false);
 		this.connectionMessageLabel.setBounds(300, 35, 90, 20);
 		this.connectionStatusIconTypeLabel.setBounds(395, 35, 25, 25);

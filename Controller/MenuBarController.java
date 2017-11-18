@@ -19,46 +19,38 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
+import javax.swing.*;
 import Model.NetworkDataModel;
-import Model.NetworkModel;
 import View.*;
+
 
 class MenuBarController {
 	
 	private MenuBarView menuBarView;
-	
 	private GameController gameController;
-	
 	private NetworkDataModel txData;
 	private JFrame mainWindow;
-	
+
+	//
 	// Default constructor:
+	//
 	public MenuBarController(GameController gameController) {
 		
 		this.gameController = gameController;
-		
 		this.menuBarView = new MenuBarView();
-		
-	
 		this.initialize();
 	}
 	
-	
+	//
 	// Getter methods:
-	
+	//
 	public MenuBarView getMenuBar() {
 		return this.menuBarView;
 	}
-	
-	// Setter methods:
-	
-	
+
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 		
 		this.mainWindow = this.gameController.getMainWindow();
@@ -67,7 +59,11 @@ class MenuBarController {
 		this.menuBarView.addMenuItemListener("JoinHost", new JoinHost());
 		this.menuBarView.addMenuItemListener("Quit", new QuitMenu());
 		this.menuBarView.addMenuItemListener("About", new AboutMenu());
-		this.menuBarView.addMenuItemListener("GameRules", new GameRulesMenu());
+		this.menuBarView.addMenuItemListener
+				("GameRules", new GameRulesMenu());
+		this.menuBarView.addMenuItemListener("Statistics", new StatisticsMenu());
+		this.menuBarView.addMenuItemListener
+				("Connection", new ConnectionMenu());
 	
 		
 	}
@@ -130,7 +126,8 @@ class MenuBarController {
 	                "CS 342 Project #4 - Networked battlefield\n" +
 	                "Nov 16, 2017";
 	        String title = "About";
-	        JOptionPane.showMessageDialog(mainWindow, message, title, JOptionPane.PLAIN_MESSAGE);
+	        JOptionPane.showMessageDialog(mainWindow,
+					message, title, JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 	
@@ -151,7 +148,41 @@ class MenuBarController {
 		                "ships is the winner.\n\n" +
 		                "Good Luck!";
 		        String title = "Game help";
-	        JOptionPane.showMessageDialog(mainWindow, message, title, JOptionPane.PLAIN_MESSAGE);
+	        JOptionPane.showMessageDialog(mainWindow, message,
+					title, JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	class StatisticsMenu implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int hits = gameController.getGameboardController().getHits();
+			int misses = gameController.getGameboardController().getMisses();
+			int accuracy = (int)(((double)hits / (hits + misses)) * 100);
+
+			String message = "Player " + gameController.getPlayerName()
+					+ ":\n" + "Hits: " + hits + "\n"
+					+ "Misses: " + misses+ "\n"
+					+ "Accuracy: " +accuracy + "%\n\n";
+
+			String title = "Statistics";
+			JOptionPane.showMessageDialog(mainWindow, message,
+					title, JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	class ConnectionMenu implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String message = "To create a host or join to the existing network\n" +
+					"please fallow the menu options. To create a new host you can\n" +
+					"specify your port of choice or use random port by clicking the checkbox\n" +
+					"that will open first available port on your computer.\n" +
+					"To join to the existing host, please provide the same IP address\n" +
+					"and port as specified by the host creator.";
+			String title = "Connection";
+			JOptionPane.showMessageDialog(mainWindow, message,
+					title, JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 }

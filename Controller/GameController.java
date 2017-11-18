@@ -20,17 +20,6 @@ package Controller;
 import Model.*;
 import View.*;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -73,18 +62,17 @@ public class GameController {
     		this.gameMenuController = new GameMenuController(this);
     		this.menuBarController = new MenuBarController(this);
     		this.gameboardController = null;
-    		
-    		
+
     		this.playerName = null;
     		this.opponentName = null;
     		this.gameMode = 0;
-    		
     	
     		initialize();
     }
 
+    //
     // Getter methods:
-    
+    //
     public String getPlayerName() {
     		return this.playerName;
     }
@@ -108,9 +96,14 @@ public class GameController {
     			return null;
     		}
     }
-    
-    // Setter methods:
-    
+
+	public GameboardController getGameboardController() {
+    	return this.gameboardController;
+	}
+
+	//
+	// Setter methods:
+    //
     public void setPlayerName(String playerName) {
     		this.playerName = playerName;
     }
@@ -122,14 +115,14 @@ public class GameController {
     public void setGameMode(int mode) {
     		this.gameMode = mode;
     }
-    
-    
+
     public void setNetworkConnection(NetworkModel networkConnection) {
     		this.networkConnection = networkConnection;
     }
-    
+
+    //
     // Class methods:
-    
+    //
     private void initialize() {
     	
     		this.gameWindowView.addMenuBar(this.menuBarController.getMenuBar());
@@ -144,37 +137,51 @@ public class GameController {
     		switch (gameOption) {
     			
     			case 1:
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
-    				//this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(false);
-    				this.gameWindowView.addContent(this.gameMenuController.getWelcomeMessageView());
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("JoinHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("Statistics").setEnabled(false);
+    				this.gameWindowView.addContent
+							(this.gameMenuController.getWelcomeMessageView());
     				break;
     			case 2:
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
-    				//this.menuBarController.getMenuBar().getMenuItems().get("Statistics").setEnabled(true);
-    				this.gameWindowView.addContent(this.gameMenuController.getSelectGameModeView());
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("JoinHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("Statistics").setEnabled(true);
+    				this.gameWindowView.addContent
+							(this.gameMenuController.getSelectGameModeView());
     				break;
     			case 3:
     				this.gameMode = 0;
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("JoinHost").setEnabled(false);
     				
     				this.serverModeController = new ServerModeController(this);
     				this.gameWindowView.addContent(this.serverModeController.getView());
     				break;
     			case 4:
     				this.gameMode = 1;
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(false);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("CreateHost").setEnabled(false);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("JoinHost").setEnabled(false);
     				
     				this.clientModeController = new ClientModeController(this);
     				this.gameWindowView.addContent(this.clientModeController.getView());
     				break;
     			case 5:
-    				this.menuBarController.getMenuBar().getMenuItems().get("CreateHost").setEnabled(true);
-    				this.menuBarController.getMenuBar().getMenuItems().get("JoinHost").setEnabled(true);
-    				this.gameWindowView.setNewSize(1400, 700);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("CreateHost").setEnabled(true);
+    				this.menuBarController.getMenuBar().getMenuItems()
+							.get("JoinHost").setEnabled(true);
+    				this.gameWindowView.setNewSize(1400, 660);
     				
     				this.gameboardController = new GameboardController(this);
     				this.gameboardController.setPlayerNames();
@@ -187,10 +194,6 @@ public class GameController {
 
     public void setDefaultMenuWindow() {
     		this.gameWindowView.setDefault();
-//    		this.serverModeController.setDefault();
-//    		this.clientModeController.setDefault();
-//    		this.gameboardController = new GameboardController(this);
-    		
     }
     
     public void exitFromStartedGame() {

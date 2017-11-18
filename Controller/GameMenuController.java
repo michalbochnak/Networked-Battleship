@@ -22,11 +22,8 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import View.SelectGameModeView;
 import View.WelcomeMessageView;
-
-
 
 
 public class GameMenuController {
@@ -46,12 +43,9 @@ public class GameMenuController {
 		this.initialize();
 	}
 	
-	// Getter methods:
-	
-	// Setter methods:
-	
+	//
 	// Class methods:
-	
+	//
 	private void initialize() {
 		this.welcomeMessageView.addNextButtonActionListener(new ActionListener() {
 			@Override

@@ -23,10 +23,10 @@ package View;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
 
 public class GameboardView extends JPanel{
 
@@ -41,15 +41,15 @@ public class GameboardView extends JPanel{
 	private String opponentName;
 
 	
-
+	//
 	// Default constructor
-	
+	//
 	public GameboardView() {
 		
 		this.controlsView = new ControlsView();
 		this.playerBoardView = new PlayerBoardView();
 		this.opponentBoardView = new OpponentBoardView();
-		//this.statusBarView = new StatusBarView();
+		this.statusBarView = new StatusBarView();
 		
 		this.playerNameLabel = new JLabel();
 		this.opponentNameLabel = new JLabel();
@@ -59,9 +59,9 @@ public class GameboardView extends JPanel{
 		this.initialize();
 	}
 	
-	
+	//
 	// Getter methods:
-		
+	//
 	public GameboardView getGameboardView() {
 		return this;
 	}
@@ -77,9 +77,14 @@ public class GameboardView extends JPanel{
 	public OpponentBoardView getOpponentBoardView() {
 		return this.opponentBoardView;
 	}
-	
+
+	public StatusBarView getStatusBarView() {
+		return this.statusBarView;
+	}
+
+	//
 	// Setter methods:
-	
+	//
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
@@ -87,12 +92,13 @@ public class GameboardView extends JPanel{
 	public void setOpponentName(String opponentName) {
 		this.opponentName = opponentName;
 	}
-	
-	// Class methods:
 
+	//
+	// Class methods:
+	//
 	private void initialize() {
 		setBackground(Color.WHITE);
-		setBounds(0,0,1400, 700);
+		setBounds(0,0,1400, 600);
 		setLayout(null);
 		
 		this.playerNameLabel.setBounds(340, 10, 500, 20);
@@ -103,16 +109,17 @@ public class GameboardView extends JPanel{
 		this.opponentNameLabel.setFont(new Font("TimesRoman", Font.BOLD, 18));
 		this.opponentNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(this.opponentNameLabel);
-		
+
 		add(this.controlsView);
+		add(this.statusBarView);
 		add(this.playerBoardView);
 		opponentBoardView.setVisible(false);
 		add(this.opponentBoardView);
 	}
 	
 	public void updatePlayerNames() {
-		this.playerNameLabel.setText("Player " + this.playerName + ":");
-		this.opponentNameLabel.setText("Opponent " + this.opponentName + ":");
+		this.playerNameLabel.setText(this.playerName);
+		this.opponentNameLabel.setText(this.opponentName);
 	}
 
 
